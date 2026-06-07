@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# 로컬 Claude Code 설정 (개인 권한 등)
+.claude/settings.local.json
+
+# 임시/출력
+*.tmp
+/tmp/
+.omo/
