@@ -38,10 +38,11 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
     evaluation — every score cites evidence, strengths and weaknesses are
     balanced, and a human makes the final decision — strengthening accountable
     institutional practice in development cooperation.
-  - *SDG 17 (development effectiveness & capacity):* by lowering the effort and
-    increasing the consistency of monitoring & evaluation (M&E), it supports the
-    evaluation capacity that effective, learning-oriented development
-    partnerships depend on.
+  - *SDG 17, targets 17.9 (effective, targeted capacity-building) and 17.16 /
+    17.19 (multi-stakeholder partnerships and better data/methodologies to
+    measure progress on the 2030 agenda):* by lowering the effort and increasing
+    the consistency of monitoring & evaluation (M&E), it supports the evaluation
+    capacity that effective, learning-oriented development partnerships depend on.
   - It evaluates ODA projects across sectors (health, energy, water, education,
     public administration), so it indirectly supports the SDGs those projects
     target by improving the learning-and-accountability feedback loop.
@@ -114,13 +115,37 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 
 ## Indicator 4 — Platform independence
 
+- **Core technologies the solution depends on (list):** the substance is
+  *portable Markdown* (agent instructions + a shared `reference/` knowledge base
+  + one shell hook). It ships no model, server, or database of its own and
+  orchestrates whichever LLM the user supplies. Core dependencies — every
+  mandatory one has a fully open alternative:
+  - *An LLM agent-harness* — **mandatory, but a category, not a specific
+    product.** The same agents run unchanged on Claude Code (proprietary), Codex
+    (proprietary), and Ollama + `scripts/open_runner.py` (fully open).
+  - *An LLM model* — **user-supplied.** Proprietary (Anthropic Claude, GPT-5.5)
+    *or* a fully open-weight model (**Qwen2.5-14B, Apache-2.0**); the proprietary
+    model is a replaceable runtime choice, not a hard requirement.
+  - *Python 3* — **standard library only, no third-party packages** — for the
+    open-weight runner
+    [`scripts/open_runner.py`](https://github.com/amnotyoung/dev-eval-agents/blob/main/scripts/open_runner.py).
+  - *Ollama* — open-source local model server for the fully-open path (runs
+    locally at `http://localhost:11434`, no proprietary API).
+  - *Bash* — for the single optional completion hook `.claude/hooks/boulder.sh`
+    (Claude Code path only).
+  - *Markdown / plain text* — the format of all agent instructions, reference
+    knowledge, and evaluation inputs/outputs. **No framework and no database.**
+  - A complete path — **Ollama + Qwen2.5 (Apache-2.0) + the Python standard
+    library** — runs the entire solution with no proprietary dependency.
 - **Does the solution have mandatory closed-component dependencies?** It requires
   *a capable LLM agent-harness* at runtime — a category of tool, not a specific
   proprietary product.
 - **How closed components can be replaced:** the core product is portable
   Markdown; the **same agents run on Claude Code, on Codex, and on fully
   open-weight models** (Qwen2.5, Apache-2.0) via Ollama, with **no change to the
-  core**. A user can swap the proprietary model for open weights by pointing
+  core**. Replacing a closed component is a **minimal configuration change, not a
+  major overhaul** — you point a different runner at the same Markdown agents. A
+  user swaps the proprietary model for open weights by pointing
   `scripts/open_runner.py` at the same agents — **demonstrated and reproducible**
   in
   [`docs/platform-independence.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/platform-independence.md)
@@ -130,12 +155,27 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 
 ## Indicator 5 — Documentation
 
-- **Location:** the README, the [`docs/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs)
-  directory (platform-independence, do-no-harm, standards, validation log), and
-  English reference translations under
+- **Location:** the
+  [README](https://github.com/amnotyoung/dev-eval-agents/blob/main/README.md),
+  the [`docs/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs)
+  directory, and English reference translations under
   [`docs/en/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs/en).
-  Documentation covers setup for three harnesses, system architecture, the agent
-  catalog, use cases, and functional requirements.
+  Mapped to the software-documentation types the DPG Standard asks for — **all
+  available in English**:
+  - *User guide* → README "Quick start" (setup for all three harnesses) plus the
+    bundled [`samples/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/samples)
+    walk-through.
+  - *Technical architecture* → README "System" (11 agents, two evaluation types,
+    three harnesses) and
+    [`docs/platform-independence.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/platform-independence.md).
+  - *Developer docs* →
+    [`CLAUDE.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CLAUDE.md)
+    /
+    [`AGENTS.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/AGENTS.md)
+    (agent contracts & workflow),
+    [`CONTRIBUTING.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CONTRIBUTING.md),
+    and the per-agent instruction files, with English mirrors under
+    [`docs/en/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs/en).
 
 ## Indicator 6 — Non-PII data extraction / portability
 
@@ -144,6 +184,12 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
   formats** (Markdown / plain text), so any data a user produces with it is fully
   portable with any text tool — no lock-in. See
   [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md).
+- **Which extraction options to select on the form:** the structured presets
+  (CSV / XML / JSON, or exposing non-PII data through an API) **do not apply** —
+  by design there is no database, no data layer, and no API. Select **"Other"**
+  and state: *all content is authored and emitted as **Markdown / plain text**, a
+  non-proprietary, human- and machine-readable format that any tool can import or
+  export with no conversion step and no lock-in.*
 
 ## Indicator 7 — Privacy & applicable laws
 
@@ -166,12 +212,59 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 
 ## Indicator 9A — Data privacy & security
 
-- **Does the solution collect/store PII?** **No.** The project stores no PII and
-  has no accounts, telemetry, or database. User-supplied inputs may contain PII
-  but are processed locally/ephemerally and not retained; the agents are
-  instructed to anonymize individuals, and a **local open-weight path** lets
-  sensitive documents stay on the user's machine.
-- **Measures:**
+> Baseline: the solution **collects and stores no PII** — no accounts, telemetry,
+> analytics, database, or server; it runs on the user's machine and retains
+> nothing. It processes only the evaluation document the user supplies at runtime,
+> which *may* incidentally contain personal data; that is handled transiently and
+> the agents are instructed to anonymize individuals. The five portal questions
+> answered against that baseline:
+
+- **Is this the minimum amount of PII required to function? (data minimization)**
+  **Yes — the minimum is none.** The solution requires **no PII to operate** and
+  collects/stores none. It reads only the document the user provides, only for the
+  duration of one run; any PII in that file is incidental to the user's own
+  material, not something the tool requests or needs. The agents are further
+  instructed to **anonymize** individuals (initials), reducing exposure beyond the
+  minimum.
+- **How does the solution communicate that it collects PII? (transparency /
+  consent)** There is **no PII collection to consent to**, and no signup/account
+  surface. Transparency is provided in documentation: [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md)
+  states plainly that the tool "collects nothing," and discloses the data flows a
+  user must understand — in particular that running on a **hosted** LLM sends the
+  input to that provider under the provider's own policy, whereas the **local
+  open-weight path** keeps everything on-device. The user runs the tool locally and
+  controls which file is supplied and where it executes.
+- **Which mechanisms delete PII? (retention & deletion)** The solution **retains
+  nothing** (it has no datastore), so no server-side deletion mechanism is
+  required. Outputs are plain-text/Markdown files the user saves to their **own
+  disk** and can delete at any time with ordinary file tools; inputs are never
+  copied into the repository or any store (`.gitignore` excludes real reports). If
+  a hosted LLM is used, provider-side transient data follows **that provider's**
+  retention/deletion policy; the local open-weight path avoids third-party
+  retention entirely.
+- **Where is PII processed/used, and which components access it? (purpose
+  limitation)** PII exists only **transiently**, inside the single document
+  supplied for one run, held in memory during processing and not persisted. Access
+  is limited to: the **agent instructions** (`.claude/agents/*`, `CLAUDE.md`,
+  `AGENTS.md`) that read the document **read-only** to draft an evaluation; and the
+  **LLM harness/model** the user chose (hosted → the text is sent to that provider;
+  local `scripts/open_runner.py` → it stays on `localhost:11434`). Nothing else has
+  access — the completion hook `.claude/hooks/boulder.sh` reads only a local task
+  checklist, and there is **no database, content logging, network export, or
+  analytics** component. The single purpose is drafting an evaluation.
+- **How does the solution ensure data privacy, security & integrity?**
+  **Minimize** (no PII stored, nothing retained); **local-by-default** with a fully
+  on-device open-weight path, giving data sovereignty over sensitive evaluation
+  material; **anonymization** grounded in KOICA evaluation ethics (Regulation
+  No. 536 Ch. 6 — Art. 42 anonymity, Art. 46 personal-data protection);
+  **third-party clarity** (hosted-LLM inputs are governed by that provider's
+  policy, and the user/organization is the **data controller** under PIPA / GDPR);
+  **integrity** via open, inspectable, Git-versioned Markdown (no opaque binaries)
+  plus evidence/verification gates and a mandatory human gate; and **no
+  distribution surface** (it does not host, publish, or share content), so there is
+  no collection-storage-distribution channel through which adverse impact could
+  arise.
+- **Evidence:**
   [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md)
   and
   [`docs/do-no-harm.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/do-no-harm.md).
