@@ -171,7 +171,7 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
   - *User guide* → README "Quick start" (setup for all three harnesses) plus the
     bundled [`samples/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/samples)
     walk-through.
-  - *Technical architecture* → README "System" (11 agents, two evaluation types,
+  - *Technical architecture* → README "System" (12 agents, two evaluation types,
     three harnesses) and
     [`docs/platform-independence.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/platform-independence.md).
   - *Developer docs* →

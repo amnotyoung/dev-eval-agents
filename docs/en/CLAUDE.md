@@ -28,7 +28,7 @@ You are an **orchestrator** — you do not finalize grades yourself. You **deleg
 
 ## KOICA Evaluation Criteria Framework (2024 — the 6 DAC criteria + cross-cutting)
 
-Aggregate-score computation = **the 5 criteria of Relevance, Coherence, Effectiveness, Efficiency, and Sustainability**, each scored 1–4 → summed to a **maximum of 20 points**. (Impact is an ex-post evaluation criterion, so it is **excluded** from the Final Evaluation aggregate score.)
+Aggregate-score computation = **the 5 criteria of Relevance, Coherence, Effectiveness, Efficiency, and Sustainability**, each scored 1–4 → summed to a **maximum of 20 points**. (Impact is an **ex-post** evaluation criterion, so it is **excluded** from the Final Evaluation aggregate score — `dac-impact-evaluator` produces it separately as an ex-post-perspective draft.)
 
 | Aggregate score | KOICA grade | OPC grade |
 |:---:|:---:|:---:|
@@ -50,8 +50,8 @@ Aggregate-score computation = **the 5 criteria of Relevance, Coherence, Effectiv
 | Effectiveness 효과성 | `dac-effectiveness-evaluator` | ✅ |
 | Efficiency 효율성 | `dac-efficiency-evaluator` | ✅ |
 | Sustainability 지속가능성 | `dac-sustainability-evaluator` | ✅ |
+| **Impact 영향력** | `dac-impact-evaluator` | ex-post criterion — excluded from aggregate, reported separately |
 | **Validity 타당성** | `cts-validity-evaluator` | **CTS projects only** |
-| (Impact 영향력) | For ex-post evaluation — excluded from Final Evaluation aggregate score, not implemented | — |
 | Evidence & score verification | `quality-verifier` | — |
 
 **Validity** is a non-standard auxiliary criterion applied only to projects whose primary purpose is CTS (technology innovation) / technology development. General projects are evaluated on the standard 5 criteria.
@@ -61,7 +61,7 @@ Aggregate-score computation = **the 5 criteria of Relevance, Coherence, Effectiv
 When the user provides an evaluation target (e.g., `samples/`) and requests an evaluation:
 
 1. **Confirm the materials + determine the project type** — read the target and grasp its scope. Check **whether it is a CTS / technology-innovation project** (decides whether Validity applies).
-2. **Delegate to the criterion evaluation officers in parallel** — delegate the standard 5 criteria (Relevance, Coherence, Effectiveness, Efficiency, Sustainability) **simultaneously** via Task (multiple Tasks in a single message). **If it is a CTS project, include Validity (`cts-validity-evaluator`) as well, for 6 criteria** in parallel. Each returns a 1–4 score (or "cannot evaluate") for its own criterion only, together with evidence.
+2. **Delegate to the criterion evaluation officers in parallel** — delegate the standard 5 criteria (Relevance, Coherence, Effectiveness, Efficiency, Sustainability) **simultaneously** via Task (multiple Tasks in a single message). **If it is a CTS project, include Validity (`cts-validity-evaluator`) as well, for 6 criteria** in parallel. Each returns a 1–4 score (or "cannot evaluate") for its own criterion only, together with evidence. **If Impact is relevant (long-term / transformative effects, ex-post outcomes), also delegate `dac-impact-evaluator` in parallel for an ex-post-perspective draft — but its score is NOT summed into the 20-point aggregate and is reported separately.**
 3. **Evidence & score verification** — use `quality-verifier` to cross-check the evidence + inspect the consistency between scores and evidence.
 4. **Aggregate-score computation** —
    - **Standard 5 criteria**: summed to a maximum of 20 points → the A–F table above.

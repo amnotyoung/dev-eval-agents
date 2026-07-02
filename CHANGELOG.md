@@ -24,6 +24,12 @@ each slice below is recorded as a 0.x milestone.
   an English-first `README.md` (Korean preserved as `README.ko.md`).
 - **SDG relevance statement** (SDG 16 & 17).
 - **DPG application answer packet**: `docs/dpg-application.md`.
+- **Impact evaluator** (`dac-impact-evaluator`): the DAC Impact criterion now has
+  a dedicated **ex-post** evaluator (KO executable + EN mirror), assessed
+  separately and **excluded** from the 5-criterion, 20-point Final-Evaluation
+  composite — so all six DAC criteria have an evaluator agent (12 agents total).
+  It is distinct from `impact-evaluation-reviewer`, which reviews formal Impact
+  Evaluation reports' causal methodology.
 
 ### Changed
 - `reference/` digests rewritten in the project's own expression with explicit

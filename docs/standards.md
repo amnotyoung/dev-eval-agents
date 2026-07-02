@@ -11,8 +11,11 @@ standards — it does not invent its own criteria:
 
 - **OECD-DAC Evaluation Criteria** — Relevance, Coherence, Effectiveness,
   Efficiency, Impact, Sustainability. These are the internationally agreed
-  criteria for evaluating development assistance, and they are the backbone of
-  the six evaluator agents.
+  criteria for evaluating development assistance; each has a dedicated evaluator
+  agent (`dac-*-evaluator`). Impact is an ex-post criterion, so it is assessed
+  separately and excluded from the 5-criterion, 20-point Final-Evaluation
+  composite; a CTS-only Validity add-on (`cts-validity-evaluator`) is a
+  non-standard seventh.
 - **KOICA Evaluation Guidelines 2024** (『KOICA 평가 업무수행 길라잡이』) — the
   4-point scale, the A–F aggregate grade scale, and the standard evaluation
   questions the agents apply. See `reference/KOICA-평가지침-2024-다이제스트.md`.

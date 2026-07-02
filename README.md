@@ -57,7 +57,7 @@ nine indicators:
 
 Governance: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md).
 
-## 🎛️ System — 11 agents, two evaluation types, three harnesses
+## 🎛️ System — 12 agents, two evaluation types, three harnesses
 
 KOICA evaluation comes in **different types**; the system handles two of them
 distinctly.
@@ -95,11 +95,12 @@ on **5 axes / 10 questions** (causal identification, counterfactual design,
 selection bias, robustness, …). The 6-criteria frame is deliberately **not**
 applied here.
 
-### Agent catalog (11)
+### Agent catalog (12)
 
 | Role | Agent | Access |
 |------|-------|:---:|
-| Final-eval, 6 criteria | `dac-{relevance,coherence,effectiveness,efficiency,sustainability}-evaluator` + `cts-validity-evaluator` | read |
+| Final-eval DAC criteria (6) | `dac-{relevance,coherence,effectiveness,efficiency,sustainability,impact}-evaluator` — Impact is ex-post, excluded from the 20-pt composite | read |
+| CTS Validity add-on (CTS only) | `cts-validity-evaluator` | read |
 | Evidence verification | `quality-verifier` | read |
 | Report composition | `report-composer` | **write** |
 | Narrative verification (hallucination/consistency) | `narrative-verifier` | read |
