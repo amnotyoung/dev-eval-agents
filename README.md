@@ -1,4 +1,4 @@
-# oh-my-oda-agent
+# DevEval Agents
 
 *Read this in other languages: **English** (this file) · [한국어](README.ko.md).*
 
@@ -109,7 +109,7 @@ guards (OMO "Boulder").
 
 **Claude Code** (parallel sub-agents in `.claude/agents/`):
 ```bash
-cd oh-my-oda-agent
+cd dev-eval-agents
 claude        # approve the Stop hook in settings.json on first run
 ```
 
@@ -174,4 +174,5 @@ Inspired by the *design principles* of [oh-my-openagent](https://github.com/code
 criteria and rules are grounded in official KOICA materials (digests only,
 originals excluded). An **independent, unofficial** learning/research project —
 not affiliated with or endorsed by KOICA. Maintainer & ownership:
-[`MAINTAINERS.md`](MAINTAINERS.md).
+[`MAINTAINERS.md`](MAINTAINERS.md). Formerly named `oh-my-oda-agent` (the
+repository was renamed; old links redirect).

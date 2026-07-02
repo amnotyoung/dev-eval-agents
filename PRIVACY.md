@@ -7,7 +7,7 @@
 
 ## What this project collects / 본 프로젝트가 수집하는 것
 
-**Nothing.** oh-my-oda-agent is a set of Markdown agent instructions, reference
+**Nothing.** DevEval Agents is a set of Markdown agent instructions, reference
 digests, templates, and one shell hook that run inside an LLM agent harness on
 the user's own machine.
 

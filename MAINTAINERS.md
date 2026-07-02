@@ -8,11 +8,11 @@
 
 | Field | Value |
 |-------|-------|
-| Project | oh-my-oda-agent |
+| Project | DevEval Agents |
 | Owner / 소유자 | **amnotyoung** (individual maintainer / 개인 메인테이너) |
 | Country / 소유 국가 | **Republic of Korea (대한민국)** |
-| Source of truth | https://github.com/amnotyoung/oh-my-oda-agent |
-| Copyright holder | amnotyoung and the oh-my-oda-agent contributors, 2026– |
+| Source of truth | https://github.com/amnotyoung/dev-eval-agents |
+| Copyright holder | amnotyoung and the DevEval Agents contributors, 2026– |
 
 The copyright in the assets produced by this project is held by the owner and
 contributors. The project is released under two approved open licenses:

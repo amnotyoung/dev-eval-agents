@@ -1,4 +1,4 @@
-# oh-my-oda-agent — 프로젝트 컨텍스트
+# DevEval Agents — 프로젝트 컨텍스트
 
 이 파일은 Claude Code가 세션 시작 시 자동으로 읽는 프로젝트 지침이다.
 (OMO의 **Rules Injection** 원리를 Claude Code 네이티브로 재현.)

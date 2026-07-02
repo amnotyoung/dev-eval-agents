@@ -5,7 +5,7 @@
 
 ## Summary / 요약
 
-**oh-my-oda-agent does not depend on any single proprietary platform or model.**
+**DevEval Agents does not depend on any single proprietary platform or model.**
 Its substance is *portable Markdown*: agent instructions (`CLAUDE.md`,
 `AGENTS.md`, `.claude/agents/*.md`) plus a shared knowledge base (`reference/`)
 and one small shell hook. The only mandatory dependency is **"a capable LLM

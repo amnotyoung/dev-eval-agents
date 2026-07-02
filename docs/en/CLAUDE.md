@@ -1,6 +1,6 @@
 > English reference translation of `CLAUDE.md`. The Korean file is the executable version loaded by the harness.
 
-# oh-my-oda-agent — Project Context
+# DevEval Agents — Project Context
 
 This file is the project instruction that Claude Code reads automatically at the start of a session.
 (A native Claude Code reproduction of OMO's **Rules Injection** principle.)

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# oh-my-oda-agent — 완료 엔진 (OMO "Boulder" 재현)
+# DevEval Agents — 완료 엔진 (OMO "Boulder" 재현)
 #
 # Claude Code Stop hook. Claude가 응답을 끝내려 할 때 발화한다.
 # 평가 작업판(.omo/eval-plan.md)에 미완료 체크박스가 남아 있으면

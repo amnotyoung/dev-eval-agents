@@ -1,4 +1,4 @@
-# oh-my-oda-agent — Codex 지침 (AGENTS.md)
+# DevEval Agents — Codex 지침 (AGENTS.md)
 
 > Codex가 이 파일을 자동 로드한다(= Claude Code의 `CLAUDE.md`에 대응하는 Codex판).
 > **공용 지식은 `reference/`에 있고 두 하네스가 공유한다.** Claude Code판 워크플로는 `CLAUDE.md` + `.claude/agents/` 참조.
