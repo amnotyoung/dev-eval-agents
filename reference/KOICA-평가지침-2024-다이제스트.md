@@ -1,5 +1,8 @@
 # KOICA 평가지침 다이제스트 (2024년판) — 주 자산
 
+> **출처·저작권 안내:** 이 문서는 공개적으로 문서화된 KOICA/KIEP 평가 실무(기준·척도·규정)를 상호운용 목적으로 **프로젝트가 자체 표현으로 요약·정리**한 것이다. 사실·기준·척도·규정 조항은 원 출처(문서명·조/페이지)로 인용하며, 식별을 위한 짧은 인용 외에 원문 표현을 재현하지 않는다. 원본 PDF·HWP는 미포함(`.gitignore`). 본 문서는 **CC BY 4.0**로 배포된다.
+> **Source & copyright note:** This is the project's OWN summary of publicly documented KOICA/KIEP evaluation practice (criteria, scales, regulation), written for interoperability. Facts and provisions are cited to their source (document name + article/page); no original wording is reproduced beyond short attributed identifiers. Original PDF/HWP files are not included (`.gitignore`). Licensed under CC BY 4.0.
+
 > 출처: **『KOICA 평가 업무수행 길라잡이』 (2024)** — 원본 PDF는 로컬 보관(.gitignore).
 > 이 문서가 **현행 주(主) 자산**이다. 2017년판 다이제스트는 구버전(비교용)이며 등급척도·효과성 정의·표준질문이 없었다. 2024년판이 그 공백을 모두 채운다.
 > 페이지 근거는 `(p.XX)`.
@@ -50,13 +53,13 @@
 | 10~12점 미만 | **E** | 부분 성공적 |
 | 10점 미만 | **F** | 미흡 |
 
-> 평가팀은 "보고서 서술내용과 평가등급 배정 간 괴리가 없는지 신중히 점검"할 의무 (p.7). → 검증자 점검 항목.
+> 평가팀은 본문 서술과 배정된 등급이 서로 어긋나지 않는지 꼼꼼히 확인할 책임을 진다 (p.7). → 검증자 점검 항목.
 
 ---
 
 ## 3. ★ 효과성(Effectiveness) — 정의·질문·루브릭 (p.9·12·27)
 
-**정의 (p.27):** "해당 사업은 목표를 달성하였는가 — 평가대상사업의 목표·성과의 달성 정도 또는 예상도, 그룹 간 차등적 성과 등을 평가." (원문) *"the extent to which the intervention achieved, or is expected to achieve, its objectives and its results, including any differential results across groups."*
+**정의 (p.27, 자체 요약):** 사업이 설정한 목표를 실제로 달성했는지를 본다 — 목표·성과가 어느 정도 달성되었는지(또는 달성될 전망인지)와 집단별로 성과가 어떻게 갈렸는지를 함께 판단한다. OECD-DAC 표준 정의(효과성)의 핵심 어구는 *"the extent to which the intervention achieved, or is expected to achieve, its objectives"* (OECD-DAC).
 
 **핵심 질문 3개 (p.27, p.11):**
 1. 사업의 직접적·일차적 결과(output)를 계획대로 달성했거나 달성 예상하는가?
@@ -107,7 +110,7 @@
 | C(보통) | 70~80 | Pass |
 | **D(미흡)** | 70 미만 | **Non-Pass** (1회 보완 재검토, 재차 D면 평가등급 삭제) |
 
-- **24개 세부 질문**(표10, p.16-17): 각 우수(10)/양호(8)/다소미흡(6)/미흡(4). 예: Q13 "사업성과달성도를 객관적·신뢰할 수단으로 재검증?", Q18 "최종 평가등급이 본문 내용과 일치?". → 품질심사관 에이전트 룰브릭으로 그대로 이식.
+- **24개 세부 질문**(표10, p.16-17): 각 우수(10)/양호(8)/다소미흡(6)/미흡(4). 예를 들어 Q13은 사업성과 달성도를 객관적·신뢰 가능한 수단으로 재검증했는지, Q18은 최종 평가등급이 본문 서술과 맞아떨어지는지를 묻는 항목이다. → 품질심사관 에이전트 룰브릭으로 그대로 이식.
 
 ---
 
