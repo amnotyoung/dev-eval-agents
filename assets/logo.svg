@@ -1,0 +1,19 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DevEval Agents logo">
+  <defs>
+    <linearGradient id="deveval-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#154B7A"/>
+      <stop offset="1" stop-color="#0E7C8B"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#deveval-bg)"/>
+  <!-- evaluation checkmark drawn as a path connecting agent nodes -->
+  <path d="M76 130 L112 168 L184 90" fill="none" stroke="#FFFFFF"
+        stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- three agent nodes on the evaluation path -->
+  <circle cx="76" cy="130" r="13.5" fill="#FFFFFF"/>
+  <circle cx="112" cy="168" r="13.5" fill="#FFFFFF"/>
+  <circle cx="184" cy="90" r="13.5" fill="#FFFFFF"/>
+  <circle cx="76" cy="130" r="6" fill="#34D399"/>
+  <circle cx="112" cy="168" r="6" fill="#34D399"/>
+  <circle cx="184" cy="90" r="6" fill="#34D399"/>
+</svg>
