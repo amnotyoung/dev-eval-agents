@@ -9,7 +9,7 @@
 | Field | Value |
 |-------|-------|
 | Project | DevEval Agents |
-| Owner / 소유자 | **amnotyoung** (individual maintainer / 개인 메인테이너) |
+| Owner / 소유자 | **Wooyoung Kim (김우영)** — GitHub [@amnotyoung](https://github.com/amnotyoung), individual maintainer / 개인 메인테이너 |
 | Country / 소유 국가 | **Republic of Korea (대한민국)** |
 | Source of truth | https://github.com/amnotyoung/dev-eval-agents |
 | Copyright holder | amnotyoung and the DevEval Agents contributors, 2026– |
@@ -56,7 +56,7 @@ represent official KOICA positions.
 
 - **General questions / bugs:** open a GitHub issue.
 - **Security reports:** see [`SECURITY.md`](SECURITY.md).
-- **Maintainer contact:** via GitHub [@amnotyoung](https://github.com/amnotyoung).
+- **Maintainer contact:** Wooyoung Kim — email `k_wong@naver.com`, or via GitHub [@amnotyoung](https://github.com/amnotyoung).
 - **Decision model:** the owner is the current lead maintainer and reviews all
   contributions. The project welcomes contributors — see
   [`CONTRIBUTING.md`](CONTRIBUTING.md). The maintainer intends to keep the
