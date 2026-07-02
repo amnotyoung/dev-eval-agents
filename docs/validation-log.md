@@ -1,6 +1,6 @@
 # 검증 기록 (Validation Log)
 
-> oh-my-oda-agent가 ① **실제로 작동하는가**(실물 e2e) ② **실제 KOICA 평가 결과와 부합하는가**(대조)의 기록.
+> DevEval Agents가 ① **실제로 작동하는가**(실물 e2e) ② **실제 KOICA 평가 결과와 부합하는가**(대조)의 기록.
 >
 > ⚠️ **학습·실험 프로젝트의 자체 검증**이며 공식 검증이 아니다. 표본 소수(4건), 한계 존재(§4). 최종 갱신: 2026-07-03 (오픈모델 실증 e2e-5 추가).
 
@@ -8,11 +8,11 @@
 
 ## 1. 실물 e2e — 실제 에이전트 작동 검증
 
-시뮬레이션(메인이 역할을 흉내냄)이 아니라, headless `claude -p`로 `oh-my-oda-agent`를 로드해 **실제 `.claude/agents/*.md`가 호출되는지** 검증했다.
+시뮬레이션(메인이 역할을 흉내냄)이 아니라, headless `claude -p`로 `DevEval Agents`를 로드해 **실제 `.claude/agents/*.md`가 호출되는지** 검증했다.
 
 ```bash
 # 검증 방식 (재현 가능)
-cd oh-my-oda-agent
+cd dev-eval-agents
 claude -p "<입력> 이 사업을 DAC 5대 기준으로 평가해줘" \
   --dangerously-skip-permissions --verbose --output-format stream-json --max-turns 50
 # → 출력 stream에서 "subagent_type":"dac-*-evaluator" 호출을 확인
@@ -33,7 +33,7 @@ claude -p "<입력> 이 사업을 DAC 5대 기준으로 평가해줘" \
 
 ## 2. 실제 KOICA 보고서 대조 (4건)
 
-| 사업 | 유형 | 평가팀(인간) | oh-my-oda-agent | 부합도 |
+| 사업 | 유형 | 평가팀(인간) | DevEval Agents | 부합도 |
 |---|---|---|---|---|
 | 캄보디아 자궁경부암 검진 SW | CTS (6기준) | 11.7/24 **부분 성공적** | 13/24 **부분 성공적** | ✅ **등급 일치** (1.3pt 차, 독립 도출) |
 | 미얀마 태양광 | 인프라 종료 (2018·4기준) | 11.33/16 성공적 | ~12/20 D(부분 성공적) | ◐ **기준별 방향 일치**(적절3·효과3·효율2 정확), 종합은 한 단계 차 |

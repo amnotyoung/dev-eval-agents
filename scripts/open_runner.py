@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-open_runner.py — Run oh-my-oda-agent on a fully OPEN-WEIGHT model.
+open_runner.py — Run DevEval Agents on a fully OPEN-WEIGHT model.
 
 Purpose (Digital Public Goods, Indicator 4 — Platform Independence)
 -------------------------------------------------------------------
-The oh-my-oda-agent evaluation system is a set of *portable Markdown* agent
+The DevEval Agents evaluation system is a set of *portable Markdown* agent
 instructions plus a shared knowledge base under `reference/`. It is not tied to
 any single proprietary LLM: it already runs on Claude Code and on Codex, and
 this script demonstrates it running on an **open-weight** model served locally
@@ -105,7 +105,7 @@ def chat(model, messages, num_ctx, temperature):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Run oh-my-oda-agent on an open model via Ollama.")
+    ap = argparse.ArgumentParser(description="Run DevEval Agents on an open model via Ollama.")
     ap.add_argument("--model", default=os.environ.get("OMOA_MODEL", "qwen2.5:14b"))
     ap.add_argument("--target", default="samples/sample-evaluation-report.md")
     ap.add_argument("--out", default=None, help="Write the evaluation to this file (Markdown).")

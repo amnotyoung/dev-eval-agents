@@ -10,22 +10,22 @@
 > 소유자(권한 있는 대표)가 수행**한다(본인 인증·이메일 검증 필요). `<…>`만 채우면
 > 된다. 링크는 `dpg-readiness` 브랜치가 기본 브랜치에 병합된 뒤 유효하다.
 
-Repo: https://github.com/amnotyoung/oh-my-oda-agent
+Repo: https://github.com/amnotyoung/dev-eval-agents
 
 ---
 
 ## General information
 
-- **Solution name:** oh-my-oda-agent
-- **Aliases / acronyms:** OMOA
+- **Solution name:** DevEval Agents
+- **Aliases / acronyms:** DevEval; formerly "oh-my-oda-agent" (OMOA)
 - **Categories:** **Open Software** + **Open Content**
   *(Not "Open AI system": the project ships no model or weights — it orchestrates
   whichever LLM the user supplies. See Indicator 4.)*
 - **Short description (tweet-length):** An open, model-agnostic multi-agent
   framework that supports OECD-DAC / KOICA-style evaluation of ODA (development
   aid) projects — with evidence gates, verification, and a mandatory human gate.
-- **Website:** https://github.com/amnotyoung/oh-my-oda-agent
-- **Source code:** https://github.com/amnotyoung/oh-my-oda-agent
+- **Website:** https://github.com/amnotyoung/dev-eval-agents
+- **Source code:** https://github.com/amnotyoung/dev-eval-agents
 - **Contact email:** `<your contact email>`
 
 ## Indicator 1 — Relevance to the SDGs
@@ -51,8 +51,8 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
 - **Licenses:** **MIT** (software) and **CC BY 4.0** (documentation/content) —
   both on the DPGA-approved lists (OSI / Creative Commons).
 - **Evidence:**
-  [`LICENSE`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/LICENSE),
-  [`LICENSE-CONTENT`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/LICENSE-CONTENT),
+  [`LICENSE`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE),
+  [`LICENSE-CONTENT`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE-CONTENT),
   and the "License" section of the README. Each component's license is mapped
   explicitly; no proprietary/closed license is mixed in.
 
@@ -60,7 +60,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
 
 - **Owner:** amnotyoung (individual maintainer).
 - **Ownership evidence:**
-  [`MAINTAINERS.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/MAINTAINERS.md)
+  [`MAINTAINERS.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/MAINTAINERS.md)
   + the copyright notices in `LICENSE` / `LICENSE-CONTENT`.
 - **Owning organization type:** individual.
 - **Owner country:** Republic of Korea.
@@ -83,17 +83,17 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   core**. A user can swap the proprietary model for open weights by pointing
   `scripts/open_runner.py` at the same agents — **demonstrated and reproducible**
   in
-  [`docs/platform-independence.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/docs/platform-independence.md)
+  [`docs/platform-independence.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/platform-independence.md)
   and the Colab notebook
-  [`notebooks/open-model-demo.ipynb`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/notebooks/open-model-demo.ipynb).
+  [`notebooks/open-model-demo.ipynb`](https://github.com/amnotyoung/dev-eval-agents/blob/main/notebooks/open-model-demo.ipynb).
   The project itself ships no proprietary component.
 
 ## Indicator 5 — Documentation
 
-- **Location:** the README, the [`docs/`](https://github.com/amnotyoung/oh-my-oda-agent/tree/main/docs)
+- **Location:** the README, the [`docs/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs)
   directory (platform-independence, do-no-harm, standards, validation log), and
   English reference translations under
-  [`docs/en/`](https://github.com/amnotyoung/oh-my-oda-agent/tree/main/docs/en).
+  [`docs/en/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs/en).
   Documentation covers setup for three harnesses, system architecture, the agent
   catalog, use cases, and functional requirements.
 
@@ -103,7 +103,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   database, or export step. All inputs and outputs are **open, non-proprietary
   formats** (Markdown / plain text), so any data a user produces with it is fully
   portable with any text tool — no lock-in. See
-  [`PRIVACY.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/PRIVACY.md).
+  [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md).
 
 ## Indicator 7 — Privacy & applicable laws
 
@@ -111,7 +111,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   Act (PIPA)**; **GDPR** where EU personal data is processed; and KOICA's own
   evaluation-ethics/confidentiality rules for KOICA materials.
 - **Evidence of compliance:**
-  [`PRIVACY.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/PRIVACY.md).
+  [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md).
   The tool runs locally and stores no personal data; the user/organization is the
   data controller.
 
@@ -122,7 +122,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   (CommonMark/Markdown, JSON, Jupyter); SPDX-identified licenses; Semantic
   Versioning + Keep a Changelog; Contributor Covenant.
 - **Evidence:**
-  [`docs/standards.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/docs/standards.md).
+  [`docs/standards.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/standards.md).
 
 ## Indicator 9A — Data privacy & security
 
@@ -132,9 +132,9 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   instructed to anonymize individuals, and a **local open-weight path** lets
   sensitive documents stay on the user's machine.
 - **Measures:**
-  [`PRIVACY.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/PRIVACY.md)
+  [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md)
   and
-  [`docs/do-no-harm.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/docs/do-no-harm.md).
+  [`docs/do-no-harm.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/do-no-harm.md).
 
 ## Indicator 9B — Inappropriate & illegal content
 
@@ -148,7 +148,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
 - **Does the solution facilitate user-to-user interaction?** **No.** There are no
   accounts, messaging, comments, or social features. Community spaces (issues,
   PRs) are governed by the
-  [`CODE_OF_CONDUCT.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/CODE_OF_CONDUCT.md).
+  [`CODE_OF_CONDUCT.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CODE_OF_CONDUCT.md).
   See `docs/do-no-harm.md` §9C.
 
 ## Scale & reach (optional fields)
@@ -161,7 +161,7 @@ Repo: https://github.com/amnotyoung/oh-my-oda-agent
   validation log). *Note: the DPGA supports early-stage projects; maturity is not
   an eligibility bar.*
 - **Real-world evaluation targets:** see
-  [`docs/real-world-examples.md`](https://github.com/amnotyoung/oh-my-oda-agent/blob/main/docs/real-world-examples.md)
+  [`docs/real-world-examples.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/real-world-examples.md)
   *(published KOICA evaluation reports this tool is designed to evaluate).*
 
 ---

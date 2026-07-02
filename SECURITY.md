@@ -2,7 +2,7 @@
 
 ## Threat model / 위협 모델
 
-oh-my-oda-agent is a **local, offline-first** toolkit. It is a collection of
+DevEval Agents is a **local, offline-first** toolkit. It is a collection of
 Markdown agent instructions, reference digests, templates, and one shell hook.
 It runs inside an LLM agent harness (Claude Code, Codex, or an open-model runner)
 on the user's own machine.

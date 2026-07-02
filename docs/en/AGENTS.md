@@ -1,6 +1,6 @@
 > English reference translation of `AGENTS.md`. The Korean file is the executable version loaded by the harness.
 
-# oh-my-oda-agent — Codex Instructions (AGENTS.md)
+# DevEval Agents — Codex Instructions (AGENTS.md)
 
 > Codex loads this file automatically (= the Codex counterpart to Claude Code's `CLAUDE.md`).
 > **The shared knowledge lives in `reference/` and is shared by both harnesses.** For the Claude Code workflow, see `CLAUDE.md` + `.claude/agents/`.

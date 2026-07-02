@@ -1,6 +1,6 @@
-# Contributing to oh-my-oda-agent / 기여 안내
+# Contributing to DevEval Agents / 기여 안내
 
-Thank you for your interest in improving oh-my-oda-agent! This project is an
+Thank you for your interest in improving DevEval Agents! This project is an
 open, model-agnostic agent framework that supports KOICA-style ODA project
 evaluation. Contributions of all sizes are welcome.
 
