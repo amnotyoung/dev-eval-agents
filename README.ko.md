@@ -129,6 +129,7 @@ python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 - ✅ **슬라이스 6**: 영향평가 검토 모듈 + 사업평가 규정(제536호) 규정 근거 주입
 - ✅ **슬라이스 7**: 품질심사관 공식 v2 반영 — 「평가품질검토 가이드라인 v2」(2025.6)로 갱신. **Pass 경계 70→60 교정**, 세부항목 v2 명칭·매핑, 총평 200자, 평가용역 종합등급 산정표 신설
 - ✅ **슬라이스 8**: **멀티 하네스** — `AGENTS.md`(Codex판 지침) 추가로 Claude Code(`.claude/`)·Codex(`AGENTS.md`)에서 작동, 공용 지식(`reference/`) 공유. `codex exec` e2e 검증. 여기에 **오픈웨이트 모델**(Qwen2.5 등, `scripts/open_runner.py` — 독점 API 없음)까지 더해 **세 번째 스택**을 실증 → 총 **세 하네스**(플랫폼 독립성)
+
 ## 📚 reference (KOICA 공식 자료 다이제스트)
 
 원본 PDF·HWP는 저작권 고려해 미포함(`.gitignore`), 추출 다이제스트만 보관:
