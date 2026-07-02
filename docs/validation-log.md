@@ -6,6 +6,83 @@
 
 ---
 
+## Summary (English)
+
+> This log records two things: **(1) does the system actually run** (live
+> end-to-end tests) and **(2) does it agree with real KOICA evaluations**
+> (comparison). ⚠️ This is **self-validation of a learning/research project, not
+> an official validation** — small sample (4 comparisons), with limitations in
+> §4. Last updated 2026-07-03 (added the open-weight run e2e-5). The detailed
+> tables below are kept in Korean (the working language of the KOICA source
+> material); this section is a full English synopsis for reviewers.
+
+**1. Live end-to-end runs (does it actually work).** Five headless runs — not
+simulations: the harness loads the real `.claude/agents/*.md` (or `AGENTS.md`)
+and the transcript is checked for the actual sub-agent calls.
+
+- **e2e-1** — bundled `samples/` report on Claude Code: five `dac-*-evaluator`
+  sub-agents fired; the deliberately blank indicator (O-2) was caught; coherence
+  and sustainability were marked *"cannot evaluate"*; the aggregate was withheld
+  and handed to the human.
+- **e2e-2** — Myanmar solar project: five evaluators fired; coherence *"cannot
+  evaluate"*; a conditional draft grade **D**.
+- **e2e-3** — quality inspection of a defect-seeded report:
+  `report-quality-inspector` fired with the v2 rubric (Pass = 60); caught the
+  grade↔text mismatch, unmet SMART targets, and a missing attachment → 58 → **D
+  (Non-Pass)**.
+- **e2e-4** — **Codex harness** (`AGENTS.md`, GPT-5.5 via `codex exec`):
+  `AGENTS.md` auto-loaded, `reference/` digests cited down to line numbers, the
+  five criteria scored *sequentially* — same principles (evidence gate, three
+  "cannot evaluate", withheld aggregate, human gate) as Claude Code.
+- **e2e-5** — **open-weight harness** (`scripts/open_runner.py`, local Ollama +
+  **Qwen2.5-14B**, Apache-2.0, **no proprietary API**): rules + `reference/`
+  injected; five criteria scored 1–4 with evidence; aggregate 13 → draft **D**;
+  the **human gate and the limitations note were preserved**. Its *"cannot
+  evaluate"* calls were less conservative than the commercial harness (a
+  calibration gap) — this demonstrates **portability, not quality parity**.
+
+→ The Claude Code workflow was reproduced **3×** (2 project evaluations + 1
+quality inspection); e2e-4 and e2e-5 show the **same shared knowledge runs on
+Codex and on a fully open-weight stack** (multi-harness).
+
+**2. Comparison against real KOICA reports (4 cases).**
+
+| Project | Type | Human team | DevEval Agents | Agreement |
+|---|---|---|---|---|
+| Cambodia cervical-cancer screening SW | CTS (6-criteria) | 11.7/24 *partially successful* | 13/24 *partially successful* | ✅ **grade match** (1.3 pt apart, derived independently) |
+| Myanmar solar | infra, completion (2018, 4-criteria) | 11.33/16 *successful* | ~12/20 **D** *partially successful* | ◐ **per-criterion direction match** (relevance 3 / effectiveness 3 / efficiency 2 exact); aggregate one band off |
+| Pakistan wastewater | infra, completion (2017, qualitative) | no grade ("mostly met") | **D** (13.5/20) | ◐ weakness (sustainability) **direction match** |
+| Vietnam vocational training | **impact evaluation** | (ungraded impact eval) | recognized "6-criteria inapplicable" → routed to the impact-evaluation reviewer | ✅ **evaluation-type distinction** verified |
+
+Observation: in the two cases with a comparable/clear grade (Cambodia, Myanmar),
+the **per-criterion direction agrees strongly**.
+
+**3. Safeguard evidence.** No evidence → no grade (missing-evidence criteria are
+marked *"cannot evaluate"*, never fabricated); the planted blank (O-2) was caught
+independently; no aggregate is asserted when a *"cannot evaluate"* is present;
+every output ends by deferring the final grade to the human; and a
+**self-correction** case is on record — an evaluator once refused over a
+"biased input" concern, then returned to an independent balanced score after
+context was added (neither blindly complying nor ignoring the evidence).
+
+**4. Honest tendencies & limitations.** Tendency: **more conservative** than the
+human teams on sustainability and efficiency (possibly good rigor, possibly
+over-conservatism — a calibration task). Limitations: **only 4 comparisons**
+(not statistically reliable); fact-extraction (PART A) is done by a
+human/assistant, so extraction bias would propagate (unresolved); the teams'
+grade systems differ (2018 4-criteria/16 vs 2024 5-criteria/20), needing
+normalization for a direct aggregate comparison; **no expert 1:1
+cross-validation** yet; direct processing of very large PDFs is unverified (a
+109-page report was run from an extract).
+
+**Conclusion:** *"it runs"* is demonstrated (live e2e reproduced); *"it agrees in
+direction with the evaluation teams"* is observed across 4 cases (per-criterion
+match in the 2 clear-grade cases). Reliability still needs a larger sample and
+expert cross-validation. Current stage = a **validated prototype, ahead of
+production deployment**.
+
+---
+
 ## 1. 실물 e2e — 실제 에이전트 작동 검증
 
 시뮬레이션(메인이 역할을 흉내냄)이 아니라, headless `claude -p`로 `DevEval Agents`를 로드해 **실제 `.claude/agents/*.md`가 호출되는지** 검증했다.
