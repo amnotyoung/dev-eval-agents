@@ -137,9 +137,15 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
     knowledge, and evaluation inputs/outputs. **No framework and no database.**
   - A complete path — **Ollama + Qwen2.5 (Apache-2.0) + the Python standard
     library** — runs the entire solution with no proprietary dependency.
-- **Does the solution have mandatory closed-component dependencies?** It requires
-  *a capable LLM agent-harness* at runtime — a category of tool, not a specific
-  proprietary product.
+- **Does the solution use any closed components that create a proprietary
+  dependency?** **No.** The project ships **no closed component of its own** and
+  has **no mandatory proprietary dependency (no lock-in).** It needs a capable LLM
+  agent-harness at runtime — a *category* of tool, not a specific product — and a
+  complete path built only from open components (**Ollama + Qwen2.5-14B,
+  Apache-2.0 + the Python standard library**) runs the entire solution.
+  Proprietary options (Claude Code, Codex, Anthropic Claude / GPT-5.5) are
+  **optional, replaceable runtime choices** — like a database or OS the user
+  supplies — not dependencies the project mandates or bundles.
 - **How closed components can be replaced:** the core product is portable
   Markdown; the **same agents run on Claude Code, on Codex, and on fully
   open-weight models** (Qwen2.5, Apache-2.0) via Ollama, with **no change to the
@@ -176,6 +182,24 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
     [`CONTRIBUTING.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CONTRIBUTING.md),
     and the per-agent instruction files, with English mirrors under
     [`docs/en/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/docs/en).
+  - *Content access (Open Content)* → the "content" — the Markdown agent
+    instructions and the
+    [`reference/`](https://github.com/amnotyoung/dev-eval-agents/tree/main/reference)
+    digests — is plain Markdown / UTF-8 text: **reading** it needs only a text
+    editor or web browser, and **running** it needs any LLM agent-harness (Claude
+    Code, Codex, or Ollama + `scripts/open_runner.py`). No proprietary app, reader,
+    or special hardware is required.
+  - *Additional references* → design/standards, safety, and evidence docs:
+    [`docs/standards.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/standards.md),
+    [`docs/do-no-harm.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/do-no-harm.md),
+    [`docs/validation-log.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/validation-log.md)
+    (English summary + Korean detail),
+    [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md),
+    and [`CHANGELOG.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CHANGELOG.md).
+  - *AI-system docs (model card, datasheet, training data)* → **not applicable**:
+    the project ships **no trained model or weights** (the model is user-supplied —
+    see Indicator 4), so there is no model to document. It is submitted as **Open
+    Software + Open Content**, not an AI model.
 
 ## Indicator 6 — Non-PII data extraction / portability
 
@@ -196,10 +220,25 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 - **Applicable frameworks:** Republic of Korea **Personal Information Protection
   Act (PIPA)**; **GDPR** where EU personal data is processed; and KOICA's own
   evaluation-ethics/confidentiality rules for KOICA materials.
-- **Evidence of compliance:**
-  [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md).
-  The tool runs locally and stores no personal data; the user/organization is the
-  data controller.
+- **Evidence (privacy documentation):**
+  [`PRIVACY.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md)
+  — the project's privacy & data-handling policy — and
+  [`docs/do-no-harm.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/docs/do-no-harm.md)
+  §9A. There is **no separate Terms of Service**: the tool runs locally with no
+  accounts or hosted service, so use is governed by the open license
+  ([`LICENSE`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE) /
+  [`LICENSE-CONTENT`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE-CONTENT))
+  plus `PRIVACY.md`.
+- **Consent, purpose of processing & subject requests:** because the solution
+  **collects and stores no PII** (no accounts, database, telemetry, or server),
+  there is **no consent to manage, no PII processed for any purpose of the tool's
+  own, and no subject-request queue** on the solution's side. Where a user feeds a
+  document that incidentally contains personal data, it is processed **locally and
+  transiently** and not retained; the **user/organization is the data controller**
+  and remains responsible for lawful basis, consent, and data-subject requests
+  under PIPA / GDPR. The design supports them: agents are instructed to
+  **anonymize** individuals, and a **fully local open-weight path** lets sensitive
+  documents never leave the user's machine.
 
 ## Indicator 8 — Standards & best practices
 
