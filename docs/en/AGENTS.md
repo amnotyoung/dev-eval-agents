@@ -3,7 +3,7 @@
 # DevEval Agents — Codex Instructions (AGENTS.md)
 
 > Codex loads this file automatically (= the Codex counterpart to Claude Code's `CLAUDE.md`).
-> **The shared knowledge lives in `reference/` and is shared by both harnesses.** For the Claude Code workflow, see `CLAUDE.md` + `.claude/agents/`.
+> **The shared knowledge lives in `reference/` and is shared across all harnesses** (Claude Code, Codex, and the open-weight runner `scripts/open_runner.py`). For the Claude Code workflow, see `CLAUDE.md` + `.claude/agents/`.
 > The evaluation criteria, scales, and regulation are based on actual KOICA materials: `reference/`.
 
 ---

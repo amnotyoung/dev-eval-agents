@@ -39,9 +39,12 @@ represent official KOICA positions.
 
 ## Third-party material / 제3자 자료
 
-- **OMO (oh-my-openagent)** — Only *design principles* were studied and
-  re-implemented in this project's own words. No OMO source code is included;
-  this is not a derivative work of OMO. See [`README.md`](README.md).
+- **oh-my-openagent (OMO)** — This project was inspired by OMO's *design
+  principles* only. It shares **no source code** with OMO and is **not a
+  derivative work**; only uncopyrightable ideas/patterns were re-implemented in
+  the project's own words. (OMO's own license is non-standard — a further reason
+  the project is kept fully independent and re-implemented from scratch.) This is
+  the project's single lineage acknowledgment.
 - **KOICA / KIEP evaluation documents** — The `reference/` digests are the
   authors' own original descriptions of publicly documented evaluation criteria,
   scales, and regulation (cited by name and article, e.g. Regulation No. 536).

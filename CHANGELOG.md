@@ -61,12 +61,12 @@ each slice below is recorded as a 0.x milestone.
 ## [0.3.0] — 2026-06 — Slice 3: completion engine
 ### Added
 - `.claude/hooks/boulder.sh` Stop hook — drives long/multi-project evaluations to
-  completion with stagnation and attempt-cap guards (OMO "Boulder").
+  completion with stagnation and attempt-cap guards.
 
 ## [0.2.0] — 2026-06 — Slice 2 / 2.5: parallel criteria team
 ### Added
 - Parallel 6-criteria evaluation team with aggregate-score → A–F grading
-  (reproducing OMO "hyperplan").
+  (parallel multi-angle evaluation).
 - `cts-validity-evaluator` — Validity as a 6th auxiliary criterion for CTS /
   technology-innovation projects.
 

@@ -3,7 +3,7 @@
 # DevEval Agents — Project Context
 
 This file is the project instruction that Claude Code reads automatically at the start of a session.
-(A native Claude Code reproduction of OMO's **Rules Injection** principle.)
+(A native Claude Code implementation of the **rules-injection** principle.)
 
 The evaluation criteria, scales, and principles were extracted from the **actual 2024 edition of the KOICA Evaluation Guidelines**.
 Source: `reference/KOICA-평가지침-2024-다이제스트.md` (primary asset). `reference/KOICA-평가지침-다이제스트.md` is the older 2017 version (for comparison).
@@ -104,7 +104,7 @@ When you must evaluate several projects or carry a single evaluation through to 
 3. The **Stop hook (`.claude/hooks/boulder.sh`)** automatically blocks with "continue" whenever an incomplete `[ ]` remains — until every item is `[x]` / `[~]`.
 4. Items blocked by, e.g., waiting on external materials, are marked `[~]` (with a reason) → excluded from the incomplete set.
 
-Infinite-loop prevention: automatic termination is permitted after 3 rounds of stagnation with no progress, or 20 total attempts (prompting human intervention). *(A reproduction of OMO Boulder's stagnation and cap guards.)*
+Infinite-loop prevention: automatic termination is permitted after 3 rounds of stagnation with no progress, or 20 total attempts (prompting human intervention). *(Stagnation and attempt-cap guards prevent infinite loops.)*
 
 ---
 

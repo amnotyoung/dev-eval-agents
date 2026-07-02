@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# DevEval Agents — 완료 엔진 (OMO "Boulder" 재현)
+# DevEval Agents — 완료 엔진 (Stop hook)
 #
 # Claude Code Stop hook. Claude가 응답을 끝내려 할 때 발화한다.
 # 평가 작업판(.omo/eval-plan.md)에 미완료 체크박스가 남아 있으면
 #   exit 2 + stderr 로 "계속하라"는 메시지를 Claude에 전달해 멈추지 못하게 한다.
-# 무한루프는 (1) 정체 감지 (2) 절대 시도 상한 으로 막는다 (OMO의 stagnation/상한 가드).
+# 무한루프는 (1) 정체 감지 (2) 절대 시도 상한 으로 막는다.
 #
 # 완료 신호 = 모든 체크박스가 [x] 또는 [~](막힘). 미완료 = [ ].
 

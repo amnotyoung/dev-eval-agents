@@ -1,7 +1,7 @@
 # DevEval Agents — Codex 지침 (AGENTS.md)
 
 > Codex가 이 파일을 자동 로드한다(= Claude Code의 `CLAUDE.md`에 대응하는 Codex판).
-> **공용 지식은 `reference/`에 있고 두 하네스가 공유한다.** Claude Code판 워크플로는 `CLAUDE.md` + `.claude/agents/` 참조.
+> **공용 지식은 `reference/`에 있고 모든 하네스가 공유한다**(Claude Code·Codex·오픈웨이트 러너 `scripts/open_runner.py`). Claude Code판 워크플로는 `CLAUDE.md` + `.claude/agents/` 참조.
 > 평가 기준·척도·규정은 실제 KOICA 자료 기반: `reference/`.
 
 ---

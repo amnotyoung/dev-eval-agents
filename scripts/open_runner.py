@@ -106,7 +106,7 @@ def chat(model, messages, num_ctx, temperature):
 
 def main():
     ap = argparse.ArgumentParser(description="Run DevEval Agents on an open model via Ollama.")
-    ap.add_argument("--model", default=os.environ.get("OMOA_MODEL", "qwen2.5:14b"))
+    ap.add_argument("--model", default=os.environ.get("DEVEVAL_MODEL", "qwen2.5:14b"))
     ap.add_argument("--target", default="samples/sample-evaluation-report.md")
     ap.add_argument("--out", default=None, help="Write the evaluation to this file (Markdown).")
     ap.add_argument("--num-ctx", type=int, default=32768)

@@ -4,12 +4,11 @@
 
 > **A model-agnostic, multi-agent framework that supports OECD-DAC / KOICA-style
 > evaluation of ODA (Official Development Assistance) projects.**
-> It ports the *design principles* of [OMO (oh-my-openagent)](https://github.com/code-yeongyu/oh-my-openagent)
-> — role = authority, evidence gates, rules injection, parallel multi-angle
-> review, verification, completion enforcement, and a human gate — into the ODA
-> evaluation domain. Criteria, scales, and rules are grounded in the **KOICA
-> Evaluation Guidelines (2024)** and **Project Evaluation Regulation No. 536**
-> (digests in `reference/`).
+> It applies a set of multi-agent design principles — role = authority, evidence
+> gates, rules injection, parallel multi-angle review, verification, completion
+> enforcement, and a human gate — to the ODA evaluation domain. Criteria, scales,
+> and rules are grounded in the **KOICA Evaluation Guidelines (2024)** and
+> **Project Evaluation Regulation No. 536** (digests in `reference/`).
 
 The system is **portable Markdown**: agent instructions plus a shared knowledge
 base and one shell hook. The same agents already run on **three independent
@@ -71,6 +70,24 @@ scores, and hands a **draft** grade to a human. Standard 5 criteria (Relevance,
 Coherence, Effectiveness, Efficiency, Sustainability) sum to 20 points → A–F;
 CTS/technology-innovation projects add **Validity** as a 6th criterion.
 
+#### The evaluation criteria (OECD-DAC, KOICA 2024)
+
+| DAC criterion | What it asks | Scored? |
+|--------------|--------------|:---:|
+| **Relevance** | Does the design fit the partner country's / beneficiaries' real needs & priorities? | ✅ |
+| **Coherence** | Does it complement & harmonise with other interventions — internal (ROK gov't, other KOICA projects) and external (other donors, partner gov't), avoiding duplication? | ✅ |
+| **Effectiveness** | Did it achieve (or is it expected to achieve) its objectives & outputs, including for vulnerable groups? | ✅ |
+| **Efficiency** | Were results delivered economically and on time relative to inputs? | ✅ |
+| **Impact** | Did it produce (or is it likely to produce) long-term, transformative effects? | ➖ ex-post only |
+| **Sustainability** | Are the financial, institutional & social capacities in place for benefits to last after close-out? | ✅ |
+| **Validity** | *(CTS / tech-innovation projects only)* technical validity — a non-standard add-on | ⭐ CTS only |
+
+- **Composite score** = the **5 scored criteria** (all but Impact), each **1–4 points** = **20 max → A–F**. **Impact is an ex-post criterion**, excluded from the final-evaluation composite; CTS projects add **Validity** and are graded on the 6-criteria average.
+- **4-point scale** — 1 clear negative effect · 2 partial shortfall · 3 largely achieved as planned · 4 fully achieved + beyond expectations.
+- **Grades** — ≥18 **A** (highly successful) · 16–18 **B** · 14–16 **C** (successful) · 12–14 **D** · 10–12 **E** (partially successful) · <10 **F** (unsatisfactory).
+
+Source: `reference/KOICA-평가지침-2024-다이제스트.md` (§1–2). The framework is the DAC **six**, but the final-evaluation composite is scored on **five** (Impact excluded).
+
 ### ② Impact Evaluation — measure causal effect → **Adequate / Conditional / Inadequate** (no grade)
 
 A different type entirely (causal effect via PSM/DiD/RCT, no A–F grade). Reviewed
@@ -91,21 +108,41 @@ applied here.
 
 Plus a **completion engine** (`.claude/hooks/boulder.sh`, a Stop hook) that drives
 long/multi-project evaluations to completion, with stagnation and attempt-cap
-guards (OMO "Boulder").
+guards.
 
-### OMO principle → this system
+### Design principles → this system
 
-| OMO principle | Implementation |
-|---------------|----------------|
-| Parallel multi-angle (hyperplan) | six criteria evaluated in parallel, each from its own angle |
+| Design principle | Implementation |
+|------------------|----------------|
+| Parallel multi-angle | six criteria evaluated in parallel, each from its own angle |
 | Role = authority | evaluators/verifiers are read-only; only `report-composer` writes |
 | Evidence gate | *no evidence → no grade / no text* (fabrication prohibited) |
 | Distrust completion claims | `quality-verifier` / `narrative-verifier` check evidence & consistency |
-| Completion enforcement (Boulder) | Stop hook with stagnation / cap guards |
+| Completion enforcement | Stop hook with stagnation / cap guards |
 | Rules injection | `CLAUDE.md` injects KOICA 2024 guidelines + Regulation No. 536 |
 | **Human gate** *(public-sector, new)* | AI cannot finalize a grade — that is a human's job |
 
 ## ▶️ Quick start
+
+**How it works, in three steps** — ① prepare the material to evaluate (project
+plan, PDM, completion report, …) as Markdown / plain text → ② start a harness and
+ask for an evaluation, pointing it at the file → ③ the system returns
+**per-criterion scores + evidence → verification → a draft composite grade**.
+**A human (the evaluation officer) sets the final grade** — the AI stops at an
+evidence-backed draft (the *human gate*).
+
+**Three ways to ask:**
+
+| Ask it this | You get | Handled by |
+|-------------|---------|------------|
+| `evaluate this project against the DAC criteria` | 6-criteria scores + a draft **A–F grade** | final-eval team |
+| `review this impact-evaluation report` | causal-inference & method review → **Adequate / Conditional / Inadequate** | `impact-evaluation-reviewer` |
+| `inspect the quality of this evaluation report` | 24-item meta-review → quality grade **A–D** | `report-quality-inspector` |
+
+New here? Run the bundled fictional sample
+[`samples/sample-evaluation-report.md`](samples/sample-evaluation-report.md) —
+some result indicators are deliberately left blank, so you can watch the
+**"no evidence → no grade"** gate fire.
 
 **Claude Code** (parallel sub-agents in `.claude/agents/`):
 ```bash
@@ -169,10 +206,8 @@ review + Regulation No. 536 → quality inspector v2 → **multi-harness (Codex)
 
 ## 📌 Attribution & status
 
-Inspired by the *design principles* of [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent)
-(ideas/patterns only; no OMO source code included — not a derivative). Evaluation
-criteria and rules are grounded in official KOICA materials (digests only,
-originals excluded). An **independent, unofficial** learning/research project —
-not affiliated with or endorsed by KOICA. Maintainer & ownership:
-[`MAINTAINERS.md`](MAINTAINERS.md). Formerly named `oh-my-oda-agent` (the
+Evaluation criteria and rules are grounded in official KOICA materials (digests
+only, originals excluded). An **independent, unofficial** learning/research
+project — not affiliated with or endorsed by KOICA. Design-lineage acknowledgment,
+maintainer & ownership: [`MAINTAINERS.md`](MAINTAINERS.md). Formerly named `oh-my-oda-agent` (the
 repository was renamed; old links redirect).

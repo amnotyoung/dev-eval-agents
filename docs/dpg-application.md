@@ -65,12 +65,52 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 - **Owning organization type:** individual.
 - **Owner country:** Republic of Korea.
 - **Do you own all code/content/data?** Yes for the project's own code and
-  content. Third-party material is limited to: (a) *design principles* inspired by
-  OMO (ideas only, no code, not a derivative) and (b) the project's **own
+  content. Third-party material is limited to: (a) general multi-agent **design
+  patterns** — the project shares **no source code** with, and is **not a
+  derivative of**, the upstream *oh-my-openagent* project (whose license is
+  non-standard); only uncopyrightable ideas/patterns were re-implemented in the
+  project's own words — and (b) the project's **own
   descriptions** of publicly documented KOICA/KIEP evaluation methodology (facts
   and criteria are not copyrightable; original documents are cited, not
   redistributed — see `.gitignore` and `LICENSE-CONTENT`). No third-party content
   is redistributed under our license.
+- **Do you have the right to reproduce / redistribute all included content, data,
+  and code? — Yes.** Every file is either the maintainer's **own work** or an
+  **uncopyrightable restatement of public facts**; the repository redistributes
+  **no third-party code or dataset** under our licenses, and copyrighted originals
+  are excluded by design. Evidence, component by component:
+  - *Own software* (the `boulder.sh` Stop hook, `scripts/open_runner.py`, the
+    notebook, config) → **MIT**, © 2026 amnotyoung
+    ([`LICENSE`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE)).
+  - *Own documentation & content* (agent instructions in `.claude/agents/`,
+    `CLAUDE.md`, `AGENTS.md`, `templates/`, `docs/`) → **CC BY 4.0**
+    ([`LICENSE-CONTENT`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE-CONTENT)).
+  - *`reference/` digests* → the project's **own original wording** summarizing
+    *publicly documented* KOICA/KIEP criteria, scales, and regulation (each cited
+    by document name + article/page). Facts, criteria, and regulatory provisions
+    are **not copyrightable**; only the project's expression is distributed. The
+    **original copyrighted PDF/HWP files are never redistributed** — they are
+    git-ignored (`*.pdf`, `*.hwp`; see
+    [`.gitignore`](https://github.com/amnotyoung/dev-eval-agents/blob/main/.gitignore)).
+    Basis stated in each digest's header note and in
+    [`MAINTAINERS.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/MAINTAINERS.md)
+    §"Third-party material."
+  - *No third-party source code* → the repository is **original code**, includes
+    **no source code from any other project**, and is **not a derivative work**;
+    its multi-agent design was informed only by general, uncopyrightable patterns.
+    The single design-lineage note is recorded in
+    [`MAINTAINERS.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/MAINTAINERS.md)
+    §"Third-party material."
+  - *Samples & real reports* → `samples/sample-evaluation-report.md` is a
+    **fictional, author-created** example (no real project or personal data); real
+    KOICA reports are **linked by URL only, never bundled**
+    (`docs/real-world-examples.md`).
+  - *Future code contributions* → an **inbound = outbound** term: by contributing,
+    a contributor agrees the material is licensed under the same MIT / CC BY 4.0
+    scheme and **confirms they have the right to contribute it** — see
+    [`CONTRIBUTING.md`](https://github.com/amnotyoung/dev-eval-agents/blob/main/CONTRIBUTING.md)
+    §"Licensing of contributions." The project is single-maintainer, so no
+    separate signed CLA is currently in force.
 
 ## Indicator 4 — Platform independence
 
