@@ -19,20 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-SCOPE OF THIS LICENSE
-=====================
-
-This MIT License applies to the SOFTWARE components of oh-my-oda-agent, namely:
-
-  - Shell scripts (e.g. `.claude/hooks/boulder.sh`)
-  - Orchestration/configuration files (e.g. `.claude/settings.json`)
-  - Runner scripts and notebooks (e.g. `scripts/`, `notebooks/`)
-
-The DOCUMENTATION and CONTENT components — including all Markdown agent
-instructions, the KOICA methodology digests under `reference/`, templates,
-samples, and the docs — are licensed separately under the Creative Commons
-Attribution 4.0 International license. See `LICENSE-CONTENT` and the "License"
-section of `README.md` for the precise mapping.
