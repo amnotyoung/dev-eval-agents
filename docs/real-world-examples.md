@@ -25,16 +25,17 @@
 
 Reports the framework has been checked against (see
 [`validation-log.md`](validation-log.md) §2) plus a governance example, spanning
-several sectors — which is also why the tool's SDG relevance is broad. Exact
-library titles and URLs are being finalized by the maintainer.
+several sectors — which is also why the tool's SDG relevance is broad. All are
+published on KOICA's ODA Library; the tool consumes such a report at runtime (it
+is not bundled here).
 
-| Report (descriptive) | Type | Sector / SDG | URL |
+| # | KOICA report (published) | Type | Sector / SDG |
 |---|---|---|---|
-| Cambodia — cervical cancer screening software project, final evaluation | Final (CTS, 6 criteria) | Health / SDG 3 | *maintainer to confirm* |
-| Myanmar — solar power (electrification) project, final evaluation | Final (infrastructure) | Energy / SDG 7 | *maintainer to confirm* |
-| Pakistan — wastewater treatment project, final evaluation | Final (infrastructure) | Water & sanitation / SDG 6 | *maintainer to confirm* |
-| Vietnam — vocational-training capacity building, impact evaluation | Impact evaluation | Education / jobs, SDG 4 & 8 | *maintainer to confirm* |
-| Uzbekistan — public-administration academy capacity building (2017–2021), final evaluation | Final (governance) | Institutions / SDG 16 | *maintainer to confirm* |
+| 1 | [캄보디아 모바일용 인공지능 자궁경부암 조기검진 소프트웨어 개발사업 (2019–2020) 종료평가 결과보고서](https://lib.koica.go.kr/search/detail/CATTOT000000044741) — *Cambodia: mobile AI cervical-cancer early-screening software* | Final (CTS) | Health / **SDG 3** |
+| 2 | [미얀마 태양광발전을 통한 전력소외지역 생활여건 개선사업 종료평가 보고서](https://lib.koica.go.kr/search/detail/CATTOT000000042723) — *Myanmar: solar power for off-grid communities* | Final (infrastructure) | Energy / **SDG 7** |
+| 3 | [파키스탄 카수르지역 하수처리시설 건립사업 종료평가 결과보고서](https://lib.koica.go.kr/search/detail/CATTOT000000040581) — *Pakistan: Kasur-district wastewater-treatment facility* | Final (infrastructure) | Water & sanitation / **SDG 6** |
+| 4 | [베트남 응에안성 산업기술학교 교육역량강화사업 영향평가](https://lib.koica.go.kr/search/detail/CATTOT000000041019) — *Vietnam: Nghệ An industrial-technical school, education capacity building* | **Impact evaluation** | Education & jobs / **SDG 4 · 8** |
+| 5 | [우즈베키스탄 공공부문 혁신을 위한 국가행정아카데미 역량강화사업 (2017–2021) 종료평가 결과보고서](https://lib.koica.go.kr/search/detail/CATTOT000000045506) — *Uzbekistan: Academy of Public Administration capacity building* | Final (governance) | Institutions / **SDG 16** |
 
 > These reports are **not** bundled in this repository. The tool reads a report
 > the user provides at runtime and produces a draft evaluation for human review.
