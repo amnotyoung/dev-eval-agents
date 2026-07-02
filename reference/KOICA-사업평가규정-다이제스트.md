@@ -1,5 +1,8 @@
 # KOICA 사업평가 규정 다이제스트
 
+> **출처·저작권 안내:** 이 문서는 공개적으로 문서화된 KOICA/KIEP 평가 실무(기준·척도·규정)를 상호운용 목적으로 **프로젝트가 자체 표현으로 요약·정리**한 것이다. 사실·기준·척도·규정 조항은 원 출처(문서명·조/페이지)로 인용하며, 식별을 위한 짧은 인용 외에 원문 표현을 재현하지 않는다. 원본 PDF·HWP는 미포함(`.gitignore`). 본 문서는 **CC BY 4.0**로 배포된다.
+> **Source & copyright note:** This is the project's OWN summary of publicly documented KOICA/KIEP evaluation practice (criteria, scales, regulation), written for interoperability. Facts and provisions are cited to their source (document name + article/page); no original wording is reproduced beyond short attributed identifiers. Original PDF/HWP files are not included (`.gitignore`). Licensed under CC BY 4.0.
+
 > 출처: **사업평가 규정 (규정 제536호, 2025.2.25 개정)** — hwp 원문에서 kordoc으로 추출.
 > 이 규정은 「국제개발협력기본법」 제16조 등에 근거한 KOICA 평가의 **상위 규정적 근거**다. 우리 시스템의 평가기준·유형·품질검토·원칙이 모두 이 규정에 정합한다.
 
@@ -34,7 +37,7 @@
 **평가자별:** 외부 / 내부 / 공동.
 
 ## 제19조 평가독립성 보장
-평가자의 독립성·자율성 보장. **특정 내용의 일방적 수정·삭제·추가 등 부당한 요구 금지.**
+평가자의 독립성·자율성을 보장한다. 즉, 어느 한쪽이 평가 내용을 임의로 고치거나 빼거나 덧붙이도록 강요하는 등 부당한 요구를 하지 못하게 한다.
 → 우리 "사람 게이트"와 정합: AI는 초안, 사람이 확정하되 **평가 독립성**을 침해하지 않는다.
 
 ## 제23조 평가대상 등급 부여

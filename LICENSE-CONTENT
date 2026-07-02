@@ -1,0 +1,59 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+=========================================================
+
+Copyright (c) 2026 amnotyoung and the oh-my-oda-agent contributors
+
+The DOCUMENTATION and CONTENT of oh-my-oda-agent are licensed under the
+Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+  - Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+  - Full legal code:        https://creativecommons.org/licenses/by/4.0/legalcode
+
+You are free to:
+  - Share  — copy and redistribute the material in any medium or format
+  - Adapt  — remix, transform, and build upon the material for any purpose,
+             even commercially.
+
+Under the following term:
+  - Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any reasonable
+    manner, but not in any way that suggests the licensor endorses you or your
+    use.
+
+
+SCOPE OF THIS LICENSE
+---------------------
+
+CC BY 4.0 applies to the CONTENT components of this project, namely:
+
+  - All Markdown agent instructions (`CLAUDE.md`, `AGENTS.md`,
+    `.claude/agents/*.md`, and their English counterparts under `docs/en/`)
+  - The KOICA methodology digests under `reference/`
+  - Templates under `templates/` and samples under `samples/`
+  - Project documentation under `docs/` and the README files
+
+The SOFTWARE components (shell scripts, configuration, runner scripts and
+notebooks) are licensed separately under the MIT License. See `LICENSE`.
+
+
+ATTRIBUTION FORMAT (suggested)
+------------------------------
+
+  "oh-my-oda-agent" by amnotyoung and contributors, licensed under CC BY 4.0.
+  Source: https://github.com/amnotyoung/oh-my-oda-agent
+
+
+NOTE ON THIRD-PARTY SOURCES
+---------------------------
+
+The `reference/` digests describe the evaluation methodology, criteria, and
+grading scales of KOICA (Korea International Cooperation Agency) and related
+Korean public bodies. They are the project authors' own original descriptions
+and summaries of publicly documented evaluation practice, written for
+interoperability, with the underlying official documents cited by name and
+article. Facts, ideas, criteria, and scales are not themselves copyrightable;
+only original expression is, and the expression here is the project's own.
+Original KOICA/KIEP source documents (PDF/HWP) are NOT redistributed in this
+repository (see `.gitignore`). Where any third-party wording is quoted, it is
+short, attributed, and used for identification/reference. See `MAINTAINERS.md`
+for the ownership statement.
