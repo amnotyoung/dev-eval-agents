@@ -1,0 +1,20 @@
+{
+  "name": "deveval",
+  "description": "KOICA/OECD-DAC 기준 ODA 사업평가 보조 에이전트팀 — 기준별 병렬 평정, 평가보고서 품질심사, 영향평가 방법론 검토, 근거 기반 보고서 작성. 근거 없으면 등급 없음·최종 확정은 사람.",
+  "version": "0.9.0",
+  "author": {
+    "name": "Wooyoung Kim",
+    "url": "https://github.com/amnotyoung"
+  },
+  "homepage": "https://github.com/amnotyoung/dev-eval-agents",
+  "repository": "https://github.com/amnotyoung/dev-eval-agents",
+  "license": "MIT",
+  "keywords": [
+    "oda",
+    "evaluation",
+    "koica",
+    "oecd-dac",
+    "development-cooperation",
+    "digital-public-good"
+  ]
+}

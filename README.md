@@ -145,10 +145,30 @@ New here? Run the bundled fictional sample
 some result indicators are deliberately left blank, so you can watch the
 **"no evidence → no grade"** gate fire.
 
-**Claude Code** (parallel sub-agents in `.claude/agents/`):
+**Claude Code — install as a plugin** (recommended: use it from *your own* working
+folder, not from inside this repo):
 ```bash
-cd dev-eval-agents
-claude        # approve the Stop hook in settings.json on first run
+/plugin marketplace add amnotyoung/dev-eval-agents
+/plugin install deveval@deveval-agents
+/reload-plugins
+```
+Then, in whatever folder your evaluation material lives:
+
+| Skill | What it does |
+|-------|--------------|
+| `/deveval:evaluate` | project evaluation — 5–6 criteria in parallel → composite score + draft grade |
+| `/deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
+| `/deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
+| `/deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
+
+Your working files (`.omo/eval-plan.md`, `.omo/draft-report*.md`) stay in **your**
+folder; the plugin directory is read-only knowledge. The bundled
+`deveval-consistency-check` command is on `PATH` while the plugin is enabled.
+
+To try it without installing (or to develop it):
+```bash
+git clone https://github.com/amnotyoung/dev-eval-agents
+claude --plugin-dir ./dev-eval-agents
 ```
 
 **Codex** (single-agent sequential, `AGENTS.md`):

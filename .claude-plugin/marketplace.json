@@ -1,0 +1,22 @@
+{
+  "name": "deveval-agents",
+  "description": "ODA(공적개발원조) 사업평가 도구 — OECD DAC/KOICA 기준 평가, 평가보고서 품질심사, 영향평가 방법론 검토를 위한 Claude Code 플러그인.",
+  "owner": {
+    "name": "Wooyoung Kim",
+    "url": "https://github.com/amnotyoung"
+  },
+  "plugins": [
+    {
+      "name": "deveval",
+      "source": "./",
+      "description": "KOICA/OECD-DAC 기준 ODA 사업평가 보조 에이전트팀 — 기준별 병렬 평정, 평가보고서 품질심사, 영향평가 방법론 검토, 근거 기반 보고서 작성.",
+      "version": "0.9.0",
+      "author": {
+        "name": "Wooyoung Kim",
+        "url": "https://github.com/amnotyoung"
+      },
+      "license": "MIT",
+      "keywords": ["oda", "evaluation", "koica", "oecd-dac", "digital-public-good"]
+    }
+  ]
+}
