@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# 평가보고서 수치 일관성 검사 (scripts/consistency_check.py 래퍼).
+# 플러그인 활성화 시 PATH에 올라가므로 평가자의 어느 폴더에서든 실행된다.
+#   deveval-consistency-check <report.md> [--mode auto|project|quality]
+exec python3 "$(dirname "$0")/../scripts/consistency_check.py" "$@"

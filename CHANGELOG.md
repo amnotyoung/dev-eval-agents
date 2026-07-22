@@ -11,6 +11,26 @@ each slice below is recorded as a 0.x milestone.
 ## [Unreleased] — Digital Public Goods readiness (2026-07)
 
 ### Added
+- **Packaged as a Claude Code plugin** — the repository *is* the plugin, so an
+  evaluator installs it once and works **in their own folder** instead of inside
+  this repo (evaluation reports are the evaluator's local work product; the repo
+  is the tool).
+  - `.claude-plugin/plugin.json` (name `deveval`) + `.claude-plugin/marketplace.json`
+    for self-distribution: `/plugin marketplace add amnotyoung/dev-eval-agents`
+    → `/plugin install deveval@deveval-agents`.
+  - **Workflows became skills** (`skills/`): `/deveval:evaluate`,
+    `/deveval:quality-review`, `/deveval:impact-review`, `/deveval:write-report`.
+    A plugin does not load `CLAUDE.md` as context (`claude plugin validate` warns
+    about exactly this), so the evaluation procedure now lives in skills — loaded
+    on demand rather than always-on.
+  - `.claude/agents/` → `agents/` (12 agents, unchanged content),
+    `.claude/settings.json` hooks → `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}`.
+  - `bin/` (on `PATH` while enabled): `deveval-root` resolves the plugin's absolute
+    path so skills can pass **absolute** reference paths to sub-agents — agents only
+    have `Read/Grep/Glob` and cannot resolve `reference/…` from the user's folder;
+    `deveval-consistency-check` wraps the numeric consistency checker.
+  - `CLAUDE.md` rewritten as **repository/development** context only, with the
+    evaluation workflow removed to prevent duplication drift with `skills/`.
 - **Open-source licensing**: MIT for software (`LICENSE`) and CC BY 4.0 for
   documentation/content (`LICENSE-CONTENT`).
 - **Governance & policy docs**: `MAINTAINERS.md`, `CONTRIBUTING.md`,
