@@ -36,6 +36,13 @@ claude plugin validate .     # 매니페스트·구조 검증
 
 `.claude/agents/`나 `.claude/settings.json`으로 되돌리지 마라 — 플러그인 레이아웃(`agents/`, `hooks/hooks.json`)이 정본이다.
 
+**한국어 정본을 고치면 `docs/en/` 미러도 같은 PR에서 고쳐라.** `CLAUDE.md`·`AGENTS.md`·`agents/`·`reference/`가 대상이고, CI(`mirror-sync`)가 한쪽만 바뀐 PR을 막는다. 한쪽만 바꾸는 것이 의도된 PR에는 `mirror-sync-exempt` 라벨을 붙인다.
+
+```bash
+bash scripts/check-mirror-sync.sh            # PR 모드 — origin/main과의 변경분 검사
+bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전체의 미러 최신성
+```
+
 ## 경로 규칙 (중요)
 
 플러그인 사용자는 **자기 작업 폴더**에서 이걸 쓴다. 저장소 안이 아니다. 따라서:
