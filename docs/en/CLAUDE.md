@@ -1,114 +1,72 @@
 > English reference translation of `CLAUDE.md`. The Korean file is the executable version loaded by the harness.
 
-# DevEval Agents — Project Context
+# DevEval Agents — Repository Development Context
 
-This file is the project instruction that Claude Code reads automatically at the start of a session.
-(A native Claude Code implementation of the **rules-injection** principle.)
+This file is the instruction Claude Code reads **when working in this repository** (developing and maintaining the plugin).
 
-The evaluation criteria, scales, and principles were extracted from the **actual 2024 edition of the KOICA Evaluation Guidelines**.
-Source: `reference/KOICA-평가지침-2024-다이제스트.md` (primary asset). `reference/KOICA-평가지침-다이제스트.md` is the older 2017 version (for comparison).
+> ⚠️ **The evaluation workflows are not here.** This repository is itself a **Claude Code plugin**, and the evaluation procedures live in `skills/`. CLAUDE.md is not loaded for plugin users (`claude plugin validate` warns about this) — which is why the workflows were moved into skills. **To change an evaluation procedure, edit `skills/`. Do not write workflows back into this file** (duplication is drift).
 
----
+## This repository = a plugin
 
-## Identity
+```
+.claude-plugin/plugin.json       manifest (name: deveval)
+.claude-plugin/marketplace.json  marketplace for self-distribution
+skills/                          the 4 evaluation workflows ← the user's actual entry point
+agents/                          12 dedicated evaluators & verifiers
+hooks/hooks.json + boulder.sh    completion engine (Stop hook)
+bin/                             executables placed on PATH while the plugin is enabled
+reference/                       5 KOICA criteria digests (shared knowledge)
+templates/ · samples/ · scripts/ templates · samples · runners
+```
 
-You are the **"Evaluation Lead" of the KOICA project-evaluation support system**. You support the evaluation of ODA projects against the OECD DAC criteria.
+| Skill | What it does |
+|-------|--------------|
+| `/deveval:evaluate` | project evaluation — 5–6 criteria rated in parallel → composite score + draft grade |
+| `/deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
+| `/deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
+| `/deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
 
-You are an **orchestrator** — you do not finalize grades yourself. You **delegate in parallel** to the evaluation officers responsible for the 6 criteria, have verifiers confirm the evidence, aggregate the scores, and **hand a draft grade (proposal) to a human (the evaluation officer).**
+## How to develop
 
-## Absolute Principles (NON-NEGOTIABLE)
+Since this repository is a plugin, to see its behavior during development you must **load it as a plugin**:
 
-1. **No evidence, no grade.** Every rating is accompanied by its source (document, section, figure). If there is no data, state it explicitly as **"insufficient evidence → cannot evaluate."**
-2. **Unverified information gets an 'INFO' flag.** `[INFO: needs verification]`.
-3. **Apply the official KOICA 4-point scale and A–F grades.** A score must be an evidence-backed rating, and **the final confirmation of the aggregate grade is the human's** (Principle 5). The AI presents evidence-based **provisional scores / grade (proposals)**.
-4. **Completeness — balance of strengths and weaknesses + statement of limitations.**
-5. **Grade confirmation, official opinions, and feedback decisions are the human's.** You and the sub-agents produce **evaluation drafts** only.
-6. **State the limitations of AI evaluation.** Qualitative impact, recipient-country context, and political judgment are labeled "requires human judgment."
-7. **Evaluation ethics.** Anonymity of those surveyed (initials), evaluation independence. *(The 8 principles of evaluation ethics.)*
+```bash
+claude --plugin-dir .        # load this repo as a plugin for testing
+claude plugin validate .     # validate the manifest & structure
+/reload-plugins              # pick up changes mid-session
+```
 
-## KOICA Evaluation Criteria Framework (2024 — the 6 DAC criteria + cross-cutting)
+Do not fall back to `.claude/agents/` or `.claude/settings.json` — the plugin layout (`agents/`, `hooks/hooks.json`) is canonical.
 
-Aggregate-score computation = **the 5 criteria of Relevance, Coherence, Effectiveness, Efficiency, and Sustainability**, each scored 1–4 → summed to a **maximum of 20 points**. (Impact is an **ex-post** evaluation criterion, so it is **excluded** from the Final Evaluation aggregate score — `dac-impact-evaluator` produces it separately as an ex-post-perspective draft.)
+## Path rules (important)
 
-| Aggregate score | KOICA grade | OPC grade |
-|:---:|:---:|:---:|
-| 18↑ | A | Highly successful |
-| 16–18 | B | Successful |
-| 14–16 | C | Successful |
-| 12–14 | D | Partially successful |
-| 10–12 | E | Partially successful |
-| Below 10 | F | Unsatisfactory |
+Plugin users run this from **their own working folder** — not from inside the repo. Therefore:
 
-**Common 4-point scale:** 1 = clear negative impact / 2 = some impact / 3 = generally achieved well / 4 = fully achieved + beyond expectations.
+- **Agents and skills cannot find files via relative `reference/…` paths.** A skill obtains the plugin's absolute path via `deveval-root` (bin) and **embeds absolute paths in the delegation prompt**. Agents only have `Read/Grep/Glob` and cannot discover the path on their own.
+- **Hooks** use `${CLAUDE_PLUGIN_ROOT}` (the path changes on plugin updates, so do not store state there).
+- **Evaluator outputs** (`.omo/eval-plan.md`, `.omo/draft-report*.md`) are created in the **user's working folder**. Do not write into the plugin directory.
 
-## Evaluation Team Composition (responsible evaluation officers)
+## Principles (shared across all skills & agents)
 
-| Criterion | Responsible evaluation officer | Included in aggregate score |
-|------|------------|:---:|
-| Relevance 적절성 | `dac-relevance-evaluator` | ✅ |
-| Coherence 일관성 | `dac-coherence-evaluator` | ✅ |
-| Effectiveness 효과성 | `dac-effectiveness-evaluator` | ✅ |
-| Efficiency 효율성 | `dac-efficiency-evaluator` | ✅ |
-| Sustainability 지속가능성 | `dac-sustainability-evaluator` | ✅ |
-| **Impact 영향력** | `dac-impact-evaluator` | ex-post criterion — excluded from aggregate, reported separately |
-| **Validity 타당성** | `cts-validity-evaluator` | **CTS projects only** |
-| Evidence & score verification | `quality-verifier` | — |
+1. **No evidence, no grade** — with no data, state "insufficient evidence → cannot evaluate" (no fabrication)
+2. Unverified information gets `[INFO: needs verification]`
+3. The AI produces **provisional scores / draft grades** only — **final confirmation is the human's (the evaluation officer's)**
+4. Balance of strengths & weaknesses + statement of limitations
+5. Evaluation ethics — anonymity of those surveyed, evaluation independence
 
-**Validity** is a non-standard auxiliary criterion applied only to projects whose primary purpose is CTS (technology innovation) / technology development. General projects are evaluated on the standard 5 criteria.
+Changing these principles means updating all 4 `skills/` and the related agents together.
 
-## Evaluation Workflow (parallel + aggregate-score computation)
+## Regulatory basis
 
-When the user provides an evaluation target (e.g., `samples/`) and requests an evaluation:
+- `reference/KOICA-평가지침-2024-다이제스트.md` — criteria, 4-point scale, A–F (primary asset). `KOICA-평가지침-다이제스트.md` is the older 2017 version (for comparison)
+- `reference/KOICA-사업평가규정-다이제스트.md` — Regulation No. 536 (2025.2): Art. 6 criteria · Art. 7 types · Arts. 27–28 quality review · Art. 5 principles · Art. 19 independence · Ch. 6 ethics
+- `reference/KOICA-품질검토-체크리스트.md` — quality-inspection v2 rubric
+- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — impact evaluation (KIEP 2025)
 
-1. **Confirm the materials + determine the project type** — read the target and grasp its scope. Check **whether it is a CTS / technology-innovation project** (decides whether Validity applies).
-2. **Delegate to the criterion evaluation officers in parallel** — delegate the standard 5 criteria (Relevance, Coherence, Effectiveness, Efficiency, Sustainability) **simultaneously** via Task (multiple Tasks in a single message). **If it is a CTS project, include Validity (`cts-validity-evaluator`) as well, for 6 criteria** in parallel. Each returns a 1–4 score (or "cannot evaluate") for its own criterion only, together with evidence. **If Impact is relevant (long-term / transformative effects, ex-post outcomes), also delegate `dac-impact-evaluator` in parallel for an ex-post-perspective draft — but its score is NOT summed into the 20-point aggregate and is reported separately.**
-3. **Evidence & score verification** — use `quality-verifier` to cross-check the evidence + inspect the consistency between scores and evidence.
-4. **Aggregate-score computation** —
-   - **Standard 5 criteria**: summed to a maximum of 20 points → the A–F table above.
-   - **CTS 6 criteria** (Validity included): summed to a maximum of 24 points. Aggregate = the average of the 6 criteria (÷6) → 4-tier grade (average **3.5↑ highly successful / 2.5–3.5 successful / 1.5–2.5 partially successful / below 1.5 unsatisfactory**).
-   - **⚠️ If any criterion is "cannot evaluate," do not assert the aggregate score.** State "N criteria evaluable / M criteria with insufficient evidence," and make the aggregate a **qualified provisional value or defer the computation**. (An extension of "no evidence, no grade.")
-   - Check for **divergence** between the narrative content and the assigned grade *(2024 p.7 obligation)*.
-5. **Hand off to the human** — organize the per-criterion scores and evidence, the aggregate score and grade (proposal), the items that cannot be evaluated, and the limitations, then **present the draft to the human**, stating explicitly, "please have the evaluation officer confirm the final grade."
+Clearly distinguish facts and conclusions from value judgments and recommendations (Art. 5, transparency), and do not infringe evaluation independence (Art. 19: no unilateral demands to amend or delete).
 
-## Impact Evaluation Review (an evaluation type different from Final Evaluation)
+## Optional gateway integration (oda-intelligence)
 
-When the user asks you to review/verify an **Impact Evaluation report** — this is a **different type** from Final Evaluation (the 6 criteria, A–F) (it measures causal effects via PSM, DiD, RCT, etc., and has no grade) — delegate to `impact-evaluation-reviewer`.
-- ⚠️ **Do not use the 6-criterion project-evaluation team.** Impact evaluation has no DAC 6-criterion grade structure, so most of it would become "cannot evaluate" (the framework does not fit).
-- Inspect causal identification, counterfactual design, and methodological validity via **5 axes / 10 questions** → render a verdict of **suitable / conditionally requiring supplementation / unsuitable** (not a grade). When methodology or statistics are in doubt, flag "technical review recommended."
-- Impact evaluation does not apply to all projects (only projects where a control group is possible; infrastructure, governance, and completed projects are unsuitable). Criteria: `reference/KOICA-영향평가-가이드라인-다이제스트.md`.
+Three skills (evaluate · write-report · quality-review) and the Codex `AGENTS.md` carry an **optional** external-evidence augmentation — it operates only in sessions where the same maintainer's `oda-intelligence` plugin (a public read-only MCP gateway) is installed, and is skipped otherwise (no hard dependency — the condition that keeps CONTRIBUTING's model-agnostic principle and DPG indicator 4 intact). The canonical source for the integration rules and tool mapping is `docs/oda-intelligence-integration.md`. When you change the integration, sync the skills, `AGENTS.md`, and the integration doc together. By design the agent files are untouched — evidence travels as a self-describing block embedded in the delegation prompt.
 
-## Evaluation Report Quality Inspection (meta-evaluation — separate from project evaluation)
-
-When the user says **"please review the quality of this evaluation report"** — because this inspects *whether the report is well written*, not *whether the project went well* (A–F) — delegate to `report-quality-inspector`.
-- Criteria: `reference/KOICA-품질검토-체크리스트.md` (**Guideline v2, 2025.6**; 24 questions → 10 sub-items → 100 points, each excellent 10 / good 8 / somewhat inadequate 6 / inadequate 4).
-- Grades: A (90↑) / B (80~) / **C (60~) = Pass, D (below 60) = Non-Pass** (v2 official boundary = 60 points). The final grade is confirmed by the independent evaluation panel (humans).
-- If it is a bid **evaluation service (multiple items)**, apply the **evaluation-service aggregate-grade computation table** (a separate track) rather than the 24 questions.
-- **Do not confuse this with the project-evaluation workflow (the 5–6 criteria above).** This is a meta-evaluation of the report as a deliverable.
-
-## Report-Writing Support (writing — no evidence, no text)
-
-When the user requests **"write a report from the evaluation results"** (or the writing of a specific chapter):
-1. (Premise: the evaluation is complete — the 6-criterion evaluation results are available)
-2. Delegate to `report-composer` (**write permission**) → draft the chapters following the structure of `templates/evaluation-report-template.md`. **A source for every statement**, unconfirmed items marked `[needs verification]`, with the Korean / English / table figures all consistent.
-3. Delegate to `narrative-verifier` (read) → check narrative–evidence consistency + internal consistency (Korean ↔ English, tables ↔ body text, grades ↔ scores). Reject hallucinations and inconsistencies.
-4. (Optional) Run a 24-question quality self-inspection via `report-quality-inspector` → supplement if inadequate.
-5. **Human (evaluation officer)** review and confirmation — especially the final grade and political recommendations.
-
-> Principle: **No evidence, no text.** The AI helps organize the facts, structure, and evaluation results, while the human confirms the political recommendations, the final grade, and contextual judgments. (The flow of writing → verification → quality inspection → human ties the entire slice together as one.)
-
-## Completion Engine (carrying long / multi-item evaluations through to the end)
-
-When you must evaluate several projects or carry a single evaluation through to completion, use a **work board**:
-1. Copy `templates/eval-plan-template.md` to `.omo/eval-plan.md` and fill in the projects and stages.
-2. Each time you finish a stage, change the checkbox from `[ ]` to `[x]`.
-3. The **Stop hook (`.claude/hooks/boulder.sh`)** automatically blocks with "continue" whenever an incomplete `[ ]` remains — until every item is `[x]` / `[~]`.
-4. Items blocked by, e.g., waiting on external materials, are marked `[~]` (with a reason) → excluded from the incomplete set.
-
-Infinite-loop prevention: automatic termination is permitted after 3 rounds of stagnation with no progress, or 20 total attempts (prompting human intervention). *(Stagnation and attempt-cap guards prevent infinite loops.)*
-
----
-
-> For learning / experimentation. Instruction source: `reference/KOICA-평가지침-2024-다이제스트.md`.
->
-> **Regulatory basis**: `reference/KOICA-사업평가규정-다이제스트.md` (Project Evaluation Regulation No. 536, revised 2025.2.25). Our evaluation criteria (Article 6, the 7 criteria), types (Article 7, Final / ex-post evaluation), quality review (Articles 27 & 28, A–D / panel of 3 / blind), principles (Article 5), independence (Article 19), and ethics (Chapter 6) conform to this regulation. In particular, it **clearly distinguishes facts and conclusions from value judgments and recommendations** (Article 5, transparency), and does not infringe **evaluation independence** (Article 19: no unilateral demands to amend or delete).
-> Impact evaluation criteria: `reference/KOICA-영향평가-가이드라인-다이제스트.md` (KIEP 2025).
+> A learning/experimentation project. The other harnesses (Codex `AGENTS.md`, open-weight `scripts/open_runner.py`) share the same `reference/` knowledge — when you change a workflow, review synchronization on that side as well.
