@@ -50,6 +50,18 @@ each slice below is recorded as a 0.x milestone.
   composite — so all six DAC criteria have an evaluator agent (12 agents total).
   It is distinct from `impact-evaluation-reviewer`, which reviews formal Impact
   Evaluation reports' causal methodology.
+- **Optional evidence-gateway integration** (`oda-intelligence`): the evaluate /
+  write-report / quality-review skills and the Codex `AGENTS.md` can now augment
+  the evidence gate with the same maintainer's public, read-only
+  [ODA Intelligence MCP gateway](https://github.com/amnotyoung/oda-intelligence-plugin)
+  — country indicators & other donors (relevance/coherence), the Korean ODA map
+  (duplication checks), KOICA regulation full text, and `verify_citation` for
+  report citations. Strictly optional (no hard dependency; workflows run
+  unchanged without the connector, preserving platform independence). Evidence
+  discipline: status tools first, missing ≠ zero, gateway evidence augments —
+  never replaces — the project documents. Agent files are untouched: evidence
+  travels as a self-describing block in delegation prompts. Guide:
+  `docs/oda-intelligence-integration.md`.
 
 ### Changed
 - `reference/` digests rewritten in the project's own expression with explicit

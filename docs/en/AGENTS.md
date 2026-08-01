@@ -58,6 +58,10 @@ When the user provides an evaluation target and requests an evaluation:
    - Check for narrative–grade divergence.
 5. **Hand off to the human** — organize the per-criterion scores and evidence, the aggregate score and grade (proposal), the items that cannot be evaluated, and the limitations, then **present the draft to the human**, stating explicitly, "the evaluation officer confirms the final grade."
 
+## External Evidence Augmentation (optional — MCP)
+
+If the `oda-intelligence` MCP gateway (public, read-only; the same maintainer's [oda-intelligence-plugin](https://github.com/amnotyoung/oda-intelligence-plugin)) is configured in Codex, you may augment external context evidence before rating — country indicators and other donors (`country_report_context` · `iati_query_country`), Korean projects in the same country for duplication checks (`oda_map_projects`), and regulation full text plus citation verification (`get_article` · `verify_citation`). Rules: status tools first (`country_data_status` · `oda_map_data_status`); `stale`/`no_data`/`disabled`/`error` mean "no evidence observed," **not** zero; gateway evidence is auxiliary context — the primary evidence remains the project documents under evaluation, and citations carry a `[Evidence: gateway/<source>, <status>, <retrieved date>]` label. If the gateway is not configured, ignore this section and proceed as usual (integration guide: `docs/oda-intelligence-integration.md`).
+
 ## Impact Evaluation Review (a type different from Final Evaluation)
 
 When asked to review an Impact Evaluation report — a **different type** from Final Evaluation (the 6 criteria, A–F) (it measures causal effects, and has no grade):

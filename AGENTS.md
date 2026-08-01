@@ -56,6 +56,10 @@
    - 서술-등급 괴리 점검.
 5. **사람 인계** — 기준별 점수·근거, 종합점수·등급(안), 평가 불가 항목, 한계를 정리해 **사람에게 초안 제시**, "최종 등급은 평가담당관이 확정"이라고 명시.
 
+## 외부 증거 보강 (선택 — MCP)
+
+`oda-intelligence` MCP 게이트웨이(공개 read-only, 같은 관리자의 [oda-intelligence-plugin](https://github.com/amnotyoung/oda-intelligence-plugin))가 Codex에 설정되어 있으면, 평정 전에 외부 맥락 증거를 보강할 수 있다 — 국가 지표·타 공여기관(`country_report_context`·`iati_query_country`), 같은 나라 한국 사업·중복 확인(`oda_map_projects`), 규정 조문 전문·인용 검증(`get_article`·`verify_citation`). 규칙: 상태 도구(`country_data_status`·`oda_map_data_status`) 먼저; `stale`/`no_data`/`disabled`/`error`는 "증거 없음"이지 0이 아니다; 게이트웨이 증거는 보조 맥락 — 1차 근거는 평가 대상 사업 문서이며, 인용에는 `[근거: 게이트웨이/<소스>, <상태>, <조회일>]` 라벨을 단다. 설정이 없으면 이 절을 무시하고 평소대로 진행한다(연동 안내: `docs/oda-intelligence-integration.md`).
+
 ## 영향평가 검토 (종료평가와 다른 유형)
 
 영향평가(Impact Evaluation) 보고서를 검토해 달라고 하면 — 종료평가(6기준 A~F)와 **다른 유형**(인과효과 측정, 등급 없음):
