@@ -12,8 +12,8 @@
 
 The system is **portable Markdown**: agent instructions plus a shared knowledge
 base and one shell hook. The same agents already run on **three independent
-stacks** — Claude Code, Codex, and a **fully open-weight** model — so the tool is
-not locked to any single vendor.
+stacks** — [Claude Code](https://claude.com/claude-code), Codex, and a **fully
+open-weight** model — so the tool is not locked to any single vendor.
 
 ---
 
