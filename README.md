@@ -107,7 +107,7 @@ applied here.
 | Report quality inspection (24-item / A–D) | `report-quality-inspector` | read |
 | Impact-evaluation review (5 axes / 10 questions) | `impact-evaluation-reviewer` | read |
 
-Plus a **completion engine** (`.claude/hooks/boulder.sh`, a Stop hook) that drives
+Plus a **completion engine** (`hooks/boulder.sh`, a Stop hook) that drives
 long/multi-project evaluations to completion, with stagnation and attempt-cap
 guards.
 
@@ -120,7 +120,7 @@ guards.
 | Evidence gate | *no evidence → no grade / no text* (fabrication prohibited) |
 | Distrust completion claims | `quality-verifier` / `narrative-verifier` check evidence & consistency |
 | Completion enforcement | Stop hook with stagnation / cap guards |
-| Rules injection | `CLAUDE.md` injects KOICA 2024 guidelines + Regulation No. 536 |
+| Rules injection | skills inject the KOICA 2024 guidelines + Regulation No. 536 (`reference/` digests) into delegation prompts |
 | **Human gate** *(public-sector, new)* | AI cannot finalize a grade — that is a human's job |
 
 ## ▶️ Quick start
