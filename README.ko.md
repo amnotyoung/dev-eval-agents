@@ -162,7 +162,7 @@ python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 관리자의
 [ODA Intelligence 플러그인](https://github.com/amnotyoung/oda-intelligence-plugin)을
 함께 설치하면 **대조 가능한 근거의 범위**가 넓어진다 — 공개 read-only MCP
-게이트웨이 도구 29종: 국가 지표·타 공여기관 활동(IATI·세계은행 등, 적절성·일관성),
+게이트웨이 도구 30종: 국가 지표·타 공여기관 활동(IATI·세계은행 등, 적절성·일관성),
 같은 나라 한국 ODA 사업 지도(중복·연계 확인), KOICA 규정 조문 전문, 그리고
 보고서가 인용한 조문의 실재를 검증하는 `verify_citation`.
 

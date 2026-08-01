@@ -187,7 +187,7 @@ Or reproduce it on free Google Colab: [`notebooks/open-model-demo.ipynb`](notebo
 
 DevEval's evidence gate says *no evidence → no grade*. The optional
 [ODA Intelligence plugin](https://github.com/amnotyoung/oda-intelligence-plugin)
-(same maintainer) widens what counts as checkable evidence: 29 read-only tools
+(same maintainer) widens what counts as checkable evidence: 30 read-only tools
 over one public MCP gateway — country indicators and other donors' activities
 (IATI, World Bank, …) for relevance/coherence, the Korean ODA project map for
 duplication checks, KOICA regulation full text, and `verify_citation`, which

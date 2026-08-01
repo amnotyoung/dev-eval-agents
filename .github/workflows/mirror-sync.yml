@@ -1,0 +1,33 @@
+name: mirror-sync
+
+# 한국어 정본을 고치면서 docs/en 미러를 두고 가는 PR을 막는다.
+# 번역의 정확성이 아니라 "같이 갱신했는가"만 본다.
+# 한쪽만 바꾸는 것이 의도된 PR에는 'mirror-sync-exempt' 라벨을 붙인다.
+
+on:
+  pull_request:
+    paths:
+      - "CLAUDE.md"
+      - "AGENTS.md"
+      - "agents/**"
+      - "reference/**"
+      - "docs/en/**"
+      - "README.md"
+      - "README.ko.md"
+      - "scripts/check-mirror-sync.sh"
+      - ".github/workflows/mirror-sync.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  mirror-sync:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'mirror-sync-exempt') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 정본과 docs/en 미러가 함께 갱신되었는지 검사
+        run: bash scripts/check-mirror-sync.sh "origin/${{ github.base_ref }}"

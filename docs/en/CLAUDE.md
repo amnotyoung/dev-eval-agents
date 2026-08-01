@@ -38,6 +38,13 @@ claude plugin validate .     # validate the manifest & structure
 
 Do not fall back to `.claude/agents/` or `.claude/settings.json` — the plugin layout (`agents/`, `hooks/hooks.json`) is canonical.
 
+**When you change a Korean canonical file, update its `docs/en/` mirror in the same PR.** This covers `CLAUDE.md`, `AGENTS.md`, `agents/`, and `reference/`; CI (`mirror-sync`) blocks a PR that changes only one side. Label a deliberately one-sided PR `mirror-sync-exempt`.
+
+```bash
+bash scripts/check-mirror-sync.sh            # PR mode — check the diff against origin/main
+bash scripts/check-mirror-sync.sh --audit    # audit mode — mirror freshness across the repo
+```
+
 ## Path rules (important)
 
 Plugin users run this from **their own working folder** — not from inside the repo. Therefore:
