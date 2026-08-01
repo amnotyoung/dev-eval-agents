@@ -1,11 +1,40 @@
 # DevEval Agents
 
+*다른 언어로 읽기: [English](README.md) · **한국어**(이 파일).*
+
 > **ODA(공적개발원조) 사업평가를 보조하는, 모델에 종속되지 않는 멀티 에이전트 프레임워크.**
 > KOICA 평가 업무를 보조하는 agent 팀을 [Claude Code](https://claude.com/claude-code)·**Codex**·**오픈웨이트 모델** 세 하네스 위에서 슬라이스 단위로 직접 구현했다 (공용 지식 `reference/`는 공유).
 
 코딩 전용 부품을 걷어내고 **도메인 무관 설계 원리**만 이 도메인에 적용한다 — 역할=권한, 근거 게이트, Rules 주입, 병렬 다각도, 검증, 완료 강제, 사람 게이트. 평가 기준·척도·규정은 **실제 KOICA 평가지침(2024)·사업평가 규정(제536호)** 기반(`reference/`).
 
 ---
+
+## 🌍 지속가능발전목표(SDG)와의 관련성
+
+개발원조를 근거에 기반해 더 잘 평가하는 일은 원조를 **책무성 있고 효과적으로** 만드는 장치의 일부다. 이 도구는 그 장치를 강화한다.
+
+- **SDG 16 — 평화·정의·강력한 제도**, 특히 세부목표 **16.6**("효과적이고 책무성 있으며 투명한 제도의 발전"). 이 시스템은 출처를 단 근거, 균형 잡힌 강점·단점, 의무적인 사람 게이트로 ODA 사업평가의 품질·일관성·투명성을 높여, 개발협력의 책무성 있는 제도적 관행을 뒷받침한다.
+- **SDG 17 — 목표 달성을 위한 파트너십**, 특히 **개발 효과성과 역량**에 관한 세부목표들. 모니터링·평가(M&E)의 수고를 낮추고 일관성을 높여, 효과적이고 학습 지향적인 파트너십이 기대는 평가 역량을 뒷받침한다.
+
+**분야를 가리지 않고**(보건·에너지·물·교육·공공행정 등) ODA 사업을 평가하므로, 학습과 책무성의 환류를 개선함으로써 그 사업들이 겨냥하는 SDG를 간접적으로 뒷받침한다. 직접적인 서비스 전달 도구가 아니라 **M&E 기능을 돕는 조력자**다.
+
+## ✅ 디지털 공공재(DPG) 준비 상태
+
+이 저장소는 [DPG 표준](https://www.digitalpublicgoods.net/standard)의 9개 지표에 맞춰 준비되어 있다.
+
+| # | 지표 | 근거 위치 |
+|---|------|-----------|
+| 1 | SDG 관련성 | 위 SDG 섹션, 그리고 `docs/dpg-application.md` |
+| 2 | 승인된 오픈 라이선스 | [`LICENSE`](LICENSE)(MIT) + [`LICENSE-CONTENT`](LICENSE-CONTENT)(CC BY 4.0) |
+| 3 | 명확한 소유권 | [`MAINTAINERS.md`](MAINTAINERS.md) |
+| 4 | 플랫폼 독립성 | [`docs/platform-independence.md`](docs/platform-independence.md) |
+| 5 | 문서화 | 이 README + [`docs/`](docs/) + 영문 번역 [`docs/en/`](docs/en/) |
+| 6 | 데이터 추출·이식성 | 개방형 Markdown·평문만 사용 — [`PRIVACY.md`](PRIVACY.md) |
+| 7 | 개인정보보호·준거법 | [`PRIVACY.md`](PRIVACY.md)(개인정보보호법 / GDPR) |
+| 8 | 표준·모범사례 준수 | [`docs/standards.md`](docs/standards.md) |
+| 9 | 설계 단계의 무해성 | [`docs/do-no-harm.md`](docs/do-no-harm.md) |
+
+거버넌스: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md).
 
 ## 🎛️ 시스템 구성 — 12 에이전트, 두 평가 유형, 세 하네스
 
@@ -157,7 +186,13 @@ DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 �
 - **게이트 실증** — 근거 없으면 평가 불가·종합 보류·사람 게이트가 실제로 작동
 - ⚠️ 학습·실험 자체검증(표본 소수). 전문가 교차검증·표본 확대는 진행 과제.
 
+## 🔌 플랫폼 독립성
+
+필수 의존 대상은 *유능한 LLM 에이전트 하네스*라는 **범주**이지 특정 상용 제품이 아니다. 같은 에이전트가 Claude Code·Codex·오픈웨이트 모델(Qwen2.5, Apache-2.0)에서 **핵심 산출물의 변경 없이** 동작한다. 전체 근거: [`docs/platform-independence.md`](docs/platform-independence.md).
+
 ## 🗺️ 로드맵
+
+슬라이스 1~8 완료 — 변경 이력은 [`CHANGELOG.md`](CHANGELOG.md) 참조.
 
 - ✅ **슬라이스 1~1.6**: 효과성 평가관 → KOICA 길라잡이 2024 반영 (DAC 6대 기준, A~F 공식 등급척도, 4점 루브릭)
 - ✅ **슬라이스 2 / 2.5**: 6기준 병렬 평가팀 + 종합점수→A~F (병렬 다각도) / CTS 타당성 평가관 추가
@@ -168,6 +203,15 @@ DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 �
 - ✅ **슬라이스 7**: 품질심사관 공식 v2 반영 — 「평가품질검토 가이드라인 v2」(2025.6)로 갱신. **Pass 경계 70→60 교정**, 세부항목 v2 명칭·매핑, 총평 200자, 평가용역 종합등급 산정표 신설
 - ✅ **슬라이스 8**: **멀티 하네스** — `AGENTS.md`(Codex판 지침) 추가로 Claude Code(`.claude/`)·Codex(`AGENTS.md`)에서 작동, 공용 지식(`reference/`) 공유. `codex exec` e2e 검증. 여기에 **오픈웨이트 모델**(Qwen2.5 등, `scripts/open_runner.py` — 독점 API 없음)까지 더해 **세 번째 스택**을 실증 → 총 **세 하네스**(플랫폼 독립성)
 
+## 📜 라이선스
+
+DPGA가 승인한 오픈 라이선스로 이중 배포한다.
+
+- **소프트웨어**(shell hook, 설정, 러너 스크립트, 노트북) — **MIT**, [`LICENSE`](LICENSE) 참조.
+- **문서·콘텐츠**(Markdown 에이전트, `reference/` 다이제스트, 템플릿, 샘플, docs) — **CC BY 4.0**, [`LICENSE-CONTENT`](LICENSE-CONTENT) 참조.
+
+`reference/` 다이제스트는 공개적으로 문서화된 KOICA·KIEP 평가 실무를 이 프로젝트가 **직접** 서술하고 출처를 표기한 것이며, 원본 PDF·HWP는 재배포하지 않는다. [`MAINTAINERS.md`](MAINTAINERS.md) 참조.
+
 ## 📚 reference (KOICA 공식 자료 다이제스트)
 
 원본 PDF·HWP는 저작권 고려해 미포함(`.gitignore`), 추출 다이제스트만 보관:
@@ -176,6 +220,6 @@ DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 �
 - `KOICA-영향평가-가이드라인-다이제스트.md` (KIEP 2025)
 - `KOICA-사업평가규정-다이제스트.md` (규정 제536호, 2025.2 — 우리 시스템의 규정적 근거)
 
-## 📌 출처 / 라이선스
+## 📌 출처와 상태
 
 평가 기준·규정은 KOICA 공식 자료에서 추출(원본 미포함, 다이제스트만). **독립적·비공식** 학습·실험용 개인 프로젝트로, KOICA와 제휴·후원 관계가 없다. 설계 계보 표기·소유권은 [`MAINTAINERS.md`](MAINTAINERS.md) 참조. 이전 이름: `oh-my-oda-agent`(리포 리네임, 옛 링크 리다이렉트).
