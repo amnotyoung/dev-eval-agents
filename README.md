@@ -183,6 +183,28 @@ python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 ```
 Or reproduce it on free Google Colab: [`notebooks/open-model-demo.ipynb`](notebooks/open-model-demo.ipynb).
 
+## 🔌 Optional companion — ODA Intelligence plugin
+
+DevEval's evidence gate says *no evidence → no grade*. The optional
+[ODA Intelligence plugin](https://github.com/amnotyoung/oda-intelligence-plugin)
+(same maintainer) widens what counts as checkable evidence: 29 read-only tools
+over one public MCP gateway — country indicators and other donors' activities
+(IATI, World Bank, …) for relevance/coherence, the Korean ODA project map for
+duplication checks, KOICA regulation full text, and `verify_citation`, which
+catches report citations to regulation articles that do not exist.
+
+```bash
+/plugin marketplace add amnotyoung/oda-intelligence-plugin
+/plugin install oda-intelligence@oda-intelligence-plugin
+```
+
+Strictly optional — without the connector every workflow runs unchanged and the
+output simply notes that external context was not augmented (platform
+independence is unaffected). With it, the same evidence discipline applies:
+status tools first, a missing source is **not** a zero, and gateway evidence
+augments — never replaces — the project documents. Details:
+[`docs/oda-intelligence-integration.md`](docs/oda-intelligence-integration.md).
+
 ## ✅ Validation
 
 Records of the system actually running and agreeing with real KOICA evaluations:

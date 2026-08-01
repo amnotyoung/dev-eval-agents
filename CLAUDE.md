@@ -63,4 +63,8 @@ claude plugin validate .     # 매니페스트·구조 검증
 
 사실·결론과 가치판단·제언을 명확히 구분하고(제5조 투명성), 평가 독립성(제19조: 일방적 수정·삭제 요구 금지)을 침해하지 않는다.
 
+## 선택적 게이트웨이 연동 (oda-intelligence)
+
+스킬 3종(evaluate·write-report·quality-review)과 Codex `AGENTS.md`에는 **선택적** 외부 증거 보강이 있다 — 같은 관리자의 `oda-intelligence` 플러그인(공개 read-only MCP 게이트웨이)이 설치된 세션에서만 동작하고, 없으면 건너뛴다(하드 의존 아님 — CONTRIBUTING의 model-agnostic 원칙과 DPG 지표 4를 지키는 조건). 연동 규칙·도구 매핑의 정본은 `docs/oda-intelligence-integration.md`. 연동 부분을 고치면 스킬·`AGENTS.md`·통합 문서를 함께 동기화한다. 에이전트 파일은 건드리지 않는 설계다 — 증거는 위임 프롬프트에 실리는 자기서술형 블록으로 전달된다.
+
 > 학습·실험용 프로젝트다. 다른 하네스(Codex `AGENTS.md`, 오픈웨이트 `scripts/open_runner.py`)도 같은 `reference/` 지식을 공유한다 — 워크플로를 고칠 땐 그쪽 동기화도 함께 검토한다.

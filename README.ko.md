@@ -111,6 +111,26 @@ python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 
 > 처음이라면 동봉된 가상 샘플 [`samples/sample-evaluation-report.md`](samples/sample-evaluation-report.md)로 종료평가를 돌려 보라 — 일부 성과지표를 **일부러 비워 둬**서, "근거 없으면 평가 불가" 게이트가 실제로 작동하는 걸 볼 수 있다.
 
+## 🔌 권장 동반 설치 — ODA Intelligence 플러그인 (선택)
+
+DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 관리자의
+[ODA Intelligence 플러그인](https://github.com/amnotyoung/oda-intelligence-plugin)을
+함께 설치하면 **대조 가능한 근거의 범위**가 넓어진다 — 공개 read-only MCP
+게이트웨이 도구 29종: 국가 지표·타 공여기관 활동(IATI·세계은행 등, 적절성·일관성),
+같은 나라 한국 ODA 사업 지도(중복·연계 확인), KOICA 규정 조문 전문, 그리고
+보고서가 인용한 조문의 실재를 검증하는 `verify_citation`.
+
+```bash
+/plugin marketplace add amnotyoung/oda-intelligence-plugin
+/plugin install oda-intelligence@oda-intelligence-plugin
+```
+
+**엄격히 선택 사항** — 커넥터가 없어도 모든 워크플로는 그대로 돌고, 산출물에
+"외부 맥락 증거 미보강"이 한계로 남을 뿐이다(플랫폼 독립성 무영향). 연동 시에도
+증거 규율은 그대로다: 상태 도구 먼저, 소스 부재는 0이 아니며, 게이트웨이 증거는
+사업 문서를 **보강**할 뿐 대체하지 않는다. 상세:
+[`docs/oda-intelligence-integration.md`](docs/oda-intelligence-integration.md).
+
 ## ✅ 검증 (Validation)
 
 실제로 작동하고 실제 KOICA 평가와 부합하는지의 기록 → **[`docs/validation-log.md`](docs/validation-log.md)**
