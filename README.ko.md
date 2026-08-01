@@ -92,14 +92,33 @@ KOICA 평가는 **유형이 다르다.** 이 시스템은 두 유형을 구분�
 | `이 영향평가 보고서를 검토해줘` | 인과추론·방법론 심사 → **적합/조건부/부적합** | `impact-evaluation-reviewer` |
 | `이 평가보고서 품질을 검토해줘` | 24문항 메타심사 → 품질등급 **A~D** | `report-quality-inspector` |
 
-**Claude Code** (`.claude/agents/` 병렬 서브에이전트):
+> 처음이라면 동봉된 가상 샘플 [`samples/sample-evaluation-report.md`](samples/sample-evaluation-report.md)로 종료평가를 돌려 보라 — 일부 성과지표를 **일부러 비워 둬**서, "근거 없으면 평가 불가" 게이트가 실제로 작동하는 걸 볼 수 있다.
+
+**Claude Code — 플러그인으로 설치** (권장: 이 저장소 안이 아니라 *자기 작업 폴더*에서 쓴다):
 ```bash
-cd dev-eval-agents
-claude        # 처음엔 settings.json의 Stop hook 승인
+/plugin marketplace add amnotyoung/dev-eval-agents
+/plugin install deveval@deveval-agents
+/reload-plugins
 ```
+그다음, 평가 자료가 있는 폴더 어디서든:
+
+| 스킬 | 하는 일 |
+|------|---------|
+| `/deveval:evaluate` | 사업평가 — 5~6기준 병렬 평정 → 종합점수·등급(안) |
+| `/deveval:quality-review` | 평가보고서 품질심사 — 24문항/100점/A~D |
+| `/deveval:impact-review` | 영향평가 방법론 검토 — 5축/10질문 |
+| `/deveval:write-report` | 보고서 작성 — 작성→수치검사→서술검증→사람 |
+
+작업 산출물(`.omo/eval-plan.md`, `.omo/draft-report*.md`)은 **사용자 폴더**에 남는다 — 플러그인 디렉토리는 읽기전용 지식이다. 플러그인이 켜져 있는 동안 동봉된 `deveval-consistency-check` 명령이 `PATH`에 오른다.
+
+설치 없이 써 보려면(또는 개발하려면):
+```bash
+git clone https://github.com/amnotyoung/dev-eval-agents
+claude --plugin-dir ./dev-eval-agents
+```
+
 **Codex** (`AGENTS.md` 단일 에이전트 순차 독립 평정):
 ```bash
-cd dev-eval-agents
 codex exec "samples/sample-evaluation-report.md 이 사업을 DAC 기준으로 평가해줘"
 ```
 **오픈웨이트 모델** (독점 API 없이 — [Ollama](https://ollama.com) + 오픈 가중치):
@@ -108,8 +127,6 @@ ollama pull qwen2.5:14b
 python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 ```
 무료 Google Colab로도 재현 가능: [`notebooks/open-model-demo.ipynb`](notebooks/open-model-demo.ipynb).
-
-> 처음이라면 동봉된 가상 샘플 [`samples/sample-evaluation-report.md`](samples/sample-evaluation-report.md)로 종료평가를 돌려 보라 — 일부 성과지표를 **일부러 비워 둬**서, "근거 없으면 평가 불가" 게이트가 실제로 작동하는 걸 볼 수 있다.
 
 ## 🔌 권장 동반 설치 — ODA Intelligence 플러그인 (선택)
 
