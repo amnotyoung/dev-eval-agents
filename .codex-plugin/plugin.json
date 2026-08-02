@@ -1,0 +1,44 @@
+{
+  "name": "deveval",
+  "version": "0.10.0",
+  "description": "KOICA/OECD-DAC 기준 ODA 사업평가, 평가보고서 품질심사, 영향평가 방법론 검토를 위한 근거 기반 워크플로.",
+  "author": {
+    "name": "Wooyoung Kim",
+    "url": "https://github.com/amnotyoung"
+  },
+  "homepage": "https://github.com/amnotyoung/dev-eval-agents",
+  "repository": "https://github.com/amnotyoung/dev-eval-agents",
+  "license": "MIT AND CC-BY-4.0",
+  "keywords": [
+    "oda",
+    "evaluation",
+    "koica",
+    "oecd-dac",
+    "development-cooperation",
+    "digital-public-good"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "DevEval Agents",
+    "shortDescription": "근거 기반 ODA 사업평가",
+    "longDescription": "Evaluate ODA projects against KOICA and OECD-DAC criteria, review evaluation-report quality, inspect impact-evaluation methodology, and draft evidence-linked reports with a mandatory human decision gate.",
+    "developerName": "Wooyoung Kim",
+    "category": "Education & Research",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/amnotyoung/dev-eval-agents",
+    "privacyPolicyURL": "https://github.com/amnotyoung/dev-eval-agents/blob/main/PRIVACY.md",
+    "defaultPrompt": [
+      "이 ODA 사업을 OECD DAC 기준으로 평가해줘.",
+      "이 평가보고서의 품질을 KOICA 기준으로 검토해줘.",
+      "이 영향평가 보고서의 인과추론 방법론을 검토해줘."
+    ],
+    "brandColor": "#1B3A57",
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  }
+}

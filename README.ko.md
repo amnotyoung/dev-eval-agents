@@ -123,31 +123,52 @@ KOICA 평가는 **유형이 다르다.** 이 시스템은 두 유형을 구분�
 
 > 처음이라면 동봉된 가상 샘플 [`samples/sample-evaluation-report.md`](samples/sample-evaluation-report.md)로 종료평가를 돌려 보라 — 일부 성과지표를 **일부러 비워 둬**서, "근거 없으면 평가 불가" 게이트가 실제로 작동하는 걸 볼 수 있다.
 
-**Claude Code — 플러그인으로 설치** (권장: 이 저장소 안이 아니라 *자기 작업 폴더*에서 쓴다):
+### 플러그인으로 설치
+
+플러그인을 한 번 설치한 뒤, 이 저장소 안이 아니라 평가 자료가 있는 자기 작업
+폴더에서 사용한다.
+
+**Codex**(터미널):
+
+```bash
+codex plugin marketplace add amnotyoung/dev-eval-agents --ref main
+codex plugin add deveval@deveval-agents
+```
+
+설치 후 새 Codex 작업을 시작한다. Codex는 동봉 훅을 별도로 검토하므로 완료 엔진을
+사용하려면 `/hooks`에서 내용을 확인하고 신뢰한다.
+
+**Claude Code**(대화형 세션 안):
+
 ```bash
 /plugin marketplace add amnotyoung/dev-eval-agents
 /plugin install deveval@deveval-agents
 /reload-plugins
 ```
-그다음, 평가 자료가 있는 폴더 어디서든:
 
-| 스킬 | 하는 일 |
-|------|---------|
-| `/deveval:evaluate` | 사업평가 — 5~6기준 병렬 평정 → 종합점수·등급(안) |
-| `/deveval:quality-review` | 평가보고서 품질심사 — 24문항/100점/A~D |
-| `/deveval:impact-review` | 영향평가 방법론 검토 — 5축/10질문 |
-| `/deveval:write-report` | 보고서 작성 — 작성→수치검사→서술검증→사람 |
+이후 같은 네 워크플로를 호스트별 문법으로 호출한다.
 
-작업 산출물(`.omo/eval-plan.md`, `.omo/draft-report*.md`)은 **사용자 폴더**에 남는다 — 플러그인 디렉토리는 읽기전용 지식이다. 플러그인이 켜져 있는 동안 동봉된 `deveval-consistency-check` 명령이 `PATH`에 오른다.
+| 워크플로 | Codex | Claude Code | 하는 일 |
+|----------|-------|-------------|---------|
+| 사업평가 | `$deveval:evaluate` | `/deveval:evaluate` | 5~6기준 독립 평정 → 종합점수·등급(안) |
+| 품질심사 | `$deveval:quality-review` | `/deveval:quality-review` | 24문항/100점/A~D 평가보고서 품질심사 |
+| 영향평가 검토 | `$deveval:impact-review` | `/deveval:impact-review` | 5축/10질문 인과 방법론 검토 |
+| 보고서 작성 | `$deveval:write-report` | `/deveval:write-report` | 작성→수치검사→서술검증→사람 |
 
-설치 없이 써 보려면(또는 개발하려면):
+작업 산출물(`.omo/eval-plan.md`, `.omo/draft-report*.md`)은 **사용자 폴더**에 남는다 — 플러그인 디렉토리는 읽기전용 지식이다. Claude Code는 동봉된 `deveval-consistency-check` 명령을 `PATH`에 올리고, 다른 호스트에서는 공용 스킬이 같은 검사기를 절대경로로 실행한다.
+
+Claude 플러그인을 설치 없이 써 보거나 개발하려면:
+
 ```bash
 git clone https://github.com/amnotyoung/dev-eval-agents
 claude --plugin-dir ./dev-eval-agents
 ```
 
-**Codex** (`AGENTS.md` 단일 에이전트 순차 독립 평정):
+Codex에서 플러그인 설치 없이 복제한 저장소를 직접 실행하려면 `AGENTS.md`
+폴백을 쓴다.
+
 ```bash
+cd dev-eval-agents
 codex exec "samples/sample-evaluation-report.md 이 사업을 DAC 기준으로 평가해줘"
 ```
 **오픈웨이트 모델** (독점 API 없이 — [Ollama](https://ollama.com) + 오픈 가중치):
@@ -181,7 +202,7 @@ DevEval의 증거 게이트는 "근거 없으면 등급 없음"이다. 같은 �
 
 실제로 작동하고 실제 KOICA 평가와 부합하는지의 기록 → **[`docs/validation-log.md`](docs/validation-log.md)**
 
-- **실물 e2e 4회** — Claude Code(`claude -p`, `.claude/agents/*`) 3회 + **Codex(`codex exec`, `AGENTS.md`) 1회** (시뮬레이션 아님)
+- **실물 e2e 4회** — Claude Code(`claude -p`, `agents/*`) 3회 + **Codex(`codex exec`, `AGENTS.md`) 1회** (시뮬레이션 아님)
 - **실제 보고서 4건 대조** — 캄보디아(등급 일치)·미얀마(기준별 방향 일치)·파키스탄(약점 방향 일치)·베트남(평가 유형 구분)
 - **게이트 실증** — 근거 없으면 평가 불가·종합 보류·사람 게이트가 실제로 작동
 - ⚠️ 학습·실험 자체검증(표본 소수). 전문가 교차검증·표본 확대는 진행 과제.

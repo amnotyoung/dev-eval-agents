@@ -7,8 +7,8 @@
 
 **DevEval Agents does not depend on any single proprietary platform or model.**
 Its substance is *portable Markdown*: agent instructions (`CLAUDE.md`,
-`AGENTS.md`, `.claude/agents/*.md`) plus a shared knowledge base (`reference/`)
-and one small shell hook. The only mandatory dependency is **"a capable LLM
+`AGENTS.md`, `agents/*.md`, `skills/*/SKILL.md`) plus a shared knowledge base
+(`reference/`) and one small shell hook. The only mandatory dependency is **"a capable LLM
 agent-harness"** — a *category* of tool, not a specific commercial product. The
 same agents already run on three independent stacks, including a **fully
 open-weight** one.
@@ -22,8 +22,8 @@ Markdown(에이전트 지침 + 공용 지식 `reference/` + 소형 shell 훅)이
 
 | Stack / 스택 | Harness | Model / 모델 | Openness / 개방성 | Status |
 |---|---|---|---|---|
-| 1 | Claude Code (`.claude/agents/`, parallel sub-agents) | Anthropic Claude | proprietary | validated (README §Validation) |
-| 2 | Codex (`AGENTS.md`, single-agent sequential) | GPT-5.5 | proprietary | validated (`codex exec`, Slice 8) |
+| 1 | Claude Code (`.claude-plugin/`, `agents/`, parallel subagents) | Anthropic Claude | proprietary | validated (README §Validation) |
+| 2 | Codex (`.codex-plugin/` + shared skills/subagents; `AGENTS.md` direct-run fallback) | OpenAI GPT | proprietary | direct-run validated; plugin package schema-validated |
 | 3 | **Ollama + `scripts/open_runner.py`** | **Qwen2.5-14B (open weights, Apache-2.0)** | **fully open** | **validated locally — see below** |
 
 The reference knowledge in `reference/` is shared unchanged across all three.

@@ -83,7 +83,7 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
   - *Own software* (the `boulder.sh` Stop hook, `scripts/open_runner.py`, the
     notebook, config) → **MIT**, © 2026 amnotyoung
     ([`LICENSE`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE)).
-  - *Own documentation & content* (agent instructions in `.claude/agents/`,
+  - *Own documentation & content* (agent instructions in `agents/`,
     `CLAUDE.md`, `AGENTS.md`, `templates/`, `docs/`) → **CC BY 4.0**
     ([`LICENSE-CONTENT`](https://github.com/amnotyoung/dev-eval-agents/blob/main/LICENSE-CONTENT)).
   - *`reference/` digests* → the project's **own original wording** summarizing
@@ -284,7 +284,7 @@ Repo: https://github.com/amnotyoung/dev-eval-agents
 - **Where is PII processed/used, and which components access it? (purpose
   limitation)** PII exists only **transiently**, inside the single document
   supplied for one run, held in memory during processing and not persisted. Access
-  is limited to: the **agent instructions** (`.claude/agents/*`, `CLAUDE.md`,
+  is limited to: the **agent instructions** (`agents/*`, `CLAUDE.md`,
   `AGENTS.md`) that read the document **read-only** to draft an evaluation; and the
   **LLM harness/model** the user chose (hosted → the text is sent to that provider;
   local `scripts/open_runner.py` → it stays on `localhost:11434`). Nothing else has
