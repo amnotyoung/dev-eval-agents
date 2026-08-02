@@ -10,47 +10,7 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
-### Added
-- **e2e-8 validation entry** (`docs/validation-log.md`) — the full evaluate-track
-  pipeline (6 parallel evaluators + quality-verifier + report-composer + numeric
-  checker + narrative-verifier, with optional gateway evidence) ran live on the
-  complete text of the real Cambodia CTS end-of-project report: ~60 sampled
-  evidence citations, zero hallucinations, 4 real evaluator errors caught and
-  corrected by the verification layer, band agreement with the human team
-  reproduced, and 3 defects of the published report itself re-confirmed.
-- **Regression test suite + CI** (`tests/`, `.github/workflows/checks.yml`) —
-  the deterministic components finally have automated tests: 18 unittest cases
-  for `scripts/consistency_check.py` (fixtures reproduce failure/false-positive
-  patterns observed in real KOICA reports), 15 behavior tests for
-  `hooks/boulder.sh`, and `scripts/check-manifest-sync.sh` guarding name/version
-  parity across the 4 plugin manifests (Claude + Codex + both marketplaces).
-- **Ko↔En composite-score extraction** in the numeric checker — Korean reversed
-  form (`총 24점 만점 중 11.7`) and English form (`12.7 points out of 24`).
-  Validated against a full sweep of **334 real KOICA end-of-project evaluation
-  PDFs**: the checker now catches **two genuine published Ko↔En summary
-  mismatches** (11.7 vs 12.7 — the very Cambodia CTS case this project's
-  design story is built on — and a sibling report's 9.3 vs 10.3).
-
-### Changed
-- **Numeric checker false-positive suppression**, calibrated on the same
-  334-report sweep (violation flags 71 → 22, all remaining flags are
-  multi-project bundles or true candidates): scale legends/threshold sentences,
-  quality-panel stamps (`평가품질 등급`, A–D scheme) and service-bundle grades
-  (`용역종합 등급`) vs project A–F, satisfaction-survey composites, count/date
-  ratios (`8/20개소`, `3/20-24`, `20/100,000명`, `(35/24)`), PDM achievement
-  rates masquerading as `NN/100` quality totals, and line-wrapped severed
-  labels (`부/분 성공적`). Criterion-mean sum check now requires a plausible
-  4–6 criteria and supports `(a)`–`(f)`.
-- **Checker exit codes**: "nothing to check" is now exit **3** (distinct from
-  pass 0 / violation 2) so scripted callers cannot mistake it for a pass;
-  crash/read failure stays fail-open 0. Skills updated accordingly.
-- **Completion engine pause semantics** (`hooks/boulder.sh`) — when a guard
-  trips (3 stalls or 20 attempts) the hook now records the plan's fingerprint
-  and stops nagging while the plan is untouched; editing the plan (renewed
-  intent) re-arms the engine. Previously the counters reset after firing, so an
-  abandoned plan re-blocked every subsequent turn.
-
-## [0.10.0] — 2026-08-02 — Digital Public Goods readiness
+## [0.10.0] — 2026-08-02 — Digital Public Goods readiness & verified hardening
 
 ### Added
 - **Packaged as installable Claude Code and Codex plugins** — the repository
@@ -114,11 +74,48 @@ each slice below is recorded as a 0.x milestone.
   never replaces — the project documents. Agent files are untouched: evidence
   travels as a self-describing block in delegation prompts. Guide:
   `docs/oda-intelligence-integration.md`.
+- **Regression test suite + CI** (`tests/`, `.github/workflows/checks.yml`) —
+  the deterministic components finally have automated tests: 20 unittest cases
+  for `scripts/consistency_check.py` (fixtures reproduce failure/false-positive
+  patterns observed in real KOICA reports), 15 behavior tests for
+  `hooks/boulder.sh`, and `scripts/check-manifest-sync.sh` guarding name/version
+  parity across the 4 plugin manifests (Claude + Codex + both marketplaces).
+- **Ko↔En composite-score extraction** in the numeric checker — Korean reversed
+  form (`총 24점 만점 중 11.7`) and English form (`12.7 points out of 24`).
+  Validated against a full sweep of **334 real KOICA end-of-project evaluation
+  PDFs**: the checker now catches **two genuine published Ko↔En summary
+  mismatches** (11.7 vs 12.7 — the very Cambodia CTS case this project's
+  design story is built on — and a sibling report's 9.3 vs 10.3).
+- **e2e-8 validation entry** (`docs/validation-log.md`) — the full evaluate-track
+  pipeline (6 parallel evaluators + quality-verifier + report-composer + numeric
+  checker + narrative-verifier, with optional gateway evidence) ran live on the
+  complete text of the real Cambodia CTS end-of-project report: ~60 sampled
+  evidence citations, zero hallucinations, 4 real evaluator errors caught and
+  corrected by the verification layer, band agreement with the human team
+  reproduced, and 3 defects of the published report itself re-confirmed.
 
 ### Changed
 - `reference/` digests rewritten in the project's own expression with explicit
   citations to the underlying KOICA/KIEP sources (copyright-safe).
 - `README` restructured (English-first, with License and SDG sections).
+- **Numeric checker false-positive suppression**, calibrated on the same
+  334-report sweep (violation flags 71 → 20, all remaining flags are
+  multi-project bundles or true candidates): scale legends/threshold sentences,
+  quality-panel stamps (`평가품질 등급`, A–D scheme) and service-bundle grades
+  (`용역종합 등급`) vs project A–F, satisfaction-survey composites, count/date
+  ratios (`8/20개소`, `3/20-24`, `20/100,000명`, `(35/24)`), PDM achievement
+  rates masquerading as `NN/100` quality totals, line-wrapped severed labels
+  (`부/분 성공적`), and lines that merely *quote* a mismatch. Criterion-mean sum
+  check now requires a plausible 4–6 criteria and supports `(a)`–`(f)`.
+- **Checker exit codes**: "nothing to check" is now exit **3** (distinct from
+  pass 0 / violation 2) so scripted callers cannot mistake it for a pass;
+  crash/read failure stays fail-open 0. Skills updated accordingly. *Callers that
+  treated any non-2 exit as success should be updated.*
+- **Completion engine pause semantics** (`hooks/boulder.sh`) — when a guard
+  trips (3 stalls or 20 attempts) the hook now records the plan's fingerprint
+  and stops nagging while the plan is untouched; editing the plan (renewed
+  intent) re-arms the engine. Previously the counters reset after firing, so an
+  abandoned plan re-blocked every subsequent turn.
 
 ## [0.8.0] — 2026-06-14 — Slice 8: multi-harness (Codex support)
 ### Added
