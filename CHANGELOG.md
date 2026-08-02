@@ -10,58 +10,21 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
-## [0.10.0] — 2026-08-02 — Digital Public Goods readiness & verified hardening
+## [0.10.0] — 2026-08-02 — Codex support, evidence gateway & verified hardening
 
 ### Added
-- **Packaged as installable Claude Code and Codex plugins** — the repository
-  *is* the plugin, so an
-  evaluator installs it once and works **in their own folder** instead of inside
-  this repo (evaluation reports are the evaluator's local work product; the repo
-  is the tool).
-  - `.claude-plugin/plugin.json` (name `deveval`) + `.claude-plugin/marketplace.json`
-    for self-distribution: `/plugin marketplace add amnotyoung/dev-eval-agents`
-    → `/plugin install deveval@deveval-agents`.
-  - `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for native
-    Codex discovery: `codex plugin marketplace add amnotyoung/dev-eval-agents
-    --ref main` → `codex plugin add deveval@deveval-agents`. Both plugin
-    manifests use version `0.10.0` and the same stable plugin identity.
-  - **Workflows became skills** (`skills/`): `deveval:evaluate`,
-    `deveval:quality-review`, `deveval:impact-review`, and
-    `deveval:write-report` (Codex invokes them with `$`; Claude Code with `/`).
-    A plugin does not load `CLAUDE.md` as context (`claude plugin validate` warns
-    about exactly this), so the evaluation procedure now lives in skills — loaded
-    on demand rather than always-on.
-  - `.claude/agents/` → `agents/` (12 agents, unchanged content),
-    `.claude/settings.json` hooks → `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}`.
-  - `bin/` (on Claude Code's `PATH` while enabled): `deveval-root` resolves the plugin's absolute
-    path so skills can pass **absolute** reference paths to sub-agents — agents only
-    have `Read/Grep/Glob` and cannot resolve `reference/…` from the user's folder;
-    `deveval-consistency-check` wraps the numeric consistency checker.
-  - The same four skills now resolve their installed root without assuming
-    plugin `bin/` is on `PATH`, load Claude-format role files into generic Codex
-    subagents, and retain a sequential independence fallback when subagents are
-    unavailable.
-  - `CLAUDE.md` rewritten as **repository/development** context only, with the
-    evaluation workflow removed to prevent duplication drift with `skills/`.
-- **Open-source licensing**: MIT for software (`LICENSE`) and CC BY 4.0 for
-  documentation/content (`LICENSE-CONTENT`).
-- **Governance & policy docs**: `MAINTAINERS.md`, `CONTRIBUTING.md`,
-  `CODE_OF_CONDUCT.md`, `SECURITY.md`, `PRIVACY.md`.
-- **Do-no-harm, standards, and platform-independence documentation** under
-  `docs/`.
-- **Open-model path** (platform-independence evidence): `scripts/open_runner.py`
-  runs the same agents on a local open-weight model via Ollama;
-  `notebooks/open-model-demo.ipynb` reproduces it on Google Colab.
-- **English documentation**: English reference translations under `docs/en/` and
-  an English-first `README.md` (Korean preserved as `README.ko.md`).
-- **SDG relevance statement** (SDG 16 & 17).
-- **DPG application answer packet**: `docs/dpg-application.md`.
-- **Impact evaluator** (`dac-impact-evaluator`): the DAC Impact criterion now has
-  a dedicated **ex-post** evaluator (KO executable + EN mirror), assessed
-  separately and **excluded** from the 5-criterion, 20-point Final-Evaluation
-  composite — so all six DAC criteria have an evaluator agent (12 agents total).
-  It is distinct from `impact-evaluation-reviewer`, which reviews formal Impact
-  Evaluation reports' causal methodology.
+- **Codex became a first-class host** — the same plugin now installs on both
+  hosts under one identity: `.codex-plugin/plugin.json` +
+  `.agents/plugins/marketplace.json` for native Codex discovery
+  (`codex plugin marketplace add amnotyoung/dev-eval-agents --ref main` →
+  `codex plugin add deveval@deveval-agents`), sharing the `name` and `version`
+  of the Claude manifest added in 0.9.0. The four skills are invoked with `$` on
+  Codex and `/` on Claude Code.
+  - The skills now resolve their installed root without assuming plugin `bin/`
+    is on `PATH`, load Claude-format role files into generic Codex subagents,
+    and retain a sequential independence fallback when subagents are unavailable.
+  - `AGENTS.md` reframed as the **direct-run fallback** for a cloned repository,
+    rather than the Codex workflow of record.
 - **Optional evidence-gateway integration** (`oda-intelligence`): the evaluate /
   write-report / quality-review skills and the Codex `AGENTS.md` can now augment
   the evidence gate with the same maintainer's public, read-only
@@ -74,6 +37,11 @@ each slice below is recorded as a 0.x milestone.
   never replaces — the project documents. Agent files are untouched: evidence
   travels as a self-describing block in delegation prompts. Guide:
   `docs/oda-intelligence-integration.md`.
+- **Mirror-sync CI** (`.github/workflows/mirror-sync.yml`,
+  `scripts/check-mirror-sync.sh`) — blocks a PR that changes a Korean canonical
+  file (`CLAUDE.md`, `AGENTS.md`, `agents/`, `reference/`) without updating its
+  `docs/en/` mirror, with an `--audit` mode for repository-wide staleness. The
+  English `CLAUDE.md` mirror had silently sat a month behind before this.
 - **Regression test suite + CI** (`tests/`, `.github/workflows/checks.yml`) —
   the deterministic components finally have automated tests: 20 unittest cases
   for `scripts/consistency_check.py` (fixtures reproduce failure/false-positive
@@ -95,9 +63,11 @@ each slice below is recorded as a 0.x milestone.
   reproduced, and 3 defects of the published report itself re-confirmed.
 
 ### Changed
-- `reference/` digests rewritten in the project's own expression with explicit
-  citations to the underlying KOICA/KIEP sources (copyright-safe).
-- `README` restructured (English-first, with License and SDG sections).
+- **License metadata corrected** in both plugin manifests to `MIT AND CC-BY-4.0`,
+  matching the repository's actual split (MIT code + CC BY 4.0 content).
+- **README (both languages)** gained install and invocation instructions for the
+  two hosts, and the 12 English agent mirrors were resynced with their Korean
+  canonical files (they had drifted a month behind).
 - **Numeric checker false-positive suppression**, calibrated on the same
   334-report sweep (violation flags 71 → 20, all remaining flags are
   multi-project bundles or true candidates): scale legends/threshold sentences,
@@ -116,6 +86,72 @@ each slice below is recorded as a 0.x milestone.
   and stops nagging while the plan is untouched; editing the plan (renewed
   intent) re-arms the engine. Previously the counters reset after firing, so an
   abandoned plan re-blocked every subsequent turn.
+
+## [0.9.0] — 2026-07-22 — Plugin packaging & Digital Public Goods readiness
+
+> Recorded retroactively. The version was bumped to 0.9.0 when the repository
+> was packaged as a Claude Code plugin, but no entry was written at the time and
+> 0.10.0 later absorbed the description. This entry restores it from the commit
+> history; 0.9.0 was never tagged or published, so its work first reached users
+> inside the `v0.10.0` tag.
+
+### Added
+- **Packaged as an installable Claude Code plugin** — the repository *is* the
+  plugin, so an evaluator installs it once and works **in their own folder**
+  instead of inside this repo (evaluation reports are the evaluator's local work
+  product; the repo is the tool).
+  - `.claude-plugin/plugin.json` (name `deveval`) + `.claude-plugin/marketplace.json`
+    for self-distribution: `/plugin marketplace add amnotyoung/dev-eval-agents`
+    → `/plugin install deveval@deveval-agents`.
+  - **Workflows became skills** (`skills/`): `deveval:evaluate`,
+    `deveval:quality-review`, `deveval:impact-review`, and
+    `deveval:write-report`. A plugin does not load `CLAUDE.md` as context
+    (`claude plugin validate` warns about exactly this), so the evaluation
+    procedure now lives in skills — loaded on demand rather than always-on.
+  - `.claude/agents/` → `agents/` (12 agents, unchanged content, moved as a git
+    rename to preserve history), `.claude/settings.json` hooks →
+    `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}`.
+  - `bin/` (on Claude Code's `PATH` while enabled): `deveval-root` resolves the
+    plugin's absolute path so skills can pass **absolute** reference paths to
+    sub-agents — agents only have `Read/Grep/Glob` and cannot resolve
+    `reference/…` from the user's folder; `deveval-consistency-check` wraps the
+    numeric consistency checker.
+- **Numeric consistency checker** (`scripts/consistency_check.py`) — a
+  format-agnostic, standard-library-only checker for a report's *self*
+  contradictions: composite score restated differently across the Korean
+  summary, English summary and tables; grade↔score divergence; `a+b+c+d ≠
+  composite`. Deliberately separates "nothing to check" from "passed" so a
+  thin read cannot look like a green light.
+- **Impact evaluator** (`dac-impact-evaluator`): the DAC Impact criterion now has
+  a dedicated **ex-post** evaluator (KO executable + EN mirror), assessed
+  separately and **excluded** from the 5-criterion, 20-point Final-Evaluation
+  composite — so all six DAC criteria have an evaluator agent (12 agents total).
+  It is distinct from `impact-evaluation-reviewer`, which reviews formal Impact
+  Evaluation reports' causal methodology.
+- **Open-source licensing**: MIT for software (`LICENSE`) and CC BY 4.0 for
+  documentation/content (`LICENSE-CONTENT`).
+- **Governance & policy docs**: `MAINTAINERS.md`, `CONTRIBUTING.md`,
+  `CODE_OF_CONDUCT.md`, `SECURITY.md`, `PRIVACY.md`.
+- **Do-no-harm, standards, and platform-independence documentation** under
+  `docs/`.
+- **Open-model path** (platform-independence evidence): `scripts/open_runner.py`
+  runs the same agents on a local open-weight model via Ollama;
+  `notebooks/open-model-demo.ipynb` reproduces it on Google Colab.
+- **English documentation**: English reference translations under `docs/en/` and
+  an English-first `README.md` (Korean preserved as `README.ko.md`).
+- **SDG relevance statement** (SDG 16 & 17).
+- **DPG application answer packet**: `docs/dpg-application.md`, plus
+  `docs/real-world-examples.md` with links to the published KOICA reports.
+- **Impact-track validation runs** e2e-6 / e2e-7 recorded in
+  `docs/validation-log.md`, on a real KOICA impact-evaluation report.
+- **Project identity**: renamed to **DevEval Agents**, with an SVG/PNG logo.
+
+### Changed
+- `reference/` digests rewritten in the project's own expression with explicit
+  citations to the underlying KOICA/KIEP sources (copyright-safe).
+- `README` restructured (English-first, with License and SDG sections).
+- `CLAUDE.md` rewritten as **repository/development** context only, with the
+  evaluation workflow removed to prevent duplication drift with `skills/`.
 
 ## [0.8.0] — 2026-06-14 — Slice 8: multi-harness (Codex support)
 ### Added
