@@ -145,34 +145,56 @@ New here? Run the bundled fictional sample
 some result indicators are deliberately left blank, so you can watch the
 **"no evidence → no grade"** gate fire.
 
-**Claude Code — install as a plugin** (recommended: use it from *your own* working
-folder, not from inside this repo):
+### Install as a plugin
+
+Install the plugin once, then use it from the folder that contains your
+evaluation material rather than from inside this repository.
+
+**Codex** (terminal):
+
+```bash
+codex plugin marketplace add amnotyoung/dev-eval-agents --ref main
+codex plugin add deveval@deveval-agents
+```
+
+Start a new Codex task after installation. Codex reviews bundled hooks
+separately; inspect and trust the completion hook with `/hooks` if you want it
+enabled.
+
+**Claude Code** (inside an interactive session):
+
 ```bash
 /plugin marketplace add amnotyoung/dev-eval-agents
 /plugin install deveval@deveval-agents
 /reload-plugins
 ```
-Then, in whatever folder your evaluation material lives:
 
-| Skill | What it does |
-|-------|--------------|
-| `/deveval:evaluate` | project evaluation — 5–6 criteria in parallel → composite score + draft grade |
-| `/deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
-| `/deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
-| `/deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
+Then invoke the same four workflows with the syntax for your host:
+
+| Workflow | Codex | Claude Code | What it does |
+|----------|-------|-------------|--------------|
+| Evaluate | `$deveval:evaluate` | `/deveval:evaluate` | 5–6 independent criteria → composite score + draft grade |
+| Quality review | `$deveval:quality-review` | `/deveval:quality-review` | 24-item / 100-point / A–D report-quality inspection |
+| Impact review | `$deveval:impact-review` | `/deveval:impact-review` | 5-axis / 10-question methodology review |
+| Write report | `$deveval:write-report` | `/deveval:write-report` | draft → numeric check → narrative verification → human |
 
 Your working files (`.omo/eval-plan.md`, `.omo/draft-report*.md`) stay in **your**
-folder; the plugin directory is read-only knowledge. The bundled
-`deveval-consistency-check` command is on `PATH` while the plugin is enabled.
+folder; the plugin directory is read-only knowledge. Claude Code exposes the
+bundled `deveval-consistency-check` command on `PATH`; the shared skills use the
+same checker by absolute path on hosts that do not expose plugin `bin/` entries.
 
-To try it without installing (or to develop it):
+To try the Claude plugin without installing it (or to develop it):
+
 ```bash
 git clone https://github.com/amnotyoung/dev-eval-agents
 claude --plugin-dir ./dev-eval-agents
 ```
 
-**Codex** (single-agent sequential, `AGENTS.md`):
+To run the cloned repository directly in Codex without installing the plugin,
+use the `AGENTS.md` fallback:
+
 ```bash
+cd dev-eval-agents
 codex exec "samples/sample-evaluation-report.md 이 사업을 DAC 기준으로 평가해줘"
 ```
 

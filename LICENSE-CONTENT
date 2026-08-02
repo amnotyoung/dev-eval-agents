@@ -26,8 +26,8 @@ SCOPE OF THIS LICENSE
 
 CC BY 4.0 applies to the CONTENT components of this project, namely:
 
-  - All Markdown agent instructions (`CLAUDE.md`, `AGENTS.md`,
-    `.claude/agents/*.md`, and their English counterparts under `docs/en/`)
+  - All Markdown agent instructions (`CLAUDE.md`, `AGENTS.md`, `agents/*.md`,
+    and their English counterparts under `docs/en/`)
   - The KOICA methodology digests under `reference/`
   - Templates under `templates/` and samples under `samples/`
   - Project documentation under `docs/` and the README files

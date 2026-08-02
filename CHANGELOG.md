@@ -8,27 +8,79 @@ may still change).
 The project was developed iteratively as a series of "slices" in June 2026;
 each slice below is recorded as a 0.x milestone.
 
-## [Unreleased] — Digital Public Goods readiness (2026-07)
+## [Unreleased]
 
 ### Added
-- **Packaged as a Claude Code plugin** — the repository *is* the plugin, so an
+- **e2e-8 validation entry** (`docs/validation-log.md`) — the full evaluate-track
+  pipeline (6 parallel evaluators + quality-verifier + report-composer + numeric
+  checker + narrative-verifier, with optional gateway evidence) ran live on the
+  complete text of the real Cambodia CTS end-of-project report: ~60 sampled
+  evidence citations, zero hallucinations, 4 real evaluator errors caught and
+  corrected by the verification layer, band agreement with the human team
+  reproduced, and 3 defects of the published report itself re-confirmed.
+- **Regression test suite + CI** (`tests/`, `.github/workflows/checks.yml`) —
+  the deterministic components finally have automated tests: 18 unittest cases
+  for `scripts/consistency_check.py` (fixtures reproduce failure/false-positive
+  patterns observed in real KOICA reports), 15 behavior tests for
+  `hooks/boulder.sh`, and `scripts/check-manifest-sync.sh` guarding name/version
+  parity across the 4 plugin manifests (Claude + Codex + both marketplaces).
+- **Ko↔En composite-score extraction** in the numeric checker — Korean reversed
+  form (`총 24점 만점 중 11.7`) and English form (`12.7 points out of 24`).
+  Validated against a full sweep of **334 real KOICA end-of-project evaluation
+  PDFs**: the checker now catches **two genuine published Ko↔En summary
+  mismatches** (11.7 vs 12.7 — the very Cambodia CTS case this project's
+  design story is built on — and a sibling report's 9.3 vs 10.3).
+
+### Changed
+- **Numeric checker false-positive suppression**, calibrated on the same
+  334-report sweep (violation flags 71 → 22, all remaining flags are
+  multi-project bundles or true candidates): scale legends/threshold sentences,
+  quality-panel stamps (`평가품질 등급`, A–D scheme) and service-bundle grades
+  (`용역종합 등급`) vs project A–F, satisfaction-survey composites, count/date
+  ratios (`8/20개소`, `3/20-24`, `20/100,000명`, `(35/24)`), PDM achievement
+  rates masquerading as `NN/100` quality totals, and line-wrapped severed
+  labels (`부/분 성공적`). Criterion-mean sum check now requires a plausible
+  4–6 criteria and supports `(a)`–`(f)`.
+- **Checker exit codes**: "nothing to check" is now exit **3** (distinct from
+  pass 0 / violation 2) so scripted callers cannot mistake it for a pass;
+  crash/read failure stays fail-open 0. Skills updated accordingly.
+- **Completion engine pause semantics** (`hooks/boulder.sh`) — when a guard
+  trips (3 stalls or 20 attempts) the hook now records the plan's fingerprint
+  and stops nagging while the plan is untouched; editing the plan (renewed
+  intent) re-arms the engine. Previously the counters reset after firing, so an
+  abandoned plan re-blocked every subsequent turn.
+
+## [0.10.0] — 2026-08-02 — Digital Public Goods readiness
+
+### Added
+- **Packaged as installable Claude Code and Codex plugins** — the repository
+  *is* the plugin, so an
   evaluator installs it once and works **in their own folder** instead of inside
   this repo (evaluation reports are the evaluator's local work product; the repo
   is the tool).
   - `.claude-plugin/plugin.json` (name `deveval`) + `.claude-plugin/marketplace.json`
     for self-distribution: `/plugin marketplace add amnotyoung/dev-eval-agents`
     → `/plugin install deveval@deveval-agents`.
-  - **Workflows became skills** (`skills/`): `/deveval:evaluate`,
-    `/deveval:quality-review`, `/deveval:impact-review`, `/deveval:write-report`.
+  - `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for native
+    Codex discovery: `codex plugin marketplace add amnotyoung/dev-eval-agents
+    --ref main` → `codex plugin add deveval@deveval-agents`. Both plugin
+    manifests use version `0.10.0` and the same stable plugin identity.
+  - **Workflows became skills** (`skills/`): `deveval:evaluate`,
+    `deveval:quality-review`, `deveval:impact-review`, and
+    `deveval:write-report` (Codex invokes them with `$`; Claude Code with `/`).
     A plugin does not load `CLAUDE.md` as context (`claude plugin validate` warns
     about exactly this), so the evaluation procedure now lives in skills — loaded
     on demand rather than always-on.
   - `.claude/agents/` → `agents/` (12 agents, unchanged content),
     `.claude/settings.json` hooks → `hooks/hooks.json` using `${CLAUDE_PLUGIN_ROOT}`.
-  - `bin/` (on `PATH` while enabled): `deveval-root` resolves the plugin's absolute
+  - `bin/` (on Claude Code's `PATH` while enabled): `deveval-root` resolves the plugin's absolute
     path so skills can pass **absolute** reference paths to sub-agents — agents only
     have `Read/Grep/Glob` and cannot resolve `reference/…` from the user's folder;
     `deveval-consistency-check` wraps the numeric consistency checker.
+  - The same four skills now resolve their installed root without assuming
+    plugin `bin/` is on `PATH`, load Claude-format role files into generic Codex
+    subagents, and retain a sequential independence fallback when subagents are
+    unavailable.
   - `CLAUDE.md` rewritten as **repository/development** context only, with the
     evaluation workflow removed to prevent duplication drift with `skills/`.
 - **Open-source licensing**: MIT for software (`LICENSE`) and CC BY 4.0 for

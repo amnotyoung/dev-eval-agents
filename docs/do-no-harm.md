@@ -49,7 +49,7 @@ governed by the [Code of Conduct](../CODE_OF_CONDUCT.md).
 ## AI-specific safeguards / AI 특유 안전장치
 
 These are the heart of the do-no-harm design and are enforced in the agents'
-instructions (`CLAUDE.md`, `AGENTS.md`, `.claude/agents/*`), grounded in KOICA
+instructions (`CLAUDE.md`, `AGENTS.md`, `skills/*/SKILL.md`, `agents/*`), grounded in KOICA
 evaluation ethics (Regulation No. 536) and the OECD-DAC framework:
 
 | Safeguard / 안전장치 | How it works / 작동 방식 |

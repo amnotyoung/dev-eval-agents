@@ -10,7 +10,7 @@ evaluation. Contributions of all sizes are welcome.
 ## What we welcome / 환영하는 기여
 
 - **Agent improvements** — sharper rubrics, clearer instructions, better output
-  formats for the agents in `.claude/agents/`.
+  formats for the agents in `agents/`.
 - **Reference corrections** — fixes/updates to the `reference/` digests **with a
   citation** to the published KOICA/KIEP source (name + article/page).
 - **Harness adapters** — new ways to run the same agents (e.g. additional

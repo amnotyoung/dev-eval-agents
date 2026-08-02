@@ -39,7 +39,8 @@ standards — it does not invent its own criteria:
   (`LICENSE-CONTENT`), both on the DPGA-approved lists (OSI / Creative Commons),
   with a clear per-component mapping.
 - **Model/harness-agnostic interfaces** — the same Markdown agents run on Claude
-  Code (`.claude/agents/`), Codex (`AGENTS.md`), and open-weight models via the
+  Code (`.claude-plugin/` + `agents/`), Codex (`.codex-plugin/` + shared skills,
+  with `AGENTS.md` as a direct-run fallback), and open-weight models via the
   Ollama HTTP API (`scripts/open_runner.py`). See
   [`platform-independence.md`](platform-independence.md).
 

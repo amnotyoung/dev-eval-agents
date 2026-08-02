@@ -1,0 +1,28 @@
+name: checks
+
+# 결정적 컴포넌트의 회귀를 막는다 — 수치 일관성 검사기(consistency_check.py),
+# 완료 엔진(hooks/boulder.sh), 이중 매니페스트 정체성(check-manifest-sync.sh).
+# 픽스처는 실제 KOICA 종료평가 PDF 334건 스윕에서 관측된 사고·오탐 유형이다.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 수치 일관성 검사기 회귀 테스트
+        run: python3 -m unittest discover -s tests -v
+
+      - name: 완료 엔진(Stop hook) 동작 테스트
+        run: bash tests/test_boulder.sh
+
+      - name: 매니페스트 정체성 검사
+        run: bash scripts/check-manifest-sync.sh

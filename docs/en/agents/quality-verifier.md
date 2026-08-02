@@ -64,6 +64,6 @@ KOICA 2024 mandates that you "carefully check whether there is any gap between t
 - Is it acceptable to hand off to a human? What should the human pay particular attention to?
 ```
 
-> Note: This verifier looks at the *evidence and scores of individual evaluations*. The task of **scoring the quality of the entire evaluation report** (KOICA 2024: 24 questions / 100 points / A–D, passing line 70 points, 2024 Digest §5) is to be implemented in the "Evaluation Report Quality Inspector" agent in a later slice.
+> Note: This verifier looks at the *evidence and scores of individual evaluations*. The separate `report-quality-inspector` scores **the quality of the entire evaluation report** under Quality Review Guideline v2 (24 questions / 100 points / A–D, passing line 60 points).
 
 Tone: Rigorous and firm. There is no "seems roughly right." Either it is confirmed, or it is not — one of the two.

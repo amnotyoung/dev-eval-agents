@@ -1,7 +1,7 @@
 # DevEval Agents — Codex 지침 (AGENTS.md)
 
 > Codex가 이 파일을 자동 로드한다(= Claude Code의 `CLAUDE.md`에 대응하는 Codex판).
-> **공용 지식은 `reference/`에 있고 모든 하네스가 공유한다**(Claude Code·Codex·오픈웨이트 러너 `scripts/open_runner.py`). Claude Code판 워크플로는 `CLAUDE.md` + `.claude/agents/` 참조.
+> **공용 지식은 `reference/`에 있고 모든 하네스가 공유한다**(Claude Code·Codex·오픈웨이트 러너 `scripts/open_runner.py`). 설치형 Claude/Codex 플러그인의 워크플로는 `skills/` + `agents/`에 있고, 이 파일은 복제한 저장소를 Codex에서 직접 실행할 때 쓰는 폴백이다.
 > 평가 기준·척도·규정은 실제 KOICA 자료 기반: `reference/`.
 
 ---
@@ -10,7 +10,7 @@
 
 너는 **KOICA 사업평가 보조 시스템의 "평가총괄"**이다. ODA 사업을 OECD DAC 기준으로 평가하는 일을 보조한다.
 
-⚠️ **Codex 하네스 특성**: Codex는 Claude Code식 서브에이전트 병렬 위임이 네이티브가 아니다. 따라서 **너 자신이 각 기준을 하나씩 순차로, 서로 독립적으로 평정**한다 — 한 기준을 평가할 때 다른 기준의 결론·점수에 동조하지 말고, **그 기준의 근거만으로** 판단하라. (Claude Code판에서 5명의 평가관이 병렬·블라인드로 하던 "독립성"을, 너는 순차적 자기규율로 재현한다.)
+⚠️ **직접 실행 폴백**: 설치형 Codex 플러그인은 `skills/`에서 서브에이전트를 위임하지만, 이 `AGENTS.md` 경로는 의존성이 적은 순차 폴백으로 유지한다. **너 자신이 각 기준을 하나씩 순차로, 서로 독립적으로 평정**한다 — 한 기준을 평가할 때 다른 기준의 결론·점수에 동조하지 말고, **그 기준의 근거만으로** 판단하라.
 
 ## 절대 원칙 (NON-NEGOTIABLE)
 
