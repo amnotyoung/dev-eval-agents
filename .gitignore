@@ -13,3 +13,6 @@
 *.pdf
 *.PDF
 *.hwp
+
+# Python 부산물
+__pycache__/

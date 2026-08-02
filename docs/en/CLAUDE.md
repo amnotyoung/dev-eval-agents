@@ -4,31 +4,35 @@
 
 This file is the instruction Claude Code reads **when working in this repository** (developing and maintaining the plugin).
 
-> ⚠️ **The evaluation workflows are not here.** This repository is itself a **Claude Code plugin**, and the evaluation procedures live in `skills/`. CLAUDE.md is not loaded for plugin users (`claude plugin validate` warns about this) — which is why the workflows were moved into skills. **To change an evaluation procedure, edit `skills/`. Do not write workflows back into this file** (duplication is drift).
+> ⚠️ **The evaluation workflows are not here.** This repository is itself a **shared Claude Code and Codex plugin**, and the evaluation procedures live in `skills/`. CLAUDE.md is not loaded for installed-plugin users, which is why the workflows were moved into skills. **To change an evaluation procedure, edit `skills/`. Do not write workflows back into this file** (duplication is drift).
 
 ## This repository = a plugin
 
 ```
 .claude-plugin/plugin.json       manifest (name: deveval)
 .claude-plugin/marketplace.json  marketplace for self-distribution
+.codex-plugin/plugin.json        Codex manifest (same name/version)
+.agents/plugins/marketplace.json Codex repository marketplace
 skills/                          the 4 evaluation workflows ← the user's actual entry point
 agents/                          12 dedicated evaluators & verifiers
 hooks/hooks.json + boulder.sh    completion engine (Stop hook)
-bin/                             executables placed on PATH while the plugin is enabled
+bin/                             executables Claude puts on PATH (Codex uses absolute fallback paths)
 reference/                       5 KOICA criteria digests (shared knowledge)
 templates/ · samples/ · scripts/ templates · samples · runners
 ```
 
 | Skill | What it does |
 |-------|--------------|
-| `/deveval:evaluate` | project evaluation — 5–6 criteria rated in parallel → composite score + draft grade |
-| `/deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
-| `/deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
-| `/deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
+| `deveval:evaluate` | project evaluation — 5–6 criteria rated in parallel → composite score + draft grade |
+| `deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
+| `deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
+| `deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
+
+Invoke a skill as `/deveval:<skill>` in Claude Code or `$deveval:<skill>` in Codex.
 
 ## How to develop
 
-Since this repository is a plugin, to see its behavior during development you must **load it as a plugin**:
+To inspect Claude behavior during development, **load it as a plugin**:
 
 ```bash
 claude --plugin-dir .        # load this repo as a plugin for testing
@@ -36,7 +40,15 @@ claude plugin validate .     # validate the manifest & structure
 /reload-plugins              # pick up changes mid-session
 ```
 
-Do not fall back to `.claude/agents/` or `.claude/settings.json` — the plugin layout (`agents/`, `hooks/hooks.json`) is canonical.
+The deterministic components (numeric checker, completion engine, manifest identity) have tests guarded by CI (`checks`) — run them locally too:
+
+```bash
+python3 -m unittest discover -s tests   # numeric-checker regressions (fixtures = real failure patterns)
+bash tests/test_boulder.sh              # completion engine (Stop hook) behavior
+bash scripts/check-manifest-sync.sh     # name/version parity across the 4 manifests
+```
+
+Do not fall back to `.claude/agents/` or `.claude/settings.json` — the shared plugin layout (`skills/`, `agents/`, `hooks/hooks.json`) is canonical. Validate the Codex manifest separately with plugin-creator's validator.
 
 **When you change a Korean canonical file, update its `docs/en/` mirror in the same PR.** This covers `CLAUDE.md`, `AGENTS.md`, `agents/`, and `reference/`; CI (`mirror-sync`) blocks a PR that changes only one side. Label a deliberately one-sided PR `mirror-sync-exempt`.
 
@@ -49,8 +61,9 @@ bash scripts/check-mirror-sync.sh --audit    # audit mode — mirror freshness a
 
 Plugin users run this from **their own working folder** — not from inside the repo. Therefore:
 
-- **Agents and skills cannot find files via relative `reference/…` paths.** A skill obtains the plugin's absolute path via `deveval-root` (bin) and **embeds absolute paths in the delegation prompt**. Agents only have `Read/Grep/Glob` and cannot discover the path on their own.
-- **Hooks** use `${CLAUDE_PLUGIN_ROOT}` (the path changes on plugin updates, so do not store state there).
+- **Agents and skills cannot find files via relative `reference/…` paths.** A skill uses `deveval-root` when available or derives the root from the loaded `SKILL.md` location, then **embeds absolute paths in the delegation prompt**. On Codex, role-specific `agents/*.md` files must also be loaded by absolute path.
+- **The numeric checker** is invoked as `<root>/scripts/consistency_check.py` when no bare command is available.
+- **Hooks** use `${CLAUDE_PLUGIN_ROOT}`, which Codex also provides as a compatibility variable (the path changes on plugin updates, so do not store state there).
 - **Evaluator outputs** (`.omo/eval-plan.md`, `.omo/draft-report*.md`) are created in the **user's working folder**. Do not write into the plugin directory.
 
 ## Principles (shared across all skills & agents)
@@ -76,4 +89,4 @@ Clearly distinguish facts and conclusions from value judgments and recommendatio
 
 Three skills (evaluate · write-report · quality-review) and the Codex `AGENTS.md` carry an **optional** external-evidence augmentation — it operates only in sessions where the same maintainer's `oda-intelligence` plugin (a public read-only MCP gateway) is installed, and is skipped otherwise (no hard dependency — the condition that keeps CONTRIBUTING's model-agnostic principle and DPG indicator 4 intact). The canonical source for the integration rules and tool mapping is `docs/oda-intelligence-integration.md`. When you change the integration, sync the skills, `AGENTS.md`, and the integration doc together. By design the agent files are untouched — evidence travels as a self-describing block embedded in the delegation prompt.
 
-> A learning/experimentation project. The other harnesses (Codex `AGENTS.md`, open-weight `scripts/open_runner.py`) share the same `reference/` knowledge — when you change a workflow, review synchronization on that side as well.
+> A learning/experimentation project. The installed Codex plugin, the Codex `AGENTS.md` direct-run fallback, and the open-weight `scripts/open_runner.py` share the same `reference/` knowledge — review synchronization across all of them when changing a workflow.
