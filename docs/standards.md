@@ -24,11 +24,20 @@ standards — it does not invent its own criteria:
   See `reference/KOICA-사업평가규정-다이제스트.md`.
 - **KOICA Evaluation Quality Review Guideline v2 (2025)** — the 24-item / A–D
   meta-evaluation rubric used by `report-quality-inspector`.
-- **Impact-evaluation methodology** (KIEP 2025) — causal-identification and
-  counterfactual standards used by `impact-evaluation-reviewer`.
+- **Impact-evaluation specialist proposal** (KIEP 2025) — a KOICA-commissioned
+  policy study's proposed guideline, used as primary specialist evidence for
+  causal-identification and counterfactual review; not an enacted rule.
+- **Supporting evaluation methodology** — the three own-word digests under
+  `reference/개발평가-*방법론-다이제스트.md` synthesize design, data-analysis,
+  management, reporting, and ethics practice from *The Road to Results* (World
+  Bank, 2009; KOICA Korean translation, 2016). They diagnose evidence and
+  reporting quality only; they never override official KOICA criteria, scores,
+  grades, or obligations, nor turn a specialist proposal into a binding rule.
 
 시스템은 임의 기준이 아니라 **OECD-DAC 평가기준**과 **KOICA 평가지침 2024·규정
-제536호·품질검토 가이드라인 v2·영향평가(KIEP)** 등 국제·국가 표준에 근거한다.
+제536호·품질검토 가이드라인 v2**에 근거한다. KIEP 2025 영향평가 자료는 공식
+시행지침이 아닌 전문 제안층이며, 세계은행/IPDET 방법론 다이제스트는 이를 포함한
+상위 지식층을 대체하지 않는 보조 지식으로만 쓴다.
 
 ## Open technical standards / 개방 기술 표준
 

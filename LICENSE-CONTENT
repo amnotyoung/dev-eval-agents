@@ -46,14 +46,14 @@ ATTRIBUTION FORMAT (suggested)
 NOTE ON THIRD-PARTY SOURCES
 ---------------------------
 
-The `reference/` digests describe the evaluation methodology, criteria, and
-grading scales of KOICA (Korea International Cooperation Agency) and related
-Korean public bodies. They are the project authors' own original descriptions
-and summaries of publicly documented evaluation practice, written for
-interoperability, with the underlying official documents cited by name and
-article. Facts, ideas, criteria, and scales are not themselves copyrightable;
-only original expression is, and the expression here is the project's own.
-Original KOICA/KIEP source documents (PDF/HWP) are NOT redistributed in this
-repository (see `.gitignore`). Where any third-party wording is quoted, it is
-short, attributed, and used for identification/reference. See `MAINTAINERS.md`
-for the ownership statement.
+The `reference/` digests describe (a) evaluation criteria and grading scales of
+KOICA (Korea International Cooperation Agency) and related Korean public bodies,
+and (b) supporting development-evaluation methods synthesized from cited
+published sources, including *The Road to Results* (World Bank, 2009). They are
+the project authors' own original descriptions, summaries, and operational
+restructuring, written for interoperability. Facts, ideas, methods, criteria,
+and scales are not themselves copyrightable; only original expression is, and
+the expression here is the project's own. Original KOICA/KIEP/World Bank source
+documents (PDF/HWP) are NOT redistributed in this repository (see `.gitignore`).
+Where any third-party wording is quoted, it is short, attributed, and used for
+identification/reference. See `MAINTAINERS.md` for the ownership statement.

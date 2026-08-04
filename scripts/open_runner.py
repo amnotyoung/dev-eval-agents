@@ -11,8 +11,8 @@ this script demonstrates it running on an **open-weight** model served locally
 by Ollama (https://ollama.com), with NO proprietary API involved.
 
 It reproduces, on a single-agent open model, what the Codex harness does with
-`AGENTS.md`: inject the rules + the KOICA reference knowledge, then evaluate a
-project report against the OECD-DAC criteria.
+`AGENTS.md`: inject the rules + the layered normative/methods knowledge, then
+evaluate a project report against the OECD-DAC criteria.
 
 Dependencies: Python 3 standard library only (urllib, json). No pip install.
 Requires a local Ollama server (`ollama serve`) and a pulled open model.
@@ -41,11 +41,14 @@ import urllib.request
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Knowledge injected into the system prompt (what an agentic harness would read
-# from disk). Kept minimal: the primary 2024 guideline digest + the regulation.
+# from disk). The normative sources govern scoring; two compact methods modules
+# help the open model diagnose design and evidence without importing old rules.
 DEFAULT_REFERENCES = [
     "AGENTS.md",  # the Codex-harness instructions = system role
     "reference/KOICA-평가지침-2024-다이제스트.md",
     "reference/KOICA-사업평가규정-다이제스트.md",
+    "reference/개발평가-설계방법론-다이제스트.md",
+    "reference/개발평가-자료분석방법론-다이제스트.md",
 ]
 
 OLLAMA_URL = os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
@@ -67,7 +70,10 @@ def build_messages(target_path, reference_paths):
     system = (
         agents_md
         + "\n\n---\n\n# 주입된 공용 지식 (reference/)\n"
-        + "아래는 평가에 사용할 KOICA 공식 자료 다이제스트다. 이 근거에만 기반해 평가하라.\n\n"
+        + "아래 공용 지식은 규범층과 방법론층으로 나뉜다. KOICA 지침·규정만 "
+        + "기준·척도·등급을 정하며, 개발평가 방법론 문서는 질문-근거 연결과 "
+        + "근거의 강도·한계 점검에만 사용한다. 충돌 시 규범층이 우선하고, "
+        + "방법론 지식으로 사업문서의 증거 공백을 메우지 마라.\n\n"
         + knowledge
     )
     target = read(target_path)

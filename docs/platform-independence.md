@@ -26,7 +26,9 @@ Markdown(에이전트 지침 + 공용 지식 `reference/` + 소형 shell 훅)이
 | 2 | Codex (`.codex-plugin/` + shared skills/subagents; `AGENTS.md` direct-run fallback) | OpenAI GPT | proprietary | direct-run validated; plugin package schema-validated |
 | 3 | **Ollama + `scripts/open_runner.py`** | **Qwen2.5-14B (open weights, Apache-2.0)** | **fully open** | **validated locally — see below** |
 
-The reference knowledge in `reference/` is shared unchanged across all three.
+The layered reference knowledge in `reference/` — official KOICA norms, the
+separately labeled KIEP 2025 specialist proposal, and selectively routed methods
+modules — is shared unchanged across all three.
 Swapping the harness or the model requires **no change to the core product** —
 you point a different runner at the same Markdown agents. That is exactly the
 substitutability that Indicator 4 asks for.
@@ -44,8 +46,9 @@ python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 ```
 
 `scripts/open_runner.py` reproduces, on a single open model, what the Codex
-harness does with `AGENTS.md`: it injects the rules + the KOICA reference
-knowledge, then evaluates the target report against the OECD-DAC criteria. It
+harness does with `AGENTS.md`: it injects the rules, current KOICA normative
+sources, and the design/data methods modules, then evaluates the target report
+against the OECD-DAC criteria. Normative sources alone control scoring. It
 uses **only the Python standard library** and talks to a **local** Ollama
 endpoint (`http://localhost:11434`).
 

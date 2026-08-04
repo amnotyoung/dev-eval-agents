@@ -17,7 +17,7 @@ skills/                          the 4 evaluation workflows ← the user's actua
 agents/                          12 dedicated evaluators & verifiers
 hooks/hooks.json + boulder.sh    completion engine (Stop hook)
 bin/                             executables Claude puts on PATH (Codex uses absolute fallback paths)
-reference/                       5 KOICA criteria digests (shared knowledge)
+reference/                       official KOICA norms + Impact Evaluation proposal + 3 methods modules (shared knowledge)
 templates/ · samples/ · scripts/ templates · samples · runners
 ```
 
@@ -25,7 +25,7 @@ templates/ · samples/ · scripts/ templates · samples · runners
 |-------|--------------|
 | `deveval:evaluate` | project evaluation — 5–6 criteria rated in parallel → composite score + draft grade |
 | `deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
-| `deveval:impact-review` | impact-evaluation methodology review — 5 axes / 10 questions |
+| `deveval:impact-review` | impact-evaluation methodology review — 6 proposed principles + 10 DevEval questions |
 | `deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
 
 Invoke a skill as `/deveval:<skill>` in Claude Code or `$deveval:<skill>` in Codex.
@@ -76,12 +76,27 @@ Plugin users run this from **their own working folder** — not from inside the 
 
 Changing these principles means updating all 4 `skills/` and the related agents together.
 
-## Regulatory basis
+## Shared-knowledge precedence
+
+`reference/` has three roles. The **official normative layer always prevails**; the specialist proposal and methods layers stay within their stated boundaries.
+
+### Official normative layer
 
 - `reference/KOICA-평가지침-2024-다이제스트.md` — criteria, 4-point scale, A–F (primary asset). `KOICA-평가지침-다이제스트.md` is the older 2017 version (for comparison)
 - `reference/KOICA-사업평가규정-다이제스트.md` — Regulation No. 536 (2025.2): Art. 6 criteria · Art. 7 types · Arts. 27–28 quality review · Art. 5 principles · Art. 19 independence · Ch. 6 ethics
 - `reference/KOICA-품질검토-체크리스트.md` — quality-inspection v2 rubric
-- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — impact evaluation (KIEP 2025)
+
+### Specialist proposal layer
+
+- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — the KIEP 2025 policy study's **proposed Impact Evaluation guidelines**. It is primary specialist evidence, not an enacted guideline or binding verdict table.
+
+### Methods layer
+
+- `reference/개발평가-설계방법론-다이제스트.md` — theory of change, evaluation questions, design matrix, and validity
+- `reference/개발평가-자료분석방법론-다이제스트.md` — measurement, tools, sampling, bias, analysis, and triangulation
+- `reference/개발평가-관리보고윤리-다이제스트.md` — TOR, quality management, reporting, recommendations, independence, and ethics
+
+The methods source dates from 2009 and does not define current Coherence, scoring, or grades. Precedence is **official norms > specialist proposal > methods**, and skills delegate only the files needed for the task by absolute path.
 
 Clearly distinguish facts and conclusions from value judgments and recommendations (Art. 5, transparency), and do not infringe evaluation independence (Art. 19: no unilateral demands to amend or delete).
 
