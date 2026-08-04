@@ -10,6 +10,38 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+## [0.11.0] — 2026-08-05 — Layered evaluation knowledge & source-status hardening
+
+### Added
+- **Layered development-evaluation methodology knowledge** — three own-word,
+  bilingual digests derived from *The Road to Results* cover evaluation design
+  (front-end analysis, ToC, questions, matrix, validity), data and analysis
+  (measurement, sampling, bias, mixed methods, triangulation), and management /
+  reporting / ethics (TOR, QA, recommendations, independence). The source PDF
+  remains excluded from distribution.
+- **Progressive methods routing across all four skills** — official KOICA sources
+  remain the normative layer; the KIEP 2025 Impact Evaluation proposal is labeled
+  separately as specialist evidence, and methods modules are passed only where
+  they help diagnose evidence, design, reporting, or ethics. The Codex direct-run
+  fallback and open-weight runner use the same precedence rule.
+- **Evaluation design-matrix template** — links question type, judgment criteria,
+  baseline/target, source, sample, collection, analysis, triangulation, limits,
+  and a claim-evidence register. Complex evaluations can maintain it under the
+  user's `.omo/` workspace and pass it through evaluation and report composition.
+
+### Changed
+- The open-weight runner now injects the design and data-analysis modules after
+  the current KOICA guidance and regulation, with a hard prompt boundary that
+  older methodology cannot create criteria, scores, grades, or missing case
+  evidence.
+- **Impact-review source integrity** — corrected the KIEP 2025 policy study's
+  status from normative guidance to a proposed guideline; restored its six
+  operating principles (including Sustainability), its three-element/seven-item
+  evaluability screen, and source page references. The ten review questions and
+  three-way result are now explicitly DevEval operational constructs. Sector or
+  completion stage no longer causes automatic rejection when credible pre-data
+  and comparison design remain possible.
+
 ## [0.10.0] — 2026-08-02 — Codex support, evidence gateway & verified hardening
 
 ### Added

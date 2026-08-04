@@ -88,11 +88,13 @@ CTS/technology-innovation projects add **Validity** as a 6th criterion.
 
 Source: `reference/KOICA-평가지침-2024-다이제스트.md` (§1–2). The framework is the DAC **six**, but the final-evaluation composite is scored on **five** (Impact excluded).
 
-### ② Impact Evaluation — measure causal effect → **Adequate / Conditional / Inadequate** (no grade)
+### ② Impact Evaluation — causal-method review → **project triage label** (no grade)
 
-A different type entirely (causal effect via PSM/DiD/RCT, no A–F grade). Reviewed
-on **5 axes / 10 questions** (causal identification, counterfactual design,
-selection bias, robustness, …). The 6-criteria frame is deliberately **not**
+A different type entirely (causal effect via PSM/DiD/RCT, no A-F grade). It is
+reviewed against **six proposed operating principles** and **ten DevEval
+operational questions**; planning-stage evaluability uses three elements and
+seven items. Adequate / Conditional / Inadequate is a project triage label, not
+an official KOICA/KIEP verdict. The 6-criteria frame is deliberately **not**
 applied here.
 
 ### Agent catalog (12)
@@ -105,7 +107,7 @@ applied here.
 | Report composition | `report-composer` | **write** |
 | Narrative verification (hallucination/consistency) | `narrative-verifier` | read |
 | Report quality inspection (24-item / A–D) | `report-quality-inspector` | read |
-| Impact-evaluation review (5 axes / 10 questions) | `impact-evaluation-reviewer` | read |
+| Impact-evaluation review (6 proposed principles / 10 operational questions) | `impact-evaluation-reviewer` | read |
 
 Plus a **completion engine** (`hooks/boulder.sh`, a Stop hook) that drives
 long/multi-project evaluations to completion, with stagnation and attempt-cap
@@ -137,7 +139,7 @@ evidence-backed draft (the *human gate*).
 | Ask it this | You get | Handled by |
 |-------------|---------|------------|
 | `evaluate this project against the DAC criteria` | 6-criteria scores + a draft **A–F grade** | final-eval team |
-| `review this impact-evaluation report` | causal-inference & method review → **Adequate / Conditional / Inadequate** | `impact-evaluation-reviewer` |
+| `review this impact-evaluation report` | causal-method review → **project triage label** + source status | `impact-evaluation-reviewer` |
 | `inspect the quality of this evaluation report` | 24-item meta-review → quality grade **A–D** | `report-quality-inspector` |
 
 New here? Run the bundled fictional sample
@@ -175,7 +177,7 @@ Then invoke the same four workflows with the syntax for your host:
 |----------|-------|-------------|--------------|
 | Evaluate | `$deveval:evaluate` | `/deveval:evaluate` | 5–6 independent criteria → composite score + draft grade |
 | Quality review | `$deveval:quality-review` | `/deveval:quality-review` | 24-item / 100-point / A–D report-quality inspection |
-| Impact review | `$deveval:impact-review` | `/deveval:impact-review` | 5-axis / 10-question methodology review |
+| Impact review | `$deveval:impact-review` | `/deveval:impact-review` | 6 proposed principles / 10 operational questions |
 | Write report | `$deveval:write-report` | `/deveval:write-report` | draft → numeric check → narrative verification → human |
 
 Your working files (`.omo/eval-plan.md`, `.omo/draft-report*.md`) stay in **your**
@@ -255,12 +257,28 @@ The `reference/` digests are the project's **own** descriptions of publicly
 documented KOICA/KIEP evaluation practice, cited to their sources; original
 PDF/HWP documents are not redistributed. See [`MAINTAINERS.md`](MAINTAINERS.md).
 
-## 📚 reference/ (KOICA source digests)
+## 📚 reference/ (official norms + specialist proposal + methods)
 
 Original PDFs/HWP are excluded for copyright (`.gitignore`); only the project's
-own digests are kept: 2024 guidelines (criteria, scales, A–F), Regulation No. 536
-(regulatory basis), the quality-review checklist (v2), and the impact-evaluation
-guideline (KIEP 2025).
+own-word digests are kept.
+
+The **official normative layer** governs criteria, scales, and obligations: the
+2024 KOICA guidance, Regulation No. 536, and quality-review guideline v2. A
+separate **specialist proposal layer** digests the KIEP 2025 policy study's
+*proposed* Impact Evaluation guidelines; it is not presented as an enacted rule
+or binding verdict table. The **methods layer** adds three selectively loaded modules:
+evaluation design (front-end analysis, ToC, questions, design matrix, validity),
+data and analysis (measurement, sampling, bias, mixed methods, triangulation), and
+management/reporting/ethics (TOR, QA, recommendations, independence).
+
+The methods modules are the project's own synthesis of the World Bank's *The Road
+to Results* (2009; KOICA Korean translation, 2016). Because that source predates
+DAC Coherence and current grading, it never defines current criteria, scores, or
+grades. Precedence is official norms > specialist proposal > methods.
+
+For complex evaluations, [`templates/evaluation-design-matrix-template.md`](templates/evaluation-design-matrix-template.md)
+connects questions, criteria, sources, samples, analysis, triangulation, limits,
+and the claim-evidence register in one working artifact.
 
 ## 🗺️ Roadmap
 

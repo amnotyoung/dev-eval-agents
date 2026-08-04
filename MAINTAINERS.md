@@ -51,6 +51,13 @@ represent official KOICA positions.
   Original PDF/HWP documents are **not** redistributed (see `.gitignore`).
   Facts, criteria, and scales are not copyrightable; the expression here is the
   project's own. See the note in [`LICENSE-CONTENT`](LICENSE-CONTENT).
+- **World Bank / IPDET evaluation methodology** — The three development-
+  evaluation methods digests under `reference/` are the project's own
+  paraphrased and restructured synthesis of Linda G. Morra Imas and Ray C.
+  Rist's *The Road to Results* (World Bank, 2009; KOICA Korean translation,
+  2016). They are supporting methodology, not current scoring rules. The source
+  PDF is not redistributed. Official KOICA norms prevail; the KIEP 2025 Impact
+  Evaluation study is labeled separately as a proposed-guideline specialist source.
 
 ## Contact & governance / 연락 및 거버넌스
 

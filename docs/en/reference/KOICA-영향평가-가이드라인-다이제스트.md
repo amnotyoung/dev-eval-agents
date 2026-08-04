@@ -1,73 +1,189 @@
 > English reference translation of `reference/KOICA-영향평가-가이드라인-다이제스트.md`.
 
-# KOICA Impact Evaluation Guidelines Digest (2025)
+# Digest of the Study on Establishing KOICA Impact Evaluation Guidelines (2025)
 
-> **Source & copyright note:** This is the project's OWN summary of publicly documented KOICA/KIEP evaluation practice (criteria, scales, regulation), written for interoperability. Facts and provisions are cited to their source (document name + article/page); no original wording is reproduced beyond short attributed identifiers. Original PDF/HWP files are not included (`.gitignore`). Licensed under CC BY 4.0.
+> **Source and copyright:** This is the project's own-word digest of *Study on
+> Establishing KOICA Impact Evaluation Guidelines* (Korea Institute for
+> International Economic Policy, Evaluation Paper 2025-41-133, September 2025).
+> Page references use the report's printed pagination. The original PDF is not
+> distributed (`.gitignore`). This digest is licensed under CC BY 4.0.
 
-> Source: "Study on Establishing KOICA Impact Evaluation Guidelines" (2025.9, conducted by KIEP). Page citations as `(p.XX)`.
-> ⚠️ **Impact Evaluation is a different evaluation type from the Final Evaluation (DAC 6 criteria, A–F).** It does not assign grades; it measures and reviews causal effects. The rubric of the `impact-evaluation-reviewer` agent.
+> ⚠️ **Source status:** Chapter IV is titled **“Proposed Guidelines for Conducting
+> KOICA Impact Evaluations.”** It is a proposal in a KOICA-commissioned policy
+> study, not a verified enacted KOICA guideline, binding regulation, or official
+> verdict scale. Current official rules prevail on conflict. This repository's
+> **10 review questions** and **adequate / conditional / inadequate** labels are
+> a **DevEval operational framework** connecting the proposal to causal-inference
+> practice; they are not an official table reproduced from the source.
+
+> ⚠️ **Evaluation type:** Impact Evaluation differs from rating a project against
+> the DAC criteria in a Final Evaluation. It reviews design and analysis for
+> identifying causal effects and does not assign an A-F project grade.
 
 ---
 
-## 0. Definition·Application (most important — the premise for review)
+## 0. Definition and application boundary
 
-**Definition (p.106, project's own summary):** A **practice-oriented evaluation** to empirically **establish the causal effects** that a KOICA development-cooperation project left on beneficiaries and the community, and to use the results to improve policy and projects. It differs from ordinary performance evaluation in that it **verifies causal relationships** using comparison-group data. Abroad it is called RIE (rigorous impact evaluation).
+**Proposed definition (p.109, paraphrased):** a practice-oriented evaluation that
+empirically analyses the causal effects of a KOICA development-cooperation
+intervention on beneficiaries and communities and uses the results to improve
+policy and projects. Rigorous design and comparison-group data distinguish it
+from ordinary performance evaluation.
 
-**Scope of application (p.107) — automatic branching:**
-- ✅ **Suitable**: projects where **behavioral change can be observed and causal analysis is possible** (agricultural production, education and training, cash transfers, etc.).
-- ❌ **Unsuitable**: **infrastructure** serving an unspecified public (roads, etc.), **governance/institutional improvement** that is hard to measure quantitatively, **already-completed projects**, and cases where a control group and data cannot be secured.
-- Impact Evaluation **is not applied uniformly to all projects, nor does it replace existing evaluations** (p.107) — this must always be taken as a premise when reviewing.
+**Application boundary (pp.110-111):**
 
-## 1. Final Evaluation vs Impact Evaluation
+- Impact Evaluation is one evaluation type focused on measurable causal links;
+  it neither covers all project performance nor replaces existing evaluations.
+- Interventions with observable behavioural change, such as agricultural
+  production, training, and cash transfers, are more readily evaluated.
+- Infrastructure serving an unspecified public and governance or institutional
+  reform with hard-to-quantify outcomes are **difficult to apply it to**. This is
+  not an automatic exclusion; assess the question, data, and design case by case.
+- Project scale, advance design, duration, and data access are core feasibility
+  conditions.
+- An ongoing or completed project may remain reviewable when credible baseline
+  or pre-intervention data and a defensible comparison structure survive. The
+  DEval checklist discussed by the source also recognizes this possibility
+  (p.90). Retrospective comparison construction creates additional validity risk
+  and must be reviewed explicitly.
 
-| Category | Final Evaluation | Impact Evaluation |
-|------|---------|---------|
-| Determination | **A–F quality grade** | **No grade** — suitability/completeness review based on quality-review questions |
-| Core question | Degree of fulfillment of the DAC 6 criteria | **Did the observed impact arise precisely because of this intervention?** (causality) (p.137) |
-| Design | Based on an ex-post PDM | **Begins counterfactual design from the planning stage** (p.125) |
-| Mandatory candidate | Final Evaluation USD 8 million | Total project cost of **USD 15 million or more** (p.115) |
-| Lead | Project/evaluation department | A separate type **led by the Evaluation Office** under Project Evaluation Regulation No. 536 (p.110) |
+## 1. Proposed institutional position
 
-## 2. Standard Methodology (Table IV-17, p.140)
+- The study **proposes** treating Impact Evaluation as an Evaluation Office-led
+  evaluation and a subtype of programme/project evaluation under the Project
+  Evaluation Regulation (pp.113-117).
+- It proposes retaining project monitoring and Final Evaluation while planning
+  separate, whole-cycle Impact Evaluations for selected interventions
+  (pp.113-114).
+- USD 15 million is an **example** threshold for a top-down candidate pool, not a
+  mandatory trigger (p.118). Strategic importance, evidence demand, scalability,
+  and execution conditions also matter.
+- The proposed sequence is candidate identification -> evaluability review and
+  selection -> planning and approval -> implementation -> reporting and feedback
+  (Figure IV-1, pp.114-115).
 
-Priority: **RCT first → when constrained, quasi-experimental (DiD first) → supplement with qualitative analysis (mixed)** (p.138).
+## 2. Six proposed operating principles
 
-| Method | Application conditions | Points to note |
-|------|----------|----------|
-| **RCT** (randomized controlled) | Random assignment possible, control group secured, ethically permissible | Highest internal validity. Ethical and cost burden |
-| **DiD** (difference-in-differences) | Pre/post data + a similar comparison group | Requires the **parallel-trends assumption** |
-| **PSM** (propensity-score matching) | A similar group based on observable characteristics | **Hard to control bias from unobserved variables**, large-scale data |
-| **RDD·IV**, etc. | Sufficient observations, complex causal structure | Sensitive to statistical assumptions |
+Table IV-2 proposes **six** principles (pp.112-113).
 
-**Supplementary** (theory-based): Contribution Analysis, Process Tracing, Realist Evaluation, QCA (qualitative comparative analysis). Large-N = experimental/quasi-experimental/statistical / Small-N = contribution analysis/QCA/process tracing (p.137-138).
+1. **Scientific Rigor** - counterfactual design, statistical validity and limits,
+   and external technical review
+2. **Practical Utility** - decision demand and timing; use of interim and final results
+3. **Transparency** - records of selection, design, and external participation;
+   disclosure and accountability for results and use
+4. **Sustainability** - regular implementation, databases and archives, internal
+   capacity, and durable access to external expertise
+5. **Ethical Standards** - consent, privacy, IRB, equity, and non-interference
+6. **Stakeholder Engagement** - participation and communication with partner
+   governments, project teams, country offices, participants, and communities
+   during design, interpretation, and feedback
 
-## 3. Core Design Concepts
+These are proposed operating principles, not an official six-point scale or an
+additive scorecard.
 
-- **Counterfactual**: the defining requirement of Impact Evaluation. If a counterfactual comparison design (experimental/quasi-experimental) is impossible, **Impact Evaluation is unsuitable** (p.104,108).
-- **Comparison group (control group)**: demographic **equivalence testing** against the treatment group is essential. For KOICA projects, quasi-experiments are more common (given the limits of randomization).
-- **Selection bias**: requires an explanation of the identification and control of selection bias, recall bias, and unobserved variables.
-- **Validity**: emphasis on internal (causal inference) + consideration of external (generalization). A sample based on **power calculation** (significance level 5%, power 80%), with treatment and comparison groups of similar size (p.148-149).
+## 3. Candidate fit and evaluability
 
-## 4. Quality Review of the Impact-Evaluation Final Report (Table IV-14, p.135) ★ Core rubric
+Keep the two steps distinct.
 
-| Item | Quality-review question |
-|------|-------------|
-| Summary | Understandable from core points/implications alone? |
-| Overview | Objective and scope clear; does the background support the necessity? |
-| Project analysis | Context, stakeholders, and risk factors clear? |
-| **Design·methodology** | Does the design match the evaluation questions? Grounds for the choice and **limitations** clear? Data quality and ethics reflected? |
-| **Analysis results·discussion** | Are the results consistent with the analysis plan? Are data limitations, external factors, and assumptions transparently considered? **Does the robustness check support the conclusions?** |
-| Conclusions·recommendations | Do the conclusions match the analysis? Are the recommendations concrete and actionable? |
-| Appendix | Are detailed statistics, **regression results, codebook, and ethics approval** included? |
+### 3.1 Three candidate-fit criteria
 
-> Stage-by-stage output checklists: preliminary survey (Table IV-11), implementation plan (Table IV-12), monitoring (Table IV-13), final report (Table IV-14, p.132-135). When methodology or statistics are in doubt, a **technical review by an advisory committee/external expert** is recommended.
+Table IV-4 proposes an initial screen (p.119):
 
-## 5. The 5 Rating Axes (Table IV-2, p.109) + Scoring Method
+- **Policy importance:** is there a policy or strategic demand for new causal evidence?
+- **Scalability:** could the model extend to similar interventions or other places?
+- **Evaluability:** can a comparison group, quantitative and qualitative data,
+  people, and budget be secured?
 
-**5 axes**: ① Scientific rigor (rigor of causal inference) ② Practicality (policy use) ③ Transparency (disclosure of design, limitations, raw data) ④ Ethics (IRB, equity of comparison-group exclusion) ⑤ Inclusiveness (stakeholder participation).
+### 3.2 Three evaluability elements and seven items
 
-**Scoring**: No grade is derived. Each question is answered **Yes/No or on a 3-point scale (high/medium/low)** → a fulfillment table + improvement recommendations for unmet items. Final qualitative determination of **"Suitable / Conditionally supplement / Unsuitable."** (Evaluability assessment: if the average of the 5 elements on the 3-point scale is 2 or higher, "suitable for evaluation," Table IV-5 p.118.)
+The example checklist in Table IV-5 contains **three elements and seven items**
+(pp.120-122).
 
-## 6. Implementation Procedure (Figure IV-1, p.113)
+| Element | Items |
+|---|---|
+| Utility | (1) policy/strategic importance; (2) major stakeholders' interest |
+| Plausibility | (3) evaluation timing and resources; (4) ethics and non-interference |
+| Feasibility | (5) sample and data access; (6) data quality; (7) design feasibility |
 
-① Identify targets → ② **Evaluability review and target selection** → ③ Plan formulation and approval → ④ Implementation (baseline → midline → endline, IRB) → ⑤ Results reporting and feedback. In the early introduction period, 3–5 cases per year; over the long term, 5–10% of the whole (p.117).
+The source's Yes/No or high/medium/low ratings and average of at least 2 are an
+**example threshold**, not an official absolute cut-off. The Evaluation Office,
+Evaluation Committee, and country office make the final contextual decision
+(p.122).
+
+## 4. Method selection
+
+- The core question is whether a specific effect arose from the intervention;
+  consider experimental or quasi-experimental approaches capable of answering it
+  (pp.141-142).
+- RCTs can provide strong causal evidence but face ethical, practical, cost, and
+  time constraints. When they are infeasible, use a quasi-experiment, considering
+  DiD first, and use qualitative analysis to complement quantitative results
+  (pp.143-145).
+- DiD requires pre/post data, a credible comparison group, and examination of
+  parallel trends. PSM balances observed characteristics only and cannot solve
+  unobserved confounding. RDD and IV require their own identification assumptions
+  and sufficient observations (Table IV-17, pp.144-145).
+- Case-based, theory-based, and participatory approaches explain context and
+  mechanisms and can complement quantitative causal inference. A method label is
+  never evidence of rigor by itself (Table IV-16, pp.143-144).
+- Aim for comparable treatment and comparison sample sizes and assess power using
+  expected effect, variance, significance, power, and clustering. The source's 5%
+  significance and 80% or 90% power are explanation and examples, not universal
+  fixed values (pp.152-154).
+
+## 5. Stage outputs and final-report quality
+
+- The proposal manages quality across the annual plan, preliminary study,
+  implementation plan, baseline/midline/endline surveys, monitoring, final report,
+  and feedback (Tables IV-9 to IV-14, pp.133-140).
+- The final report connects an executive summary, introduction, intervention
+  analysis, design and methodology, results and discussion, conclusions and
+  recommendations, and annexes (Table IV-14, p.140).
+- Core checks include question-design fit, selection rationale and limits, data
+  quality and ethics, consistency with the analysis plan, external factors and
+  assumptions, robustness, conclusion-analysis alignment, actionable
+  recommendations, and traceability of detailed statistics, instruments,
+  codebooks, and ethics records.
+- Recommend a separate technical quality review when methodological or analytical
+  validity is in doubt (pp.139-140).
+
+## 6. DevEval operational review framework - distinct from the source
+
+The framework below is the project's own crosswalk between Tables IV-2, IV-5,
+and IV-14 and general causal-inference diagnostics. The source does not contain
+an official “10-question review” or an official three-way report verdict.
+
+### 6.1 Ten operational questions for a final report
+
+1. Are the evaluation question, Theory of Change, and causal hypothesis clear?
+2. Are the counterfactual, assignment, treatment/comparison construction, and
+   balance diagnostics credible?
+3. Do the design and analysis fit the question, data, and timing, with the
+   identification assumptions stated?
+4. Are selection, confounding, attrition, contamination, noncompliance, and
+   missingness diagnosed and handled?
+5. Do sample, power, clustering, and weights match the design and analysis?
+6. Are measurement reliability and validity plus internal and external validity
+   threats addressed?
+7. Do design-appropriate robustness, sensitivity, or placebo checks support the
+   conclusions?
+8. Are limitations, external factors, multiple hypotheses, and heterogeneous
+   effects interpreted transparently?
+9. Are IRB or equivalent ethics review, consent, privacy, equity, and
+   non-interference addressed?
+10. Are instruments, codebooks, analysis code, tables, approvals, and other
+    reproducibility and traceability materials available?
+
+### 6.2 Operational labels
+
+- **Adequate:** identification, data, and diagnostics support the main causal
+  claims, with no fatal defect
+- **Conditional:** remediable gaps in reporting, diagnostics, or robustness remain;
+  narrow or defer conclusions until they are resolved
+- **Inadequate:** the target, data, or design cannot identify the core causal
+  question, or a fatal validity threat makes the main conclusion unreliable
+
+These labels are neither A-F grades nor official KOICA/KIEP determinations.
+Report `met / partly met / not met / insufficient information` with evidence for
+each question first, then summarize all six operating principles and the separate
+three-element/seven-item target evaluability screen. A human makes the final decision.

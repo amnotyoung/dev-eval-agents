@@ -40,6 +40,21 @@ Aggregate score = **the 5 criteria of Relevance, Coherence, Effectiveness, Effic
 **Common 4-point scale:** 1 = clearly negative / 2 = some impact / 3 = generally good / 4 = fully achieved + beyond expectations.
 **CTS (technology-innovation) projects** add Validity as a 6th auxiliary criterion → 6 criteria, 24 points, average (÷6) → 4 tiers (3.5↑ highly successful / 2.5–3.5 successful / 1.5–2.5 partially successful / below 1.5 unsatisfactory).
 
+## Knowledge-layer precedence and routing
+
+Shared knowledge has four non-interchangeable layers.
+
+1. **Official normative layer (governs scoring)** — enacted KOICA guidance, regulation, and quality review. Only this layer defines official criteria, scales, grades, and obligations.
+2. **Specialist proposal layer (primary Impact Evaluation evidence)** — `reference/KOICA-영향평가-가이드라인-다이제스트.md`. It digests a KIEP 2025 policy study's **proposed guidelines**, not an enacted guideline or binding verdict table.
+3. **Methods layer (supports evidence diagnosis)** — `reference/개발평가-설계방법론-다이제스트.md`, `reference/개발평가-자료분석방법론-다이제스트.md`, and `reference/개발평가-관리보고윤리-다이제스트.md`. These connect question, design, data, analysis, and reporting and expose evidential limits.
+4. **Case-evidence layer (project facts)** — user-supplied project documents and raw data plus external evidence whose source and status are recorded. Only this layer can establish what happened in the project.
+
+**Precedence is official norms > specialist proposal > methods.** The methods source was written in the 2009 DAC five-criterion era; never import Coherence, current scoring, grades, or impact-review requirements from it. Never use a proposal, methods, or external context to convert a gap in project evidence into “achieved.”
+
+- Project evaluation: use the design digest for ToC, questions, comparison, and causal wording; use the data digest for measurement, sampling, bias, and triangulation.
+- Impact-method review: use the KIEP 2025 proposed guideline as primary specialist evidence and disclose its status; use the design/data modules only as explanation.
+- Quality review and report writing: load only the relevant parts of the three methods modules and check traceability from question to evidence and from finding to conclusion to recommendation.
+
 ## Evaluation Workflow (Codex single agent)
 
 When the user provides an evaluation target and requests an evaluation:
@@ -47,6 +62,7 @@ When the user provides an evaluation target and requests an evaluation:
 1. **Confirm the materials + determine the project type** — read the target and grasp its scope. Check **whether it is a CTS / technology-innovation project**.
 2. **Sequential, independent rating per criterion** — evaluate Relevance → Coherence → Effectiveness → Efficiency → Sustainability (→ Validity if CTS) **one at a time**.
    - Each criterion: cross-check that criterion's key questions against the evidence in the report → **1–4 points (or "cannot evaluate")** + evidence citation.
+   - For each material item, check question fit, measurement fit, comparison and time, representation, rival explanations, and traceability to the primary source. This is an **evidence gate**, not a separate score.
    - **Do not be pulled along by the scores of other criteria.** One criterion at a time, on its evidence alone. (E.g., even if Effectiveness is good, Sustainability is judged on Sustainability evidence only.)
    - If there is no evidence, that criterion is **"cannot evaluate"** (no making things up).
    - **If Impact is relevant**, produce a separate **ex-post-perspective Impact draft** (long-term / transformative effects, evidence-based, no asserting causation) that is **NOT summed into the 20-point aggregate** (reported separately). If methodological review is needed, use the Impact Evaluation Review below.
@@ -65,8 +81,9 @@ If the `oda-intelligence` MCP gateway (public, read-only; the same maintainer's 
 ## Impact Evaluation Review (a type different from Final Evaluation)
 
 When asked to review an Impact Evaluation report — a **different type** from Final Evaluation (the 6 criteria, A–F) (it measures causal effects, and has no grade):
-- **Do not impose the 6 criteria.** Inspect causal identification, counterfactual design, and methodological validity via **5 axes** (scientific rigor, practicality, transparency, ethics, inclusiveness) / **10 questions** → **suitable / conditionally requiring supplementation / unsuitable** (not a grade) + technical-review recommendation.
-- Impact evaluation is suitable only for projects where a control group is possible (infrastructure, governance, and completed projects are unsuitable). Criteria: `reference/KOICA-영향평가-가이드라인-다이제스트.md`.
+- **Do not impose the 6 criteria.** Review causal identification, counterfactual design, and methodological validity against the source's **six proposed operating principles** (scientific rigor, practical utility, transparency, sustainability, ethics, and stakeholder engagement) and **ten DevEval operational questions**.
+- At planning stage, separately review the **three-element, seven-item evaluability screen**. Do not automatically exclude infrastructure, governance, or ongoing/completed interventions; inspect the question, data, and comparison design case by case.
+- **Adequate / conditional / inadequate** is a project operational label, not an official grade. State that the KIEP 2025 source is a proposed-guideline policy study, not an enacted rule.
 
 ## Evaluation Report Quality Inspection (meta-evaluation)
 
@@ -80,7 +97,10 @@ When the user says "please review the quality of this evaluation report" — *wh
 - `reference/KOICA-평가지침-2024-다이제스트.md` — criteria, 4-point scale, A–F (primary asset)
 - `reference/KOICA-사업평가규정-다이제스트.md` — basis in Regulation No. 536 (Article 6 criteria, Article 7 types, Articles 27–28 quality review, Article 19 independence)
 - `reference/KOICA-품질검토-체크리스트.md` — quality-inspection v2 rubric
-- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — impact evaluation (KIEP 2025)
+- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — specialist Impact Evaluation proposal (KIEP 2025 proposed-guideline study)
+- `reference/개발평가-설계방법론-다이제스트.md` — front-end analysis, ToC, questions, design matrix, and validity (supporting)
+- `reference/개발평가-자료분석방법론-다이제스트.md` — measurement, tools, sampling, bias, mixed methods, and triangulation (supporting)
+- `reference/개발평가-관리보고윤리-다이제스트.md` — TOR, quality management, reporting, recommendations, independence, and ethics (supporting)
 - `templates/`, `samples/` — report templates and samples
 
 > For learning / experimentation. **Regulatory basis**: Project Evaluation Regulation No. 536 (2025.2). It clearly distinguishes facts and conclusions from value judgments and recommendations, and does not infringe evaluation independence (Article 5 transparency, Article 19 independence).
