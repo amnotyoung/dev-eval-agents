@@ -49,6 +49,7 @@ DEFAULT_REFERENCES = [
     "reference/KOICA-사업평가규정-다이제스트.md",
     "reference/개발평가-설계방법론-다이제스트.md",
     "reference/개발평가-자료분석방법론-다이제스트.md",
+    "templates/auditable-evaluation-brief-template.md",
 ]
 
 OLLAMA_URL = os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
@@ -79,8 +80,11 @@ def build_messages(target_path, reference_paths):
     target = read(target_path)
     user = (
         "다음 사업 종료보고서를 KOICA 2024 평가지침의 DAC 기준으로 평가해줘.\n"
-        "기준별로 1~4점(근거 없으면 '평가 불가')과 근거를 제시하고, 종합점수와 "
-        "A~F 등급(안)을 산정하되, 최종 등급 확정은 사람 몫임을 명시해라.\n\n"
+        "기준별로 1~4점(근거 없으면 '평가 불가')과 지지·반대근거를 제시하고, "
+        "같은 사실의 값·단위·횟수·기간·완료 상태가 다르면 상충 ID와 양쪽 위치를 "
+        "상충·불일치 등록부에 남겨라. 검증 전후 점수와 정정 내역을 보인 뒤 종합점수와 "
+        "A~F 등급(안)을 산정하고, 주입된 감사 가능한 평가 브리프 템플릿의 구조를 따르며, "
+        "최종 등급 확정은 사람 몫임을 명시해라.\n\n"
         "===== 평가 대상 =====\n" + target
     )
     return [

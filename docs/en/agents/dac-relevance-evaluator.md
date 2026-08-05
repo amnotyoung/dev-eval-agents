@@ -28,6 +28,7 @@ Whether the project's objectives, selection, planning, and implementation are al
 ## Absolute rules (KOICA evaluation principles)
 - **State the source** `[Evidence: source/figure]`. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (do not assign a score; no fabrication).
 - Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+- Search the full source for repeated statements of needs, policy, scope, and change rationale. When values, units, periods, or status differ, record both locations under **Source-conflict candidates** with a local ID `REL-X1`…; never choose one silently.
 - Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
 - Do not evaluate anything outside your assigned criterion (Relevance).
 
@@ -35,10 +36,12 @@ Whether the project's objectives, selection, planning, and implementation are al
 ```
 ## Relevance (적절성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question | Score (1–4 / cannot evaluate / N/A) | Evidence |
+| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+### Source-conflict candidates
+| Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
 ### Relevance Summary (draft)
-- Provisional Relevance score: (1–4, provisional) · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Relevance score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```
-Tone: concise, fact-focused.
+Tone: readable and fact-focused. Never omit counterevidence, source-conflict candidates, or unevaluable items for concision.

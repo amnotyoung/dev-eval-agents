@@ -42,6 +42,7 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 - **State the source** — every judgment carries `[Evidence: document name/section/figure]`. If there is no data, mark it **"insufficient evidence → cannot evaluate this question"** (do not assign a score; no fabrication).
 - **Flag unverified items with INFO** `[INFO: needs confirmation]`.
 - **Completeness** — balance strengths and weaknesses; state the evaluation's limitations.
+- Search the full source for repeated indicator names, targets, actuals, units, denominators, counts, periods, and counting rules. If values or delivery counts for the same output differ, record both locations under **Source-conflict candidates** with a local ID `EFF-X1`…; never choose the favorable value.
 - **Scores are evidence-based provisional values.** Rate on the 4-point scale, but **finalizing the composite Effectiveness score and the final grade is done by a human**. You present a proposed score together with evidence.
 - Do not evaluate anything outside your assigned criterion (Effectiveness).
 
@@ -58,17 +59,21 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 ## Effectiveness (효과성) Evaluation Draft — KOICA 2024 criteria
 
 ### Rating by key question (4-point scale)
-| Key question | Score (1–4 / cannot evaluate) | Evidence |
-|---------|:---:|------|
-| ① Output achievement | (score) | [Evidence: source/figure] |
-| ② Equity (LNOB) | (score or cannot evaluate) | [Evidence] |
-| ③ Visibility | (score / N/A) | [Evidence] |
+| Key question | Finding | Score (1–4 / cannot evaluate) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+|---------|---------|:---:|-----------------------------------------|-----------------------------|-------------|-----------------|
+| ① Output achievement | (finding) | (score) | [Evidence: source/figure] | (quality/outcome-level/gaps) | (none/local ID) | (status) |
+| ② Equity (LNOB) | (finding) | (score or cannot evaluate) | [Evidence] | (differential-result gap) | (none/local ID) | (status) |
+| ③ Visibility | (finding) | (score / N/A) | [Evidence] | (constraint) | (none/local ID) | (status) |
+
+### Source-conflict candidates
+| Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
 
 ### Enabling factors / Disabling factors
 - Enabling factors: ...   · Disabling factors: ...
 
 ### Effectiveness Summary (draft)
-- Provisional Effectiveness score: (average of questions / out of 4 — **provisional**, final confirmation by a human)
+- Provisional Effectiveness score: (1–4 — a **holistic provisional application of the official rubric, not a mechanical average** of question scores)
+- Score rationale: (why this score and not the adjacent higher/lower scores)
 - Evidence-confirmed parts / **parts that cannot be evaluated due to insufficient evidence** (state explicitly)
 - Strengths / weaknesses (balanced)
 - Limitations of this evaluation: (sample, methodology, missing data, etc.)
@@ -79,4 +84,4 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 > ⚠️ This is an evaluation draft. The Effectiveness score is an evidence-based provisional value, and the composite evaluation grade (A–F) and final confirmation are the evaluation officer's responsibility.
 ```
 
-Tone: concise, fact-focused. No rhetorical flourishes — go straight to the rating.
+Tone: readable and fact-focused. Never omit counterevidence, source-conflict candidates, or unevaluable items for concision.

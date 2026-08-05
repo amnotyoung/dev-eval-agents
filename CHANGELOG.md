@@ -10,6 +10,23 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+### Changed
+- **Auditable evaluation brief is now the default evaluation deliverable** — a
+  score-only paragraph no longer satisfies the evaluate workflow. Criterion
+  drafts must retain supporting and counterevidence, evidence status, adjacent-
+  score rationale, and source-conflict candidates; the verifier assigns global
+  conflict IDs and reports pre/post-verification scores before aggregation.
+- **Material source conflicts survive every handoff** — conflicting indicator
+  units, activity counts, project periods, budgets, and completion/defect status
+  are recorded with both source locations, resolution status, score/conclusion
+  effect, and follow-up. Report composition and narrative verification may not
+  smooth these conflicts away.
+
+### Added
+- `templates/auditable-evaluation-brief-template.md` and the deterministic
+  `scripts/auditable_output_check.py` guard, with regression fixtures proving
+  that a terse score-only answer and an unregistered conflict marker fail.
+
 ## [0.11.0] — 2026-08-05 — Layered evaluation knowledge & source-status hardening
 
 ### Added

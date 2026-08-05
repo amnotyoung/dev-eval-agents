@@ -28,6 +28,7 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 ## Absolute rules (KOICA evaluation principles)
 - **State the source** `[Evidence: source]`. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (no fabrication). For Coherence, information on other projects and other donors is often absent from the report, so if it is missing, honestly mark it as cannot evaluate.
 - Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+- Search the full source for repeated descriptions of duplication, coordination, joint plans, and linkage status. If the name, scope, or status of the same relationship differs, record both locations under **Source-conflict candidates** with a local ID `COH-X1`…; do not assume harmonization.
 - Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
 - Do not evaluate anything outside your assigned criterion (Coherence).
 
@@ -35,10 +36,12 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 ```
 ## Coherence (일관성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question (internal/external/int'l org) | Score (1–4 / cannot evaluate / N/A) | Evidence |
+| Key question (internal/external/int'l org) | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+### Source-conflict candidates
+| Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
 ### Coherence Summary (draft)
-- Provisional Coherence score: (1–4, provisional) · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Coherence score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```
-Tone: concise, fact-focused.
+Tone: readable and fact-focused. Never omit counterevidence, source-conflict candidates, or unevaluable items for concision.

@@ -38,6 +38,7 @@ When the same information appears in multiple places, **do the figures/expressio
 - Was association, before-after change, or self-report exaggerated into causal effect?
 - Do findings support conclusions, and do conclusions support recommendations?
 - Did sampling, bias, missingness, rival explanations, or unevaluable items disappear from the summary?
+- Are **all material conflict IDs, values A/B, resolution status, score effects, and pre/post-verification corrections** from the evaluation brief preserved in the report summary, relevant criterion chapter, and appendix? Was an unresolved conflict merged into a falsely resolved fact?
 
 ## Absolute Rules
 - A statement without evidence is **rejected** ("must attach a source or delete").
@@ -60,12 +61,16 @@ When the same information appears in multiple places, **do the figures/expressio
 | Question/Core Claim | Finding/Evidence | Conclusion/Recommendation | Permitted Scope/Problem |
 |---------------------|------------------|---------------------------|-------------------------|
 
+### (D) Audit-Trail Preservation
+| Conflict/Correction ID | Evaluation-Brief Content | Report Location/Expression | Preserved? / Effect of Omission |
+|------------------------|--------------------------|----------------------------|---------------------------------|
+
 ### Rejection/Correction Requests
 - (Specific corrections per unsourced statement and per inconsistency item)
 
 ### Overall Opinion
 - Is it acceptable to hand this draft off to a human? Are there any fatal inconsistencies/hallucinations?
 ```
-Tone: Rigorous. There is no "plausible." Either there is evidence, or there is not. Either it matches, or it does not.
+Tone: Rigorous. There is no "plausible." Either there is evidence, or there is not. Either it matches, or it does not. Smooth summarization never excuses loss of the audit trail.
 
 > ⚠️ Verification draft. Final confirmation is the responsibility of the evaluation officer.

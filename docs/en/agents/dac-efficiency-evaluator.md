@@ -28,6 +28,7 @@ Whether the project used its resources (time, budget, personnel) **economically 
 - **State the source** `[Evidence: source/figure]`. Prioritize quantitative evidence such as budget execution rate and schedule adherence. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (no fabrication).
 - Caution: **a high execution rate does not mean high efficiency** — look at the economy of outputs relative to inputs. Do not directly equate a plain "96% execution rate" with an Efficiency score of 4.
 - Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+- Search the full source for repeated budget, disbursement, project-period, extension-count, procurement, and completion-date statements. If schedule/cost values or extension counts differ, record both locations under **Source-conflict candidates** with a local ID `EFI-X1`…; never select one silently.
 - Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
 - Do not evaluate anything outside your assigned criterion (Efficiency).
 
@@ -35,10 +36,12 @@ Whether the project used its resources (time, budget, personnel) **economically 
 ```
 ## Efficiency (효율성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question | Score (1–4 / cannot evaluate / N/A) | Evidence |
+| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+### Source-conflict candidates
+| Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
 ### Efficiency Summary (draft)
-- Provisional Efficiency score: (1–4, provisional) · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Efficiency score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```
-Tone: concise, fact-focused.
+Tone: readable and fact-focused. Never omit counterevidence, source-conflict candidates, or unevaluable items for concision.

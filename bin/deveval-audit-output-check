@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# DevEval 기본 평가 브리프의 감사추적 산출물 계약 검사 래퍼.
+#   deveval-audit-output-check <evaluation-brief.md>
+exec python3 "$(dirname "$0")/../scripts/auditable_output_check.py" "$@"
