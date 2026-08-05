@@ -10,6 +10,14 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+### Added
+- **Source-fact ledger before scoring** — `deveval:evaluate` now records one
+  row per score-critical source occurrence under stable `F` IDs and runs an
+  early `--ledger-only` gate. Differences in value/status, unit, denominator,
+  period, aggregation rule, or as-of date require a supported explanation or a
+  linked conflict ID; final briefs cross-check `F` IDs across the ledger,
+  detailed ratings, and conflict register.
+
 ## [0.12.0] — 2026-08-05 — Auditable briefs & normative criteria cleanup
 
 ### Changed
