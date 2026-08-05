@@ -1,7 +1,8 @@
 name: checks
 
 # 결정적 컴포넌트의 회귀를 막는다 — 수치 일관성 검사기(consistency_check.py),
-# 감사 가능한 산출물 계약, 공용 지식층 라우팅, 완료 엔진(hooks/boulder.sh), 이중 매니페스트 정체성.
+# 감사 가능한 산출물 계약, 공용 지식층 라우팅, 저장소 중복·정본 ID,
+# 완료 엔진(hooks/boulder.sh), 이중 매니페스트 정체성.
 # 픽스처는 실제 KOICA 종료평가 PDF 334건 스윕에서 관측된 사고·오탐 유형이다.
 
 on:
@@ -18,7 +19,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Python 회귀 테스트 (수치 검사기 + 감사 산출물 계약 + 지식층)
+      - name: 저장소 중복 사본·정본 ID 충돌 검사
+        run: python3 scripts/repository_hygiene_check.py
+
+      - name: Python 회귀 테스트 (수치 검사기 + 감사 산출물 계약 + 지식층 + 저장소 위생)
         run: python3 -m unittest discover -s tests -v
 
       - name: 완료 엔진(Stop hook) 동작 테스트
