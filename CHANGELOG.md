@@ -17,6 +17,10 @@ each slice below is recorded as a 0.x milestone.
   period, aggregation rule, or as-of date require a supported explanation or a
   linked conflict ID; final briefs cross-check `F` IDs across the ledger,
   detailed ratings, and conflict register.
+- **Repository hygiene CI** — checks now reject copy-suffixed files and
+  directories when a canonical sibling exists, portable case/NFC path
+  collisions, and duplicate or path-mismatched agent/skill identities. An
+  exact-path allowlist documents the rare intentional suffix-shaped name.
 
 ## [0.12.0] — 2026-08-05 — Auditable briefs & normative criteria cleanup
 
