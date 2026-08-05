@@ -1,6 +1,6 @@
 {
   "name": "deveval",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "KOICA/OECD-DAC 기준 ODA 사업평가, 평가보고서 품질심사, 영향평가 방법론 검토를 위한 근거 기반 워크플로.",
   "author": {
     "name": "Wooyoung Kim",

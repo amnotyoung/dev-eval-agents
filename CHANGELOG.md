@@ -10,6 +10,8 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+## [0.12.0] — 2026-08-05 — Auditable briefs & normative criteria cleanup
+
 ### Changed
 - **Auditable evaluation brief is now the default evaluation deliverable** — a
   score-only paragraph no longer satisfies the evaluate workflow. Criterion

@@ -172,7 +172,7 @@ Then invoke the same four workflows with the syntax for your host:
 
 | Workflow | Codex | Claude Code | What it does |
 |----------|-------|-------------|--------------|
-| Evaluate | `$deveval:evaluate` | `/deveval:evaluate` | 5–6 independent criteria → composite score + draft grade |
+| Evaluate | `$deveval:evaluate` | `/deveval:evaluate` | 5 independent criteria → composite score + draft grade |
 | Quality review | `$deveval:quality-review` | `/deveval:quality-review` | 24-item / 100-point / A–D report-quality inspection |
 | Impact review | `$deveval:impact-review` | `/deveval:impact-review` | 6 proposed principles / 10 operational questions |
 | Write report | `$deveval:write-report` | `/deveval:write-report` | draft → numeric check → narrative verification → human |

@@ -148,7 +148,7 @@ codex plugin add deveval@deveval-agents
 
 | 워크플로 | Codex | Claude Code | 하는 일 |
 |----------|-------|-------------|---------|
-| 사업평가 | `$deveval:evaluate` | `/deveval:evaluate` | 5~6기준 독립 평정 → 종합점수·등급(안) |
+| 사업평가 | `$deveval:evaluate` | `/deveval:evaluate` | 5기준 독립 평정 → 종합점수·등급(안) |
 | 품질심사 | `$deveval:quality-review` | `/deveval:quality-review` | 24문항/100점/A~D 평가보고서 품질심사 |
 | 영향평가 검토 | `$deveval:impact-review` | `/deveval:impact-review` | 6개 추진원칙/10개 운용질문 |
 | 보고서 작성 | `$deveval:write-report` | `/deveval:write-report` | 작성→수치검사→서술검증→사람 |

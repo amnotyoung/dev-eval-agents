@@ -21,7 +21,7 @@ templates/ · samples/ · scripts/ 템플릿·샘플·러너
 
 | 스킬 | 하는 일 |
 |------|---------|
-| `deveval:evaluate` | 사업평가 — 5~6기준 병렬 평정 → 종합점수·등급(안) |
+| `deveval:evaluate` | 사업평가 — 5기준 병렬 평정 → 종합점수·등급(안) |
 | `deveval:quality-review` | 평가보고서 품질심사 — 24문항/100점/A~D |
 | `deveval:impact-review` | 영향평가 방법론 검토 — 6개 추진원칙 + DevEval 10질문 |
 | `deveval:write-report` | 보고서 작성 — 작성→수치검사→서술검증→사람 |

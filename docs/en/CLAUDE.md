@@ -23,7 +23,7 @@ templates/ · samples/ · scripts/ templates · samples · runners
 
 | Skill | What it does |
 |-------|--------------|
-| `deveval:evaluate` | project evaluation — 5–6 criteria rated in parallel → composite score + draft grade |
+| `deveval:evaluate` | project evaluation — 5 criteria rated in parallel → composite score + draft grade |
 | `deveval:quality-review` | evaluation-report quality inspection — 24 items / 100 pts / A–D |
 | `deveval:impact-review` | impact-evaluation methodology review — 6 proposed principles + 10 DevEval questions |
 | `deveval:write-report` | report drafting — write → numeric check → narrative verification → human |
