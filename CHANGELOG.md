@@ -27,6 +27,11 @@ each slice below is recorded as a 0.x milestone.
   `scripts/auditable_output_check.py` guard, with regression fixtures proving
   that a terse score-only answer and an unregistered conflict marker fail.
 
+### Removed
+- The non-standard CTS-only `Validity` criterion, its evaluator, 24-point
+  aggregation branch, and report/template routing. Project evaluation now uses
+  only the documented KOICA/OECD-DAC criteria and scoring path.
+
 ## [0.11.0] — 2026-08-05 — Layered evaluation knowledge & source-status hardening
 
 ### Added

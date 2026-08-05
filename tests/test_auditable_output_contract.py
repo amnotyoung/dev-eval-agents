@@ -99,5 +99,24 @@ class RuntimeContract(unittest.TestCase):
         self.assertIn("상충·불일치 등록부", read("templates", "evaluation-report-template.md"))
         self.assertIn("상충·불일치 등록부", read("skills", "write-report", "SKILL.md"))
 
+    def test_nonstandard_cts_criterion_is_not_routed(self):
+        self.assertFalse(os.path.exists(os.path.join(ROOT, "agents", "cts-validity-evaluator.md")))
+        active_paths = (
+            ("AGENTS.md",),
+            ("docs", "en", "AGENTS.md"),
+            ("skills", "evaluate", "SKILL.md"),
+            ("skills", "write-report", "SKILL.md"),
+            ("templates", "eval-plan-template.md"),
+            ("templates", "evaluation-report-template.md"),
+            ("templates", "auditable-evaluation-brief-template.md"),
+            ("agents", "report-composer.md"),
+            ("docs", "en", "agents", "report-composer.md"),
+        )
+        forbidden = ("cts-validity", "CTS면 타당성", "CTS 6기준", "CTS Validity")
+        for path in active_paths:
+            body = read(*path)
+            for token in forbidden:
+                self.assertNotIn(token, body, "/".join(path))
+
 if __name__ == "__main__":
     unittest.main()

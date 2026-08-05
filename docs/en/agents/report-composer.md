@@ -33,7 +33,7 @@ Report composition carries **far greater hallucination risk** than evaluation �
 - **Ⅰ. Project Overview** (background / project overview / Project Design Matrix (PDM))
 - **Ⅱ. Evaluation Overview** (purpose·scope / evaluation matrix / evaluation methods and limitations / conflict and inconsistency register / verification corrections and score recalculation / evaluation team)
 - **Ⅲ. Degree of Performance Achievement and Project Theory of Change** (performance-achievement summary table)
-- **Ⅳ. Criterion-by-Criterion Evaluation Results** (Relevance·Coherence·Effectiveness·Efficiency·Sustainability [+CTS Validity])
+- **Ⅳ. Criterion-by-Criterion Evaluation Results** (Relevance·Coherence·Effectiveness·Efficiency·Sustainability)
 - **Ⅴ. Conclusion** (conclusion / lessons learned / recommendations)
 - Appendices
 

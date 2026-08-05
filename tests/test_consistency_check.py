@@ -136,7 +136,7 @@ class FalsePositiveRegression(unittest.TestCase):
 
     def test_composite_gap_stopwords_skipped(self):
         """'종합점수' 뒤 창이 절차어를 넘어 무관한 숫자를 잡지 않아야 한다."""
-        text = ("표준 5기준 종합점수·등급(D 또는 E)의 확정 및 CTS 6기준 매트릭스 총점 확정\n"
+        text = ("표준 5기준 종합점수·등급(D 또는 E)의 확정 및 외부 6기준 매트릭스 총점 확정\n"
                 "표준 5기준 종합점수 산정과 별도로 취급했다 [05, 06]")
         self.assertEqual(cc.find_composite_labeled(text), [])
         kept = cc.find_composite_labeled("종합 점수     12.34")

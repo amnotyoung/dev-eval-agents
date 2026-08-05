@@ -57,18 +57,17 @@ nine indicators:
 
 Governance: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md).
 
-## 🎛️ System — 12 agents, two evaluation types, three harnesses
+## 🎛️ System — 11 agents, two evaluation types, three harnesses
 
 KOICA evaluation comes in **different types**; the system handles two of them
 distinctly.
 
-### ① Final Evaluation — rate a project on 6 criteria → **A–F grade**
+### ① Final Evaluation — rate a project on KOICA criteria → **A–F grade**
 
 An orchestrator injects the KOICA criteria/rules, delegates the criteria to
 read-only evaluators **in parallel**, has a verifier check the evidence, sums the
-scores, and hands a **draft** grade to a human. Standard 5 criteria (Relevance,
-Coherence, Effectiveness, Efficiency, Sustainability) sum to 20 points → A–F;
-CTS/technology-innovation projects add **Validity** as a 6th criterion.
+scores, and hands a **draft** grade to a human. The 5 scored criteria (Relevance,
+Coherence, Effectiveness, Efficiency, Sustainability) sum to 20 points → A–F.
 
 #### The evaluation criteria (OECD-DAC, KOICA 2024)
 
@@ -80,9 +79,8 @@ CTS/technology-innovation projects add **Validity** as a 6th criterion.
 | **Efficiency** | Were results delivered economically and on time relative to inputs? | ✅ |
 | **Impact** | Did it produce (or is it likely to produce) long-term, transformative effects? | ➖ ex-post only |
 | **Sustainability** | Are the financial, institutional & social capacities in place for benefits to last after close-out? | ✅ |
-| **Validity** | *(CTS / tech-innovation projects only)* technical validity — a non-standard add-on | ⭐ CTS only |
 
-- **Composite score** = the **5 scored criteria** (all but Impact), each **1–4 points** = **20 max → A–F**. **Impact is an ex-post criterion**, excluded from the final-evaluation composite; CTS projects add **Validity** and are graded on the 6-criteria average.
+- **Composite score** = the **5 scored criteria** (all but Impact), each **1–4 points** = **20 max → A–F**. **Impact is an ex-post criterion**, excluded from the final-evaluation composite.
 - **4-point scale** — 1 clear negative effect · 2 partial shortfall · 3 largely achieved as planned · 4 fully achieved + beyond expectations.
 - **Grades** — ≥18 **A** (highly successful) · 16–18 **B** · 14–16 **C** (successful) · 12–14 **D** · 10–12 **E** (partially successful) · <10 **F** (unsatisfactory).
 
@@ -97,12 +95,11 @@ seven items. Adequate / Conditional / Inadequate is a project triage label, not
 an official KOICA/KIEP verdict. The 6-criteria frame is deliberately **not**
 applied here.
 
-### Agent catalog (12)
+### Agent catalog (11)
 
 | Role | Agent | Access |
 |------|-------|:---:|
 | Final-eval DAC criteria (6) | `dac-{relevance,coherence,effectiveness,efficiency,sustainability,impact}-evaluator` — Impact is ex-post, excluded from the 20-pt composite | read |
-| CTS Validity add-on (CTS only) | `cts-validity-evaluator` | read |
 | Evidence verification | `quality-verifier` | read |
 | Report composition | `report-composer` | **write** |
 | Narrative verification (hallucination/consistency) | `narrative-verifier` | read |
@@ -283,7 +280,7 @@ and the claim-evidence register in one working artifact.
 ## 🗺️ Roadmap
 
 Slices 1–8 are complete (see [`CHANGELOG.md`](CHANGELOG.md)): first evaluator on
-KOICA 2024 → parallel 6-criteria team + CTS validity → completion engine → report
+KOICA 2024 → parallel 6-criteria team → completion engine → report
 quality inspector → report composition + narrative verifier → impact-evaluation
 review + Regulation No. 536 → quality inspector v2 → **multi-harness (Codex)**.
 

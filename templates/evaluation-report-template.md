@@ -42,7 +42,6 @@
 3. 효과성 (Effectiveness)
 4. 효율성 (Efficiency)
 5. 지속가능성 (Sustainability)
-6. 타당성 (Validity) — *CTS 사업만*
 
 ## Ⅴ. 결론
 1. 결론 — 검증 후 종합 평가등급 + 근거 *(Ⅳ장 검증 후 점수 합산과 일치; 미해결 상충의 등급 민감도 명시)*

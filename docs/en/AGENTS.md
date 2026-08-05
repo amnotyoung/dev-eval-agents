@@ -39,7 +39,6 @@ Aggregate score = **the 5 criteria of Relevance, Coherence, Effectiveness, Effic
 | Below 10 | F | Unsatisfactory |
 
 **Common 4-point scale:** 1 = clearly negative / 2 = some impact / 3 = generally good / 4 = fully achieved + beyond expectations.
-**CTS (technology-innovation) projects** add Validity as a 6th auxiliary criterion → 6 criteria, 24 points, average (÷6) → 4 tiers (3.5↑ highly successful / 2.5–3.5 successful / 1.5–2.5 partially successful / below 1.5 unsatisfactory).
 
 ## Knowledge-layer precedence and routing
 
@@ -60,8 +59,8 @@ Shared knowledge has four non-interchangeable layers.
 
 When the user provides an evaluation target and requests an evaluation:
 
-1. **Confirm the materials + determine the project type** — read the target and grasp its scope. Check **whether it is a CTS / technology-innovation project**. Record document names, versions, and dates; search the full source for repeated key indicators, counts, project dates, budgets, and completion/defect status, then compare indicator name, unit, denominator, period, counting rule, and status date.
-2. **Sequential, independent rating per criterion** — evaluate Relevance → Coherence → Effectiveness → Efficiency → Sustainability (→ Validity if CTS) **one at a time**.
+1. **Confirm the materials + determine the project type** — read the target and grasp its scope. Record document names, versions, and dates; search the full source for repeated key indicators, counts, project dates, budgets, and completion/defect status, then compare indicator name, unit, denominator, period, counting rule, and status date.
+2. **Sequential, independent rating per criterion** — evaluate Relevance → Coherence → Effectiveness → Efficiency → Sustainability **one at a time**.
    - Each criterion: cross-check that criterion's key questions against the evidence in the report → **1–4 points (or "cannot evaluate")** + supporting-evidence location + counter/constraint evidence + evidence status + why the adjacent scores do not apply.
    - If values, units, counts, periods, or completion status differ for the same fact, attach a local conflict ID and preserve both locations; never choose the favorable value.
    - For each material item, check question fit, measurement fit, comparison and time, representation, rival explanations, and traceability to the primary source. This is an **evidence gate**, not a separate score.
@@ -72,7 +71,6 @@ When the user provides an evaluation target and requests an evaluation:
 4. **Aggregate-score computation** —
    - Aggregate **post-verification scores only**. If an unresolved material conflict could change a score, show the possible range and grade sensitivity or defer aggregation.
    - Standard 5 criteria: summed to 20 points → the A–F table above.
-   - CTS 6 criteria: summed to 24 points, average → 4 tiers.
    - **⚠️ If any criterion is "cannot evaluate," do not assert the aggregate score.** State "N criteria evaluable / M criteria with insufficient evidence," and make the aggregate a qualified provisional value or defer it.
    - Check for narrative–grade divergence.
 5. **Hand off to the human** — follow `templates/auditable-evaluation-brief-template.md` and produce an **auditable evaluation brief** containing scope/method, pre/post-verification scores, criterion-level supporting and counterevidence, the conflict and inconsistency register, unevaluable/unverified items, corrections and recalculation, evidence-linked recommendations, limitations, and the human gate. A one-paragraph score summary is not complete. For a file output, run `python3 scripts/auditable_output_check.py <brief>` and `python3 scripts/consistency_check.py <brief> --mode project`. State explicitly, "the evaluation officer confirms the final grade."

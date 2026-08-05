@@ -29,7 +29,7 @@
 | Sustainability | `dac-sustainability-evaluator` |
 | Coherence | `dac-coherence-evaluator` |
 | Cross-cutting issues (gender, environment, human rights) | (reflected in Effectiveness equity, etc.) |
-- ②: **Evaluation criteria may be applied selectively, taking each project's characteristics into account.** (Adding Validity for CTS projects also falls within this discretion.)
+- ②: **Evaluation criteria may be applied selectively, taking each project's characteristics into account.**
 
 ## Article 7 Evaluation Types — the basis for our two modes
 **By timing:** ex-ante evaluation / mid-term evaluation / **Final Evaluation** (degree of achievement of performance targets at the point of completion) / **ex-post evaluation** (deriving and sustaining long-term results after completion).

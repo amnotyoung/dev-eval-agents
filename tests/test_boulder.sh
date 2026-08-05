@@ -36,7 +36,7 @@ check "작업판 없으면 종료 허용" 0 "$(run_hook "$D")"
 
 # 2) 전부 [x]/[~] → 완료, 종료 허용 + 상태 리셋
 D="$TMP/done"; mkdir -p "$D/.omo"
-printf -- '- [x] 적절성\n- [~] 타당성 (CTS 아님)\n' > "$D/.omo/eval-plan.md"
+printf -- '- [x] 적절성\n- [~] 추가 조사 (해당 없음)\n' > "$D/.omo/eval-plan.md"
 touch "$D/.omo/.boulder-state"
 check "전부 완료/막힘이면 종료 허용" 0 "$(run_hook "$D")"
 [ ! -f "$D/.omo/.boulder-state" ]; check "완료 시 상태 파일 제거" 0 $?

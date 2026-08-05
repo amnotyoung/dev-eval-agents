@@ -57,7 +57,7 @@ LABEL_BANDS = [(Decimal("3.5"), "매우 성공적"), (Decimal("2.5"), "성공적
                (Decimal("1.5"), "부분 성공적"), (None, "미흡")]
 # 라벨 매칭(긴 것 먼저 — '성공적'이 '매우 성공적'·'부분 성공적'의 부분문자열)
 LABEL_ALT = r"매우\s*성공적|부분\s*성공적|성공적|미흡"
-# 사업 종합점수(DAC 체계) 상한 — 5기준 20점·CTS 6기준 24점이 최대
+# 사업 종합점수 검사 상한 — /24로 작성된 기존·외부 보고서도 불일치 검사용으로 읽는다
 COMPOSITE_MAX = Decimal(24)
 # 만족도·설문 종합점수(5점 척도 등)는 DAC 종합점수가 아니다
 SURVEY_WORDS = ("만족도", "설문", "응답률", "응답자", "리커트")
@@ -196,7 +196,7 @@ def find_composite_labeled(text):
     제외: 만족도·설문 줄(다른 척도), 등급 산정 기준 서술(범례)·불일치 인용 줄,
     값 뒤에 이상/미만(임계값)·만점(분모)이 붙는 경우, 체계 상한(24) 초과 값,
     그리고 '종합점수'와 숫자 사이에 산정·확정·기준·등급·보류가 끼는 경우 —
-    "종합점수·등급(D 또는 E)의 확정 및 CTS 6기준"의 6, 출처 표기 "[05, 06]"의
+    "종합점수·등급(D 또는 E)의 확정 및 외부 6기준"의 6, 출처 표기 "[05, 06]"의
     05처럼 점수가 아닌 숫자를 넘겨 잡는 것을 막는다(값 서술은 그 사이에 그런
     절차어가 없다).
     """
@@ -222,7 +222,7 @@ def find_composite_labeled(text):
 
 
 def find_criterion_means(text):
-    """평균 점수(a)~(f)의 값. [Decimal] — 구 4기준(a~d)·2024 5기준(a~e)·CTS 6기준(a~f)."""
+    """평균 점수(a)~(f)의 값. [Decimal] — 문서에 표기된 4~6개 기준 점수 셀."""
     means = []
     pat = re.compile(r"평균\s*점수\s*\(([a-fA-F])\)[^\d\n]{0,20}(\d(?:\.\d{1,2})?)")
     for m in pat.finditer(text):
@@ -304,7 +304,7 @@ def check_project(text, violations):
             violations.append(f"종합점수 표기 불일치 — {desc}. 같은 종합점수는 문서 전체에서 일치해야 합니다")
     composite = next(iter(comp_vals)) if len(comp_vals) == 1 else None
 
-    # ② a+b+c+d = 종합점수 — 기준 수는 4~6개(구 4기준·표준 5기준·CTS 6기준).
+    # ② a+b+c+d = 종합점수 — 기준 수는 4~6개(구형·현행 또는 외부 보고서 자체 체계).
     # 그 밖의 개수는 표 추출이 불완전하거나 다른 표를 잡은 것이므로 합산하지 않는다.
     means = find_criterion_means(text)
     if 4 <= len(means) <= 6 and composite is not None:
