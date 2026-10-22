@@ -226,10 +226,12 @@ class SelfCheckingRoles(unittest.TestCase):
         self.assertIn("## 감사 가능한 브리프 조립", ko)
         self.assertIn("모든 F-ID가 4절 어딘가에", ko)
         self.assertIn("consistency_check.py", ko)
-        self.assertIn("Edit 한 번으로", ko)
+        self.assertIn("Write 한 번으로", ko)
+        self.assertIn("원문 보고서를 다시 Read·Grep하지 않는다", ko)
+        self.assertIn("검사기 스크립트 소스를 읽지 않는다", ko)
         self.assertIn("수정은 두 번까지", ko)
         self.assertIn("## Assembling the auditable brief", read("docs", "en", "agents", "report-composer.md"))
-        self.assertIn("single Edit", read("docs", "en", "agents", "report-composer.md"))
+        self.assertIn("single Write", read("docs", "en", "agents", "report-composer.md"))
 
     def test_lead_evaluator_only_confirms(self):
         skill = read("skills", "evaluate", "SKILL.md")
