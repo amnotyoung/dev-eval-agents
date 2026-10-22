@@ -60,4 +60,4 @@ Assessment of **suitability as an impact-evaluation target** → linked to the `
 
 ---
 
-> This regulation guarantees that our system is not an arbitrary design but is **grounded in KOICA's official regulation**. CLAUDE.md injects the core as Rules.
+> This regulation guarantees that our system is not an arbitrary design but is **grounded in KOICA's official regulation**. AGENTS.md injects the core as Rules.

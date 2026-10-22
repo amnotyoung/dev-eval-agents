@@ -501,11 +501,9 @@ class RuntimeContract(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(ROOT, "agents", "cts-validity-evaluator.md")))
         active_paths = (
             ("AGENTS.md",),
-            ("CLAUDE.md",),
             ("README.md",),
             ("README.ko.md",),
             ("docs", "en", "AGENTS.md"),
-            ("docs", "en", "CLAUDE.md"),
             ("skills", "evaluate", "SKILL.md"),
             ("skills", "write-report", "SKILL.md"),
             ("templates", "eval-plan-template.md"),

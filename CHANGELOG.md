@@ -47,6 +47,15 @@ each slice below is recorded as a 0.x milestone.
   fails when their columns drift from the contract.
 
 ### Changed
+- **One agent-instructions document** — the repository-development context
+  (`CLAUDE.md`) and the Codex direct-run evaluation fallback (`AGENTS.md`)
+  are merged into a single `AGENTS.md`: Part 1 for developing the plugin,
+  Part 2 (between `deveval:codex-fallback` markers) for running an evaluation
+  directly in Codex. `CLAUDE.md` and `docs/en/CLAUDE.md` are removed; the
+  mirror check, CI paths, licensing and DPG docs, and reference mapping tables
+  point at `AGENTS.md`. `scripts/open_runner.py` injects only Part 2 into the
+  open-weight model. *Claude Code sessions in this repository need a setup
+  that loads `AGENTS.md` (or should read it at session start).*
 - **Criterion evaluators emit the fact-ID contract** — the evaluate skill
   required `[사실: Fn]` on every claim, but none of the six `dac-*` output
   formats had a fact-ID column. Each rating table now has one, each draft

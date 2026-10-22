@@ -134,8 +134,8 @@ Independence · Impartiality · Credibility · Accountability · Accuracy · **C
 
 | Asset | Reflected in |
 |------|----------|
-| 4-point scale · A–F grades (§2) | CLAUDE.md, Effectiveness evaluator — **Principle #3 (no grading scale) abolished** |
+| 4-point scale · A–F grades (§2) | AGENTS.md, Effectiveness evaluator — **Principle #3 (no grading scale) abolished** |
 | Effectiveness 3 questions + 4-point rubric (§3) | `dac-effectiveness-evaluator` |
-| 6 criteria · question pool (§1·§4) | CLAUDE.md, Slice 2 (5 criteria in parallel) |
+| 6 criteria · question pool (§1·§4) | AGENTS.md, Slice 2 (5 criteria in parallel) |
 | 24-item quality check (§5) | Slice 4 quality inspector |
-| 8 evaluation-ethics principles (§6) | CLAUDE.md Rules |
+| 8 evaluation-ethics principles (§6) | AGENTS.md Rules |

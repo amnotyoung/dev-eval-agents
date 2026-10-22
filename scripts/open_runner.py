@@ -11,7 +11,7 @@ this script demonstrates it running on an **open-weight** model served locally
 by Ollama (https://ollama.com), with NO proprietary API involved.
 
 It reproduces, on a single-agent open model, what the Codex harness does with
-`AGENTS.md`: inject the rules + the layered normative/methods knowledge, then
+Part 2 of `AGENTS.md` (the Codex direct-run fallback): inject the rules + the layered normative/methods knowledge, then
 evaluate a project report against the OECD-DAC criteria.
 
 Dependencies: Python 3 standard library only (urllib, json). No pip install.
@@ -44,7 +44,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # from disk). The normative sources govern scoring; two compact methods modules
 # help the open model diagnose design and evidence without importing old rules.
 DEFAULT_REFERENCES = [
-    "AGENTS.md",  # the Codex-harness instructions = system role
+    "AGENTS.md",  # Part 2 (Codex direct-run fallback) = system role; Part 1 is repo-dev context
     "reference/KOICA-평가지침-2024-다이제스트.md",
     "reference/KOICA-사업평가규정-다이제스트.md",
     "reference/개발평가-설계방법론-다이제스트.md",
@@ -61,10 +61,24 @@ def read(path):
         return fh.read()
 
 
+FALLBACK_START = "<!-- deveval:codex-fallback:start -->"
+FALLBACK_END = "<!-- deveval:codex-fallback:end -->"
+
+
+def evaluation_instructions(text):
+    """AGENTS.md의 2부(평가 워크플로)만 돌려준다 — 1부(저장소 개발 지침)는 평가 모델에 필요 없다.
+
+    표지가 없는 예전 판이면 문서 전체를 쓴다.
+    """
+    if FALLBACK_START in text and FALLBACK_END in text:
+        return text.split(FALLBACK_START, 1)[1].split(FALLBACK_END, 1)[0].strip()
+    return text
+
+
 def build_messages(target_path, reference_paths):
     """Assemble the same context the Codex harness gets: rules + reference,
     then the evaluation target as the user turn."""
-    agents_md = read(reference_paths[0])
+    agents_md = evaluation_instructions(read(reference_paths[0]))
     knowledge = "\n\n".join(
         f"===== {p} =====\n{read(p)}" for p in reference_paths[1:]
     )

@@ -44,8 +44,8 @@ evaluation. Contributions of all sizes are welcome.
 
 1. Open an issue describing the change (or comment on an existing one).
 2. Fork, create a topic branch, make your change.
-3. Keep Korean and English docs in sync (the Korean files `CLAUDE.md`,
-   `AGENTS.md`, `agents/`, and `reference/` are the executable source; English
+3. Keep Korean and English docs in sync (the Korean files `AGENTS.md`,
+   `agents/`, and `reference/` are the executable source; English
    lives under `docs/en/`, mirroring the same path). Update both sides in the
    same PR — the `mirror-sync` check enforces this, and a deliberately
    one-sided PR needs the `mirror-sync-exempt` label. Run it yourself with
