@@ -86,10 +86,11 @@ each slice below is recorded as a 0.x milestone.
   scored question; identical repeats share one row with all locations). The
   composer reads its inputs once, writes the whole brief with one Write, does
   not re-read the source or the checker scripts, and fixes only the lines the
-  checkers name. Measured on two real KOICA final reports (blind inputs,
-  `docs/validation-log.md` §1-2): 57.2 → 50.2 minutes and $18.18 → $12.98 for
-  both cases, with ratings closer to independent adjudicators (mean gap 0.20 →
-  0.10).
+  checkers name. Measured on five real KOICA final reports with the human
+  scores removed (seven runs per variant, `docs/validation-log.md` §1-2): cost
+  per case −20% (lower in all five cases), wall time −6% (lower in four of
+  five), approval prompts per run 6.6 → 0.7, and the grade matched two
+  independent blind re-scorers in 7/7 runs (baseline 5/6; human teams 2/5).
 - **One agent-instructions document** — the repository-development context
   (`CLAUDE.md`) and the Codex direct-run evaluation fallback (`AGENTS.md`)
   are merged into a single `AGENTS.md`: Part 1 for developing the plugin,
