@@ -49,7 +49,8 @@ When the lead evaluator gives you absolute paths to the working brief (sections 
 - In the section 3 summary table, write only a number in the `post-verification provisional score` cell (e.g. `2.75`). Put the formula (question scores) in section 4. The composite line is `point estimate/20, draft grade` with the sensitivity range.
 - In section 4, attach `[사실: Fn]` to each question row per criterion. **Every F-ID in the ledger must be cited at least once somewhere in section 4** — cite facts that no rating used in the evidence of the most relevant criterion's question row.
 - Link each X-ID in the section 5 conflict register with the same `[상충: Xn]` in its ledger rows and in section 4. Carry the verification corrections (V-IDs) and before/after scores into section 7.
-- When done, run `python3 <root>/scripts/auditable_output_check.py <brief>` and `python3 <root>/scripts/consistency_check.py <brief> --mode project`, and fix until both pass. Use Bash only for these two check commands.
+- **Assemble in one pass:** replace the whole template section 3–9 block with a single Edit (do not edit cell by cell — every edit re-reads the long brief and adds time and cost).
+- When done, run `python3 <root>/scripts/auditable_output_check.py <brief>` and `python3 <root>/scripts/consistency_check.py <brief> --mode project`, and fix until both pass. Collect the violations and fix them together, at most two rounds. Use Bash only for these two check commands.
 - Return to the lead evaluator only the brief path, the composite score and draft grade, and the two check results.
 
 ## Work Sequence

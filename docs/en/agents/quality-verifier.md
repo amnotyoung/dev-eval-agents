@@ -39,7 +39,7 @@ Your job is not to redo the evaluation — it is to check **(A) whether the evid
 ## (B0) Source-Fact-Ledger Audit
 
 1. Independently search the entire source for repeated statements of score-critical indicators, counts, project dates, budgets, quantities, and completion/defect status.
-2. Confirm there is **one row per source occurrence** and that the same decision object, indicator, and target/actual role reuse the same global `F1`, `F2`, and so on. Never split an F-ID merely because its value differs.
+2. Confirm there is **one row per source occurrence** (one row per differing source occurrence (identical repeats share one row that lists all their locations)) and that the same decision object, indicator, and target/actual role reuse the same global `F1`, `F2`, and so on. Never split an F-ID merely because its value differs.
 3. Check every row's **value/status, unit, denominator/population, reference period, aggregation rule, as-of date, document/version, and source location**. Use an explicit `not applicable` or `unknown` rather than a blank; unknown is not agreement.
 4. When comparison axes differ within one F-ID, require either `explained: …` supported by the source or `[Conflict: Xn]`. If the claimed unit, period, version, aggregation, or as-of explanation is only an assumption, return it to conflict-candidate status.
 5. Confirm each score-critical claim cites its related `[Fact: Fn]`. Add a missed occurrence to the existing F-ID and assign the next F-ID only to a genuinely new fact. Never renumber existing F-IDs.

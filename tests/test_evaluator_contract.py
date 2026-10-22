@@ -189,7 +189,7 @@ class SourceAnalystRole(unittest.TestCase):
         ko = read("agents", "source-analyst.md")
         self.assertIn("tools: Read, Grep, Glob, Write", ko)
         self.assertNotIn("Edit", ko.split("---")[1])
-        for token in ("auditable-evaluation-brief.md", "source-index.md", "30~80행", "점수·등급"):
+        for token in ("auditable-evaluation-brief.md", "source-index.md", "최대 60행", "같은 값으로", "점수·등급"):
             self.assertIn(token, ko)
         self.assertIn("source-index.md", read("docs", "en", "agents", "source-analyst.md"))
 
@@ -226,7 +226,10 @@ class SelfCheckingRoles(unittest.TestCase):
         self.assertIn("## 감사 가능한 브리프 조립", ko)
         self.assertIn("모든 F-ID가 4절 어딘가에", ko)
         self.assertIn("consistency_check.py", ko)
+        self.assertIn("Edit 한 번으로", ko)
+        self.assertIn("수정은 두 번까지", ko)
         self.assertIn("## Assembling the auditable brief", read("docs", "en", "agents", "report-composer.md"))
+        self.assertIn("single Edit", read("docs", "en", "agents", "report-composer.md"))
 
     def test_lead_evaluator_only_confirms(self):
         skill = read("skills", "evaluate", "SKILL.md")

@@ -24,12 +24,12 @@ If you did not receive the paths, do not guess — ask for them.
 
 ## Output 1 — working brief `.omo/<project-slug>/auditable-evaluation-brief.md`
 
-Use the template structure as is and fill **only section 1 (scope, materials, method) and section 2 (source-fact ledger)**. Leave section 3 onward as the template (the lead evaluator fills them).
+Use the template structure as is and fill **only section 1 (scope, materials, method) and section 2 (source-fact ledger)**. Leave section 3 onward as the template (the composer fills them).
 
 - Section 1: materials reviewed (document name, version, date, period covered) and the warnings from the converted copy's header (image regions, low-confidence OCR, pages without text).
-- The section 2 ledger holds **only score-critical facts**. Aim for 30–80 rows.
+- The section 2 ledger holds **only score-critical facts**. **At most 60 rows**, about 2–4 key facts per scored question. A long ledger slows down and raises the cost of every evaluator, the verifier, and the composer — leave out facts that would not change a judgment.
   - Scope: PDM indicator baselines/targets/actuals, output achievement, outcome and goal indicators, budget and disbursement, project period and extensions, policy and needs documents, coordination with other projects and donors, equity and vulnerable-group data, operating budget, staffing, handover, defects, cross-cutting issues (gender, environment, human rights).
-  - When the same fact appears in several places and the value, unit, period, or status differs, write one row per occurrence under the same F-ID and keep it as a `[Conflict: Xn]` candidate (common contract §3). If they agree, one representative row plus one `agree` row is enough.
+  - When the same fact appears in several places **with the same value**, put it in one row listing all locations (`p.20, p.51` in the source-location cell) with the verdict `단일 출처 — 전체검색 완료`. **Only when** the value, unit, period, or status differs, write one row per occurrence under the same F-ID and keep it as a `[Conflict: Xn]` candidate (common contract §3).
   - Follow template section 2 for the columns and verdict labels (`single source — full search done` / `agree` / `explained: …` / `[Conflict: Xn]`). Fill empty axes with `n/a` or `unknown`.
   - Number X-IDs from X1 within the project.
 
