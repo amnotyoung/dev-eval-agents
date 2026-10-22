@@ -18,6 +18,7 @@ import re
 import sys
 import unicodedata
 from collections import defaultdict
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 
@@ -81,6 +82,18 @@ CRITERION_UNAVAILABLE = re.compile(
     r"(?m)^\s*(?:[-*]\s*)?(?:\*\*)?기준 전체 평가 불가(?:\*\*)?"
     r"(?:\s*[—:-]\s*(?!아님|아니|불가하지)[^\n]+)?\s*$"
 )
+# 대괄호로 감싸도 정상인 플러그인 표지 — 그 밖의 대괄호-only 값은 템플릿 자리표시자다.
+LEGIT_BRACKET = re.compile(
+    r"^\[\s*(?:(?:사실|상충|근거|출처)\s*:|INFO\s*:|확인\s*필요|사람\s*판단\s*필요)",
+    re.IGNORECASE,
+)
+LABELED_BRACKET_VALUE = re.compile(r"^\s*[-*]\s+[^:\n]{1,60}:\s*(\[[^\]\n]*\])\s*$")
+STANDALONE_BRACKET = re.compile(r"^\s*(\[[^\]\n]+\])\s*$")
+SCORE_VALUE = re.compile(r"\d(?:\.\d{1,2})?")
+SCORE_RANGE = re.compile(r"\d(?:\.\d{1,2})?[~∼–-]\d(?:\.\d{1,2})?")
+UNSCORED = re.compile(r"평가\s*불가|보류|근거\s*불충분|산정\s*불가")
+COMPOSITE_20 = re.compile(r"(?<![\d.])(\d{1,2}(?:\.\d{1,2})?)\s*/\s*20(?!\d)")
+COMPOSITE_QUALIFIED = re.compile(r"보류|잠정|범위|단서|[~∼]|\d\s*[–-]\s*\d")
 CONFLICT_HEADERS = (
     "ID",
     "사실 ID",
@@ -366,10 +379,138 @@ def inspect_ledger(text: str) -> tuple[list[str], set[str], dict[str, set[str]]]
     return violations, set(rows_by_fact), dict(ledger_conflicts)
 
 
+def template_placeholders(text: str) -> list[tuple[int, str]]:
+    """Find template prompts left in any table cell, labeled bullet value, or bare line.
+
+    `[질문]`, `[통과 / 조건부 통과 / 반려]`, `[없음/Xn]` 같은 템플릿 안내문이 남아 있어도
+    섹션 제목과 필드명만 보면 통과하던 빈틈을 막는다. `[사실: F1]`·`[근거: …]`·
+    `[INFO: 확인 필요]`·`[사람 판단 필요]` 같은 플러그인 표지는 정상 값이다.
+    """
+    found: list[tuple[int, str]] = []
+    in_fence = False
+    for line_number, line in enumerate(text.splitlines(), 1):
+        if line.lstrip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        cells = markdown_cells(line)
+        if cells is not None:
+            if is_separator(cells):
+                continue
+            for cell in cells:
+                if re.fullmatch(r"\[[^\]]*\]", cell) and not LEGIT_BRACKET.match(cell):
+                    found.append((line_number, cell))
+            continue
+        for pattern in (LABELED_BRACKET_VALUE, STANDALONE_BRACKET):
+            match = pattern.match(line)
+            if match and not LEGIT_BRACKET.match(match.group(1)):
+                found.append((line_number, match.group(1)))
+                break
+    return found
+
+
+def summary_score_cells(overall: str) -> dict[str, str] | None:
+    """Return criterion → post-verification score cell from the 종합 평정 table."""
+    lines = overall.splitlines()
+    for index, line in enumerate(lines):
+        header = markdown_cells(line)
+        if not header or header[0].strip("* ") != "기준":
+            continue
+        column = next((i for i, cell in enumerate(header) if "검증 후" in cell), None)
+        if column is None:
+            continue
+        cells_by_criterion: dict[str, str] = {}
+        for candidate in lines[index + 1:]:
+            cells = markdown_cells(candidate)
+            if cells is None:
+                break
+            if is_separator(cells) or len(cells) <= column:
+                continue
+            name = cells[0].strip("* ")
+            if name in CRITERIA:
+                cells_by_criterion[name] = cells[column]
+        return cells_by_criterion
+    return None
+
+
+def score_kind(cell: str) -> str:
+    """Classify a criterion score cell: score / range / unscored / placeholder / invalid."""
+    if is_placeholder(cell):
+        return "placeholder"
+    compact = re.sub(r"[*\s]", "", cell)
+    compact = re.sub(r"점$", "", compact)
+    if SCORE_VALUE.fullmatch(compact):
+        return "score" if 1 <= float(compact) <= 4 else "invalid"
+    if SCORE_RANGE.fullmatch(compact):
+        return "range"
+    if UNSCORED.search(cell):
+        return "unscored"
+    return "invalid"
+
+
+def inspect_scores(overall: str, detail: str) -> list[str]:
+    """근거 없으면 등급 없음 — 평가 불가 기준에 점수를 붙이거나 종합점수를 단정하지 않는다."""
+    violations: list[str] = []
+    cells = summary_score_cells(overall)
+    if cells is None:
+        return ["종합 평정 표 누락 — '기준' 열과 '검증 후' 점수 열이 있는 기준별 표가 필요함"]
+    kinds: dict[str, str] = {}
+    for criterion in CRITERIA:
+        if criterion not in cells:
+            violations.append(f"종합 평정 표에 {criterion} 행이 없음")
+            continue
+        kind = score_kind(cells[criterion])
+        kinds[criterion] = kind
+        if kind == "invalid":
+            violations.append(
+                f"종합 평정 {criterion}의 검증 후 점수 형식 오류: '{cells[criterion]}' — "
+                "1~4점, 범위(예: 2~3) 또는 '평가 불가'로 적어야 함"
+            )
+        unavailable = bool(CRITERION_UNAVAILABLE.search(subsection(detail, criterion) or ""))
+        if unavailable and kind in ("score", "range"):
+            violations.append(
+                f"{criterion}은(는) 상세 평정에서 '기준 전체 평가 불가'인데 종합 평정에 점수 "
+                f"'{cells[criterion]}'이(가) 있음 — 근거 없으면 등급 없음"
+            )
+        if unavailable:
+            kinds[criterion] = "unscored"
+
+    composite_line = next(
+        (line for line in overall.splitlines() if re.search(r"검증 후 종합\s*점수", line)), None
+    )
+    if composite_line is None:
+        violations.append("종합 평정에 '검증 후 종합점수·등급(안)' 줄이 없음")
+        return violations
+    value = composite_line.split(":", 1)[1] if ":" in composite_line else composite_line
+    single = COMPOSITE_20.search(value)
+    qualified = bool(COMPOSITE_QUALIFIED.search(value))
+    unscored = [criterion for criterion, kind in kinds.items() if kind in ("unscored", "range")]
+    if unscored and single and not qualified:
+        violations.append(
+            f"평가 불가·범위 기준({', '.join(unscored)})이 있는데 종합점수를 {single.group(1)}/20으로 "
+            "단정함 — 단서부 범위 또는 산정 보류로 적어야 함"
+        )
+    if single and not qualified and all(kinds.get(c) == "score" for c in CRITERIA):
+        total = sum(Decimal(re.sub(r"[*\s점]", "", cells[c])) for c in CRITERIA)
+        stated = Decimal(single.group(1))
+        exponent = min(stated.as_tuple().exponent, 0)
+        if total.quantize(Decimal(1).scaleb(exponent), rounding=ROUND_HALF_UP) != stated:
+            violations.append(
+                f"종합 평정의 기준별 검증 후 점수 합 {total}이(가) 검증 후 종합점수 {stated}/20과 다름"
+            )
+    return violations
+
+
 def inspect(text: str) -> list[str]:
     violations: list[str] = []
     if re.search(r"\[\s*\]", text) or "[사업명]" in text:
         violations.append("템플릿 미작성 자리표시자([ ] 또는 [사업명])가 남아 있음")
+    leftovers = template_placeholders(text)
+    if leftovers:
+        examples = ", ".join(f"줄 {n} {cell}" for n, cell in leftovers[:5])
+        more = f" 외 {len(leftovers) - 5}곳" if len(leftovers) > 5 else ""
+        violations.append(f"템플릿 자리표시자가 남아 있음 ({len(leftovers)}곳): {examples}{more}")
     sections: dict[str, str] = {}
     for title in REQUIRED_SECTIONS:
         body = section(text, title)
@@ -421,6 +562,8 @@ def inspect(text: str) -> list[str]:
     for field in ("검증 후", "근거 상태", "검증 판정"):
         if field not in overall:
             violations.append(f"종합 평정 필드 누락: {field}")
+    if "종합 평정" in sections:
+        violations.extend(inspect_scores(overall, detail))
 
     register = sections.get("상충·불일치 등록부", "")
     detail_markers = {item.upper() for item in CONFLICT_MARKER.findall(detail)}
@@ -533,9 +676,18 @@ def main() -> int:
     )
     args = parser.parse_args()
     try:
-        text = Path(args.brief).read_text(encoding="utf-8")
+        raw = Path(args.brief).read_bytes()
     except OSError as exc:
         print(f"읽기 실패: {exc}", file=sys.stderr)
+        return 1
+    for encoding in ("utf-8-sig", "cp949"):
+        try:
+            text = raw.decode(encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+    else:
+        print("읽기 실패: UTF-8·CP949로 읽을 수 없음", file=sys.stderr)
         return 1
 
     if args.ledger_only:

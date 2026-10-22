@@ -22,6 +22,45 @@ each slice below is recorded as a 0.x milestone.
   collisions, and duplicate or path-mismatched agent/skill identities. An
   exact-path allowlist documents the rare intentional suffix-shaped name.
 
+### Changed
+- **Checker exit codes no longer report an unread file as a pass** —
+  `consistency_check.py` now returns 3 (cannot determine) instead of 0 for a
+  missing or undecodable file, an internal error, or a usage error (argparse's
+  default 2 collided with "violation"). Both checkers read UTF-8 (with BOM) and
+  CP949. *Callers that treated a read failure as success must handle exit 3.*
+- **Grade↔score judgment follows each scheme's official bands only** — /20
+  uses the KOICA 2024 A–F table (letters and labels); /16 uses the Prime
+  Minister's Office 2015 label bands (14·11·8 points) quoted in real reports.
+  The previous mean-based bands (3.5/2.5/1.5) had no normative source and
+  contradicted the /16 legend; /24 and other schemes are no longer judged.
+
+### Fixed
+- **Grade checks were silently off for the plugin's own briefs** — any "잠정"
+  anywhere in a document disabled grade↔score checking, and the brief notation
+  `13/20, D(안)` was not read as a grade, so `13/20, A(안)` passed. Exclusion is
+  now per line; pre-verification lines (`검증 전 …`) and `14→13`, `C→D` history
+  lines are excluded instead of the whole document. 2024 letter↔label
+  mismatches (`D(성공적)`) are reported.
+- **`종합 점수 24점 만점 중 11.7` was read as composite 2** (regex backtracking
+  into the denominator). Values may no longer be cut mid-number; three-decimal
+  composites (`13.125 /16점`) are kept whole; `20점 만점에 15점` is read on
+  composite-context lines (not psychological-test ranges such as `17-18점`);
+  criterion sums are compared at the composite's stated precision.
+- **Auditable briefs passed with template prompts left in place** — any
+  bracket-only table cell, labeled bullet value, or bare line such as `[질문]`,
+  `[통과 / 조건부 통과 / 반려]`, or `[없음/Xn]` now fails; plugin markers
+  (`[사실: F1]`, `[근거: …]`, `[INFO: 확인 필요]`, `[사람 판단 필요]`) remain
+  valid.
+- **Auditable briefs could carry scores without evidence** — each criterion's
+  post-verification score must be 1–4, a range, or an explicit unavailable
+  label; a criterion marked `기준 전체 평가 불가` may not keep a score; a brief
+  with unavailable criteria may not state a single composite; five numeric
+  criterion scores must sum to the stated composite.
+- `bin/` wrappers resolve symlinks, so linking them into another `PATH`
+  directory no longer exits 2 ("violation") with "can't open file".
+- A 334-report sweep of real KOICA evaluation PDFs is unchanged by these fixes
+  (92 pass / 20 violations / 222 cannot determine, identical messages).
+
 ## [0.12.0] — 2026-08-05 — Auditable briefs & normative criteria cleanup
 
 ### Changed
