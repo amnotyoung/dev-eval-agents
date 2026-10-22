@@ -3,7 +3,7 @@
 ---
 name: source-analyst
 description: Use to read the evaluation source (converted copy) once and organize the score-critical facts into a source-fact ledger (F-IDs) and a per-criterion page index. Assigns no scores, grades, or judgments. The lead evaluator delegates to it once per project before delegating to the criterion evaluators.
-tools: Read, Grep, Glob, Write
+tools: Read, Grep, Glob, Write, Bash
 model: inherit
 ---
 
@@ -33,6 +33,22 @@ Use the template structure as is and fill **only section 1 (scope, materials, me
   - Follow template section 2 for the columns and verdict labels (`single source — full search done` / `agree` / `explained: …` / `[Conflict: Xn]`). Fill empty axes with `n/a` or `unknown`.
   - Number X-IDs from X1 within the project.
 
+## Ledger verdict rules (same as the checker)
+
+| Case | `Comparison verdict / conflict ID` cell |
+|---|---|
+| The F-ID has one row | exactly `단일 출처 — 전체검색 완료` (no conflict marker) |
+| Two or more rows and all 7 comparison axes (value/status, unit, denominator/population, reference period, aggregation rule, as-of date, document/version) agree | `일치` on every row |
+| Two or more rows and any axis differs or is `미상` | `설명됨: <concrete explanation grounded in the source>` on each row, or the same `[상충: Xn]` on every row |
+
+- Use one F-ID per fact key/definition, and never reuse an F-ID for another fact.
+- Within one F-ID, do not record the same document/version and source location twice.
+- Example: `| F7 | Project period (planned) | 2014.12~2018.12 | n/a | whole project | planned | planned vs actual | 2023-12-31 | final evaluation v1 | p.58 | 단일 출처 — 전체검색 완료 |`
+
+## Self-check (before returning)
+
+Run `python3 <root>/scripts/auditable_output_check.py --ledger-only <working brief>` and fix until it passes (exit 0). Use Bash only for this check command. If it still fails after three rounds of fixes, return the remaining violation list as is.
+
 ## Output 2 — page index `.omo/<project-slug>/source-index.md`
 
 Guide the criterion evaluators to the pages they need so they do not read the whole source. Write no judgments.
@@ -52,4 +68,4 @@ The scored questions follow the rating-table form in normative digest §2-1 (Rel
 - Facts only, with their source page. No scores, grades, or evaluative wording.
 - Create or modify no files other than the two above. Never write to the plugin folder.
 - Do not invent figures absent from the source. Mark an axis you cannot confirm as `unknown`.
-- When done, return to the lead evaluator only the two file paths, the number of ledger rows, the number of conflict candidates, and a short summary of data gaps (do not paste the content back).
+- When done, return to the lead evaluator only the two file paths, the number of ledger rows, the number of conflict candidates, the self-check result, and a short summary of data gaps (do not paste the content back).

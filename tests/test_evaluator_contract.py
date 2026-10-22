@@ -208,6 +208,39 @@ class SourceAnalystRole(unittest.TestCase):
         self.assertIn("## (C2) Cross-criterion consistency", read("docs", "en", "agents", "quality-verifier.md"))
 
 
+class SelfCheckingRoles(unittest.TestCase):
+    """e2e v3에서 평가총괄이 쓴 63턴의 대부분은 검사기 위반을 오가며 고치는 일이었다
+    (자료 정리관과 SendMessage 3회·대기 루프, 브리프 조립 후 약 25턴). 검사를 통과시키는
+    일을 산출물을 만든 역할이 스스로 하게 하고, 평가총괄은 확인만 한다."""
+
+    def test_source_analyst_runs_ledger_check_itself(self):
+        ko = read("agents", "source-analyst.md")
+        self.assertIn("tools: Read, Grep, Glob, Write, Bash", ko)
+        self.assertIn("## 자체 검사", ko)
+        self.assertIn("--ledger-only", ko)
+        self.assertIn("단일 출처 — 전체검색 완료", ko)
+        self.assertIn("## Self-check", read("docs", "en", "agents", "source-analyst.md"))
+
+    def test_report_composer_assembles_and_checks_the_brief(self):
+        ko = read("agents", "report-composer.md")
+        self.assertIn("## 감사 가능한 브리프 조립", ko)
+        self.assertIn("모든 F-ID가 4절 어딘가에", ko)
+        self.assertIn("consistency_check.py", ko)
+        self.assertIn("## Assembling the auditable brief", read("docs", "en", "agents", "report-composer.md"))
+
+    def test_lead_evaluator_only_confirms(self):
+        skill = read("skills", "evaluate", "SKILL.md")
+        self.assertIn("평가총괄은 브리프를 직접 고치지 않는다", skill)
+        self.assertIn("**한 번만** 실행해 확인한다", skill)
+        self.assertIn("criterion-drafts.md", skill)
+        self.assertIn("verification.md", skill)
+        self.assertIn("검사기 코드를 읽지 않는다", skill)
+
+    def test_official_records_outweigh_after_the_fact_statements(self):
+        self.assertIn("근거의 무게", read("reference", CONTRACT))
+        self.assertIn("Weight of evidence", read("docs", "en", "reference", CONTRACT))
+
+
 class DelegationCarriesContract(unittest.TestCase):
     def test_evaluate_skill_and_codex_fallback_pass_the_contract(self):
         skill = read("skills", "evaluate", "SKILL.md")

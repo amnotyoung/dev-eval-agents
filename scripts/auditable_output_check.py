@@ -438,7 +438,8 @@ def score_kind(cell: str) -> str:
     """Classify a criterion score cell: score / range / unscored / placeholder / invalid."""
     if is_placeholder(cell):
         return "placeholder"
-    compact = re.sub(r"[*\s]", "", cell)
+    compact = re.sub(r"\s*\([^()]*\)\s*$", "", cell)   # `2.75 (2.5+3.0)` 같은 산식 주석
+    compact = re.sub(r"[*\s]", "", compact)
     compact = re.sub(r"점$", "", compact)
     if SCORE_VALUE.fullmatch(compact):
         return "score" if 1 <= float(compact) <= 4 else "invalid"
@@ -492,7 +493,7 @@ def inspect_scores(overall: str, detail: str) -> list[str]:
             "단정함 — 단서부 범위 또는 산정 보류로 적어야 함"
         )
     if single and not qualified and all(kinds.get(c) == "score" for c in CRITERIA):
-        total = sum(Decimal(re.sub(r"[*\s점]", "", cells[c])) for c in CRITERIA)
+        total = sum(Decimal(re.sub(r"[*\s점]", "", re.sub(r"\s*\([^()]*\)\s*$", "", cells[c]))) for c in CRITERIA)
         stated = Decimal(single.group(1))
         exponent = min(stated.as_tuple().exponent, 0)
         if total.quantize(Decimal(1).scaleb(exponent), rounding=ROUND_HALF_UP) != stated:

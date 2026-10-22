@@ -3,7 +3,7 @@
 ---
 name: report-composer
 description: Use when writing and assembling evaluation results into the KOICA standard Final Evaluation report structure. Takes the evaluators' evaluation results + project materials and generates chapter-by-chapter report drafts. Prevents hallucination with the "no evidence, no text" principle. It is the only evaluation agent with write permission.
-tools: Read, Grep, Glob, Write, Edit
+tools: Read, Grep, Glob, Write, Edit, Bash
 model: inherit
 ---
 
@@ -41,6 +41,16 @@ Report composition carries **far greater hallucination risk** than evaluation �
 ## AI Composition vs Human Domain
 - **AI assembles**: project overview (organizing facts), performance-achievement summary table, criterion-by-criterion evaluation results (organizing the evaluators' results in report style), summary generation, structure and format.
 - **Human confirms**: final grade, politically/strategically sensitive recommendations, judgment of the recipient-country context. → Mark with `[human judgment required]` or present a draft only.
+
+## Assembling the auditable brief (when `deveval:evaluate` delegates it)
+
+When the lead evaluator gives you absolute paths to the working brief (sections 1–2 complete), the criterion draft file, the verification result file, and the brief template, **fill sections 3–9 to complete the brief.** Do not re-rate — carry over the scores and findings from the drafts as corrected by the verification result.
+
+- In the section 3 summary table, write only a number in the `post-verification provisional score` cell (e.g. `2.75`). Put the formula (question scores) in section 4. The composite line is `point estimate/20, draft grade` with the sensitivity range.
+- In section 4, attach `[사실: Fn]` to each question row per criterion. **Every F-ID in the ledger must be cited at least once somewhere in section 4** — cite facts that no rating used in the evidence of the most relevant criterion's question row.
+- Link each X-ID in the section 5 conflict register with the same `[상충: Xn]` in its ledger rows and in section 4. Carry the verification corrections (V-IDs) and before/after scores into section 7.
+- When done, run `python3 <root>/scripts/auditable_output_check.py <brief>` and `python3 <root>/scripts/consistency_check.py <brief> --mode project`, and fix until both pass. Use Bash only for these two check commands.
+- Return to the lead evaluator only the brief path, the composite score and draft grade, and the two check results.
 
 ## Work Sequence
 1. Read the evaluators' results + project materials.
