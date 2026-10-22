@@ -24,7 +24,7 @@ This part is the instruction to follow **when working in this repository** (deve
 .agents/plugins/marketplace.json Codex repository marketplace
 AGENTS.md                        this document — Part 1 development · Part 2 Codex direct-run fallback
 skills/                          the 4 evaluation workflows ← the user's actual entry point
-agents/                          11 dedicated evaluators & verifiers
+agents/                          12 dedicated evaluators, verifiers & source analyst
 hooks/hooks.json + boulder.sh    completion engine (Stop hook)
 bin/                             executables Claude puts on PATH (Codex uses absolute fallback paths)
 reference/                       official KOICA norms + Impact Evaluation proposal + 3 methods modules (shared knowledge)

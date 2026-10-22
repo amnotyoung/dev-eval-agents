@@ -22,7 +22,7 @@
 .agents/plugins/marketplace.json Codex 저장소 마켓플레이스
 AGENTS.md                        이 문서 — 1부 개발 지침 · 2부 Codex 직접 실행 폴백
 skills/                          평가 워크플로 4종 ← 사용자의 실제 진입점
-agents/                          전담 평가관·검증자 11명
+agents/                          전담 평가관·검증자·자료 정리관 12명
 hooks/hooks.json + boulder.sh    완료 엔진 (Stop hook)
 bin/                             Claude가 PATH에 올리는 실행파일(Codex는 절대경로 폴백)
 reference/                       KOICA 공식 규범 + 영향평가 전문 제안 + 방법론 3종 (공용 지식)

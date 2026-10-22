@@ -157,6 +157,33 @@ class RatingTableAlignment(unittest.TestCase):
             self.assertNotIn("| 16~18 |", body, "/".join(path))
 
 
+class SourceAnalystRole(unittest.TestCase):
+    """원문을 끝까지 읽는 역할은 자료 정리관 하나다(e2e에서 평가총괄이 직접 원문을 읽어
+    위임 전에 컨텍스트 20만 토큰을 썼다). 검증자는 기준 간 교차 정합을 본다."""
+
+    def test_source_analyst_writes_only_ledger_and_index(self):
+        ko = read("agents", "source-analyst.md")
+        self.assertIn("tools: Read, Grep, Glob, Write", ko)
+        self.assertNotIn("Edit", ko.split("---")[1])
+        for token in ("auditable-evaluation-brief.md", "source-index.md", "30~80행", "점수·등급"):
+            self.assertIn(token, ko)
+        self.assertIn("source-index.md", read("docs", "en", "agents", "source-analyst.md"))
+
+    def test_evaluate_delegates_reading_before_the_ledger_gate(self):
+        skill = read("skills", "evaluate", "SKILL.md")
+        self.assertIn("원문 전체를 직접 읽지 않는다", skill)
+        self.assertIn("`source-analyst`", skill)
+        self.assertLess(skill.index("`source-analyst`에게 포그라운드로 위임"), skill.index("--ledger-only"))
+        self.assertIn("쪽 색인 `source-index.md`", skill)
+
+    def test_verifier_checks_cross_criterion_consistency_and_reads_partially(self):
+        ko = read("agents", "quality-verifier.md")
+        self.assertIn("## (C2) 기준 간 교차 정합", ko)
+        self.assertIn("이중 감점", ko)
+        self.assertIn("원문을 처음부터 정독하지 않는다", ko)
+        self.assertIn("## (C2) Cross-criterion consistency", read("docs", "en", "agents", "quality-verifier.md"))
+
+
 class DelegationCarriesContract(unittest.TestCase):
     def test_evaluate_skill_and_codex_fallback_pass_the_contract(self):
         skill = read("skills", "evaluate", "SKILL.md")
