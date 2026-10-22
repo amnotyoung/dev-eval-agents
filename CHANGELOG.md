@@ -47,6 +47,28 @@ each slice below is recorded as a 0.x milestone.
   fails when their columns drift from the contract.
 
 ### Changed
+- **Scoring follows the KOICA rating-table form** — human evaluation teams
+  score each key question 1–4 (half points common) and compute the criterion
+  rating as the mean of the scored questions (weighted mean when the form has a
+  weight column). Checked against 21 published 2024-scheme final reports: 53
+  of 54 two-question criteria and 13 of 18 three-question Effectiveness
+  ratings match the mean. The plugin previously told evaluators the criterion
+  score was *not* a mechanical average, so its integer holistic scores could
+  not match human ratings. The 2024 digest gains §2-1 (scored questions and
+  formula); the contract, skill, verifier, brief template, and Codex fallback
+  follow it; grade-table boundaries read "16 to under 18".
+- **Effectiveness scores outcome/goal, not visibility** — the current form
+  scores outputs, medium/long-term outcome and goal, and equity; no report
+  scored visibility. Partnership, follow-on, international-organization, and
+  visibility questions become unscored checks that inform the scored ones.
+- **Source analyst** — a new `source-analyst` agent is the only role that
+  reads the whole source: it writes the brief's scope and source-fact ledger
+  (30–80 score-critical rows) and a per-question page index. The lead
+  evaluator no longer reads the source (in the e2e baseline it reached 207k
+  tokens of context before delegating); evaluators and the verifier start from
+  the ledger and index and Grep the rest.
+- **Cross-criterion consistency** — the verifier checks for the same fact read
+  two ways, double penalties, and contradictory narratives across criteria.
 - **One agent-instructions document** — the repository-development context
   (`CLAUDE.md`) and the Codex direct-run evaluation fallback (`AGENTS.md`)
   are merged into a single `AGENTS.md`: Part 1 for developing the plugin,
