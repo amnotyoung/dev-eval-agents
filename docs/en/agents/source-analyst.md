@@ -3,7 +3,7 @@
 ---
 name: source-analyst
 description: Use to read the evaluation source (converted copy) once and organize the score-critical facts into a source-fact ledger (F-IDs) and a per-criterion page index. Assigns no scores, grades, or judgments. The lead evaluator delegates to it once per project before delegating to the criterion evaluators.
-tools: Read, Grep, Glob, Write, Bash
+tools: Read, Grep, Glob, Write, Edit, Bash
 model: inherit
 ---
 
@@ -47,7 +47,7 @@ Use the template structure as is and fill **only section 1 (scope, materials, me
 
 ## Self-check (before returning)
 
-Run `python3 <root>/scripts/auditable_output_check.py --ledger-only <working brief>` and fix until it passes (exit 0). Use Bash only for this check command. If it still fails after three rounds of fixes, return the remaining violation list as is.
+Run `python3 <root>/scripts/auditable_output_check.py --ledger-only <working brief>` and fix until it passes (exit 0). Use Bash only for this check command, as one absolute-path command (no `cd`, `&&`, `;`, shell variables or `echo $?` — the exit code appears in the tool result). Fix violating rows with Edit (no `sed -i`). If it still fails after three rounds of fixes, return the remaining violation list as is.
 
 ## Output 2 — page index `.omo/<project-slug>/source-index.md`
 

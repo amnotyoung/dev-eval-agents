@@ -188,7 +188,9 @@ class SourceAnalystRole(unittest.TestCase):
     def test_source_analyst_writes_only_ledger_and_index(self):
         ko = read("agents", "source-analyst.md")
         self.assertIn("tools: Read, Grep, Glob, Write", ko)
-        self.assertNotIn("Edit", ko.split("---")[1])
+        # Edit은 자체 검사 위반 행을 고치는 데만 쓴다(v5 실행에서 sed -i가 거부돼 헛돌았다).
+        # 쓰기 범위는 도구가 아니라 절대 규칙으로 묶는다.
+        self.assertIn("위 두 파일 말고는 만들거나 고치지 않는다", ko)
         for token in ("auditable-evaluation-brief.md", "source-index.md", "최대 60행", "같은 값으로", "점수·등급"):
             self.assertIn(token, ko)
         self.assertIn("source-index.md", read("docs", "en", "agents", "source-analyst.md"))
@@ -215,7 +217,8 @@ class SelfCheckingRoles(unittest.TestCase):
 
     def test_source_analyst_runs_ledger_check_itself(self):
         ko = read("agents", "source-analyst.md")
-        self.assertIn("tools: Read, Grep, Glob, Write, Bash", ko)
+        self.assertIn("tools: Read, Grep, Glob, Write, Edit, Bash", ko)
+        self.assertIn("절대경로 한 명령으로", ko)
         self.assertIn("## 자체 검사", ko)
         self.assertIn("--ledger-only", ko)
         self.assertIn("단일 출처 — 전체검색 완료", ko)

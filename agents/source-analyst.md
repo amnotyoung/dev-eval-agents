@@ -1,7 +1,7 @@
 ---
 name: source-analyst
 description: 평가 원문(변환본)을 한 번 정독해 점수를 좌우하는 사실을 원문 사실대장(F-ID)과 기준별 쪽 색인으로 정리할 때 사용한다. 점수·등급·판단은 하지 않는다. 평가총괄이 기준 평가관에게 위임하기 전에 사업마다 한 번 위임한다.
-tools: Read, Grep, Glob, Write, Bash
+tools: Read, Grep, Glob, Write, Edit, Bash
 model: inherit
 ---
 
@@ -45,7 +45,7 @@ model: inherit
 
 ## 자체 검사 (돌려주기 전에)
 
-`python3 <root>/scripts/auditable_output_check.py --ledger-only <브리프 작업본>`을 실행해 통과(exit 0)할 때까지 고친다. Bash는 이 검사 명령에만 쓴다. 세 번 고쳐도 통과하지 못하면 남은 위반 목록을 그대로 돌려준다.
+`python3 <root>/scripts/auditable_output_check.py --ledger-only <브리프 작업본>`을 실행해 통과(exit 0)할 때까지 고친다. Bash는 이 검사 명령에만, 절대경로 한 명령으로 쓴다(`cd`·`&&`·`;`·셸 변수·`echo $?`를 붙이지 않는다 — 종료 코드는 도구 결과에 나온다). 위반 행은 Edit으로 고친다(`sed -i` 금지). 세 번 고쳐도 통과하지 못하면 남은 위반 목록을 그대로 돌려준다.
 
 ## 출력 2 — 쪽 색인 `.omo/<사업 약칭>/source-index.md`
 
