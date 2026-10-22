@@ -155,6 +155,8 @@ codex plugin add deveval@deveval-agents
 
 작업 산출물(`.omo/eval-plan.md`, `.omo/draft-report*.md`)은 **사용자 폴더**에 남는다 — 플러그인 디렉토리는 읽기전용 지식이다. Claude Code는 동봉된 `deveval-consistency-check` 명령을 `PATH`에 올리고, 다른 호스트에서는 공용 스킬이 같은 검사기를 절대경로로 실행한다.
 
+**PDF·HWP 원문**은 위임 전에 `deveval-extract`가 작업 폴더의 `.omo/sources/`에 쪽 표지(`<!-- p.N -->`)가 있는 텍스트로 바꾼다 — 평가 에이전트는 텍스트만 검색할 수 있기 때문이다. 변환기는 [kordoc](https://github.com/chrisryugj/kordoc)(버전 고정, Node 20 이상이면 `npx`로 자동 실행) → PDF는 `pdftotext` 순이며, 둘 다 없으면 텍스트 원문을 요청한다. 변환은 이 컴퓨터 안에서만 하고, npx는 처음 한 번 npm에서 kordoc 패키지를 받는다. 100쪽 넘는 PDF는 변환에 몇 분 걸릴 수 있다.
+
 Claude 플러그인을 설치 없이 써 보거나 개발하려면:
 
 ```bash

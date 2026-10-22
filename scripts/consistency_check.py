@@ -463,9 +463,27 @@ def read_text(path):
     raise UnicodeDecodeError("utf-8/cp949", raw[:1], 0, 1, "UTF-8·CP949로 읽을 수 없음")
 
 
+HTML_CELL_BREAK = re.compile(r"</t[dh]>\s*<t[dh]\b[^>]*>", re.IGNORECASE)
+HTML_MARKUP = re.compile(
+    r"</?(?:table|thead|tbody|tfoot|tr|td|th|br|span|sup|sub|b|i|u|strong|em|p|div)\b[^>]*>",
+    re.IGNORECASE)
+
+
+def flatten_html_tables(text):
+    """kordoc MCP 기본 출력 같은 HTML 표를 칸 구분자로 펼친다.
+
+    `<td colspan="4">14.1 /16점</td>`를 그대로 두면 '종합 점수' 뒤 창이 colspan의 4를
+    점수로 읽는다. 표 태그만 지우고(`<10` 같은 부등호 서술은 건드리지 않는다) 칸 경계는 `|`로 남긴다.
+    """
+    if "<t" not in text.lower():
+        return text
+    text = HTML_CELL_BREAK.sub(" | ", text)
+    return HTML_MARKUP.sub(" ", text)
+
+
 def run(path, mode):
     try:
-        text = read_text(path)
+        text = flatten_html_tables(read_text(path))
     except (OSError, UnicodeDecodeError) as exc:
         print(f"[consistency_check] 읽기 실패 — 확인 불가(통과 아님, exit 3): {exc}", file=sys.stderr)
         return 3
