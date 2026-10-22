@@ -236,6 +236,17 @@ class SelfCheckingRoles(unittest.TestCase):
         self.assertIn("## Assembling the auditable brief", read("docs", "en", "agents", "report-composer.md"))
         self.assertIn("single Write", read("docs", "en", "agents", "report-composer.md"))
 
+    def test_composite_line_is_checkable(self):
+        # v6 e2e: 종합점수 줄에 '잠정'·민감도 범위를 함께 써서 수치 검사기가 줄을 건너뛰고
+        # exit 3을 냈다. 작성관이 형식을 찾느라 검사기 테스트까지 읽으며 6턴을 썼다.
+        template = read("templates", "auditable-evaluation-brief-template.md")
+        self.assertIn("`점수/20, 등급` 두 값만", template)
+        self.assertIn("- 민감도:", template)
+        ko = read("agents", "report-composer.md")
+        self.assertIn("`점수/20, 등급` 두 값만", ko)
+        self.assertIn("행이 하나뿐인 F-ID에 교차 참조나 상충 표지를 덧붙이지 않는다", ko)
+        self.assertIn("`score/20, grade`", read("docs", "en", "agents", "report-composer.md"))
+
     def test_lead_evaluator_only_confirms(self):
         skill = read("skills", "evaluate", "SKILL.md")
         self.assertIn("평가총괄은 브리프를 직접 고치지 않는다", skill)
