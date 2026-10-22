@@ -114,6 +114,49 @@ class CriterionAgentsFollowContract(unittest.TestCase):
         self.assertIn("근거 부재를 1점으로 바꾸지 않는다", self.ko_contract)
 
 
+class RatingTableAlignment(unittest.TestCase):
+    """채점은 KOICA 평가 등급 결과표 양식을 따른다 — 질문별 1~4점, 기준 평점 = 질문 점수 평균.
+
+    최종보고서 21건 대조에서 인간 평가팀은 질문 점수의 평균(또는 양식 가중평균)으로 기준 평점을
+    냈고, 효과성은 산출물·중장기 성과/목표·형평성 3문항을 채점했다. 예전 지시("기계적 평균이
+    아니라 총체적 판단")와 '가시성' 채점 문항은 이 양식과 어긋났다.
+    """
+
+    ACTIVE_KO = (("reference", CONTRACT), ("skills", "evaluate", "SKILL.md"), ("AGENTS.md",),
+                 ("agents", "quality-verifier.md"), ("templates", "auditable-evaluation-brief-template.md"))
+
+    def test_no_instruction_against_the_rating_table_formula(self):
+        for path in self.ACTIVE_KO + tuple(("agents", f"dac-{k}-evaluator.md") for k in CRITERIA):
+            self.assertNotIn("기계적 평균이 아니라", read(*path), "/".join(path))
+            self.assertNotIn("기계적으로 평균하지 말고", read(*path), "/".join(path))
+        for path in (("docs", "en", "reference", CONTRACT), ("docs", "en", "agents", "quality-verifier.md"),
+                     ("docs", "en", "agents", "dac-effectiveness-evaluator.md")):
+            self.assertNotIn("not a mechanical average", read(*path), "/".join(path))
+
+    def test_contract_and_skill_state_the_formula(self):
+        self.assertIn("채점 질문 점수의 평균", read("reference", CONTRACT))
+        self.assertIn("0.5점 단위", read("reference", CONTRACT))
+        self.assertIn("기준 평점 산식", read("skills", "evaluate", "SKILL.md"))
+        digest = read("reference", "KOICA-평가지침-2024-다이제스트.md")
+        self.assertIn("## 2-1. ★ 평가 등급 결과표", digest)
+        self.assertIn("기준 평점 = 채점 질문 점수의 평균", digest)
+        self.assertIn("## 2-1. ★ Rating table", read("docs", "en", "reference", "KOICA-평가지침-2024-다이제스트.md"))
+
+    def test_effectiveness_scores_outcome_not_visibility(self):
+        ko = read("agents", "dac-effectiveness-evaluator.md")
+        self.assertIn("2. **중장기 성과(outcome)·목표(goal) 달성**", ko)
+        self.assertIn("추가 확인(채점하지 않음)", ko)
+        self.assertNotIn("| ③ 가시성 |", ko)
+        en = read("docs", "en", "agents", "dac-effectiveness-evaluator.md")
+        self.assertIn("**Medium/long-term outcome and goal achievement**", en)
+
+    def test_grade_table_boundaries_are_half_open(self):
+        for path in (("skills", "evaluate", "SKILL.md"), ("AGENTS.md",)):
+            body = read(*path)
+            self.assertIn("16 이상 18 미만", body, "/".join(path))
+            self.assertNotIn("| 16~18 |", body, "/".join(path))
+
+
 class DelegationCarriesContract(unittest.TestCase):
     def test_evaluate_skill_and_codex_fallback_pass_the_contract(self):
         skill = read("skills", "evaluate", "SKILL.md")

@@ -17,11 +17,14 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 
 "Did the project achieve its objectives — the degree or likelihood of achieving objectives and results, evaluating **differential results across groups**." The other DAC criteria (Relevance, Coherence, Efficiency, Impact, Sustainability) are your colleagues' responsibility, so do not encroach on them.
 
-## The 3 key evaluation questions (2024 p.27, p.11)
+## Three scored key questions (current rating-table form — digest §2-1)
 
 1. **Output achievement** — Have the direct, primary results been achieved as planned, or are they expected to be? (actual performance against PDM targets)
-2. **Equity (LNOB)** — Were results achieved equitably by including socially marginalized groups?
-3. **Visibility** — (International-organization projects only) Was the visibility of KOICA/Korean-government support effectively secured? (mark "N/A" if not applicable)
+2. **Medium/long-term outcome and goal achievement** — Have the outcomes and goal been achieved, or are they expected to be? (baselines, targets, and actuals of outcome indicators; contribution level)
+3. **Equity (LNOB)** — Were results achieved equitably by including socially marginalized groups?
+
+> Additional check (not scored): (international-organization projects) **visibility** of KOICA/Korean-government support — if applicable, check the evidence and reflect it in questions 1–2 (p.27 question pool).
+> Criterion rating = mean of questions 1–3 (weighted mean if the evaluation table gives weights; the older form used 0.5/0.3/0.2).
 
 ## 4-point-scale rubric (2024 p.8-9) — rate each question by this standard
 
@@ -49,7 +52,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 ## Work sequence
 
 1. Start from the delegated source-fact ledger and page index to find facts on the PDM, performance indicators, objectives, actual results, and vulnerable groups. Locate passages in the source with Grep and Read only the pages you need (common contract §4 — do not read the whole source).
-2. Rate each of the 3 key questions on the 4-point scale (with accompanying evidence). Mark questions with no data as "cannot evaluate".
+2. Rate each of the 3 scored key questions on the 4-point scale (half points allowed), with evidence. Mark questions with no data as "cannot evaluate".
 3. Analyze enabling/disabling factors with evidence.
 4. Output in the format below.
 
@@ -62,8 +65,8 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 | Key question | Finding | Score (1–4 / cannot evaluate) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 |---------|---------|:---:|---------|-----------------------------------------|-----------------------------|-------------|-----------------|
 | ① Output achievement | (finding) | (score) | [Fact: Fn] | [Evidence: source/figure] | (quality/outcome-level/gaps) | (none/local ID) | (status) |
-| ② Equity (LNOB) | (finding) | (score or cannot evaluate) | [Fact: Fn] | [Evidence] | (differential-result gap) | (none/local ID) | (status) |
-| ③ Visibility | (finding) | (score / N/A) | [Fact: Fn] | [Evidence] | (constraint) | (none/local ID) | (status) |
+| ② Medium/long-term outcome and goal | (finding) | (score or cannot evaluate) | [Fact: Fn] | [Evidence] | (baseline/contribution limits) | (none/local ID) | (status) |
+| ③ Equity (LNOB) | (finding) | (score or cannot evaluate) | [Fact: Fn] | [Evidence] | (differential-result gap) | (none/local ID) | (status) |
 
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
@@ -76,8 +79,8 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 - Enabling factors: ...   · Disabling factors: ...
 
 ### Effectiveness Summary (draft)
-- Provisional Effectiveness score: (1–4 — a **holistic provisional application of the official rubric, not a mechanical average** of question scores)
-- Score rationale: (why this score and not the adjacent higher/lower scores)
+- Provisional Effectiveness rating: (mean of ①–③, two decimals — e.g. 3·4·4 → 3.67)
+- Score rationale: (for each question, why this score and not the adjacent higher/lower scores)
 - Evidence-confirmed parts / **parts that cannot be evaluated due to insufficient evidence** (state explicitly)
 - Strengths / weaknesses (balanced)
 - Limitations of this evaluation: (sample, methodology, missing data, etc.)

@@ -58,14 +58,36 @@ Introduction: the 2015 Office for Government Policy Coordination "ODA Project Ev
 
 ---
 
+## 2-1. ★ Rating table — scored questions and the criterion-rating formula
+
+> Source: the "rating results table" form printed in KOICA final-evaluation reports ("evaluators must present both the overall grade and the scores according to the given rating table"). This is based on the **actual form**, not the guidebook text: DevEval checked 21 final reports in the 2024 scheme (5 criteria × 4 points) in October 2026.
+
+- Each criterion's **scored key questions** get 1–4 points. Half points (2.5, 3.5) are common.
+- **Criterion rating = mean of the scored question scores** (two decimals); when the table has a weight column, the weighted mean. In the 21 reports, 53 of 54 two-question criteria matched the mean, and 13 of 18 three-question Effectiveness ratings matched the mean (the older form with a weight column used 0.5/0.3/0.2).
+- **Composite = sum of the five criterion ratings** (20 points) → the A–F table in §2.
+
+| Criterion | Scored questions in the current form | Older form (with weight column, 5 reports) |
+|---|---|---|
+| Relevance | ① design reflecting needs, policies, priorities ② design managed through internal/external change | +③ planning-stage cross-cutting (gender, environment, human rights) analysis — 0.4/0.4/0.2 |
+| Coherence | ① internal coherence ② external coherence | 0.5/0.5 |
+| Effectiveness | ① outputs achieved as planned ② **medium/long-term outcome and goal achieved (or expected)** ③ inclusion of marginalized groups / equity | ② was "participants' readiness and response capacity" — 0.5/0.3/0.2 |
+| Efficiency | ① economical and timely ② balance and interaction among inputs and activities | 0.5/0.5 |
+| Sustainability (readiness) | ① financial/economic self-reliance and crisis response ② institutional/social environment | 0.5/0.5 |
+
+- The partnership, follow-on-phase, international-organization, and visibility questions in the §4 question pool were not scored as separate rows in the forms checked. When the project qualifies, reflect them as evidence for the related scored question (DevEval operating interpretation).
+
+---
+
 ## 3. ★ Effectiveness — Definition, Questions, Rubric (p.9·12·27)
 
 **Definition (p.27, project's own summary):** Looks at whether the project actually achieved the objectives it set — judging together the extent to which objectives/results were achieved (or are expected to be achieved) and how results were distributed across groups. The core phrase of the standard OECD-DAC definition (Effectiveness) is *"the extent to which the intervention achieved, or is expected to achieve, its objectives"* (OECD-DAC).
 
-**3 core questions (p.27, p.11):**
+**3 scored key questions (current rating-table form, §2-1):**
 1. Have the project's direct/primary results (outputs) been achieved, or are they expected to be achieved, as planned?
-2. Has the project achieved results equitably by **including socially marginalized groups**? (LNOB)
-3. (For international-organization projects) Has the **visibility** of KOICA/Korean-government support been effectively secured?
+2. Have the project's **medium/long-term outcome and goal** been achieved, or are they expected to be?
+3. Has the project achieved results equitably by **including socially marginalized groups**? (LNOB)
+
+The p.27 question pool also lists (for international-organization projects) the **visibility** of KOICA/Korean-government support — it is not scored separately in the rating table, so reflect it as evidence for questions 1–2 when the project qualifies.
 
 **Effectiveness 4-point rubric (output-based, p.9):**
 | Score | Definition |

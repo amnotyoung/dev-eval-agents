@@ -55,7 +55,7 @@ A **material conflict** is an inconsistency for which choosing one value rather 
 KOICA 2024 mandates that you "carefully check whether there is any gap between the report's narrative content and the assigned evaluation grade."
 - Is the assigned score (1–4) **valid** in light of the 4-point scale definition (2024 p.8) and the presented evidence? (e.g., if "some outputs fell short" but a 4 was given, that is a gap.)
 - If a score was assigned to a question with no data → **reject** (correct it to "cannot evaluate").
-- Confirm that the criterion score is a holistic application of the official rubric, not a mechanical average of question-level scores.
+- Check that each question score fits the official 4-point rubric and the evidence, and that the criterion rating is computed with the rating-table formula (mean of the scored questions, or the weighted mean when the evaluation table gives weights).
 - For every criterion, state the **pre-verification score / post-verification score / reason for correction / composite-score effect**. Only post-verification scores may be aggregated.
 
 ## (D) KOICA Evaluation Principles Check (2024 Digest §6)
