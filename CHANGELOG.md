@@ -72,6 +72,28 @@ each slice below is recorded as a 0.x milestone.
   contradicted the /16 legend; /24 and other schemes are no longer judged.
 
 ### Fixed
+- **Evaluations stopped halfway in headless runs** — a real end-to-end run on a
+  137-page, three-project HWP report delegated the fact-ledger work in the
+  background and ended its turn; the headless runner killed the subagents
+  after 10 minutes, so no criterion evaluator or verifier ever ran. All four
+  skills now delegate in the foreground (parallel calls in one message) and
+  never end a turn while background work is pending; long source conversion
+  is awaited.
+- **The completion engine was off for most evaluations** — the plan board,
+  which arms the Stop hook, was only created for "long or multi-project"
+  evaluations and was skipped even for that three-project bundle. A plan board
+  is now created for every evaluation, with a shared block for conversion and
+  project-boundary detection.
+- **Permission friction from shelling into the plugin folder** — skills told
+  the orchestrator to verify `reference/` etc. and copy templates, which it did
+  with `ls`, `test`, and `cp` outside the working folder (blocked in the e2e
+  run). Plugin files are now checked with Glob and templates moved with
+  Read/Write.
+- **Bundled reports could mix projects** — briefs, matrices, and drafts now
+  live in `.omo/<project-slug>/`; a bundle gets one folder, brief, and F/X-ID
+  series per project. Re-delegation passes only the brief's scope and ledger
+  sections, never the sections holding other criteria's scores.
+- `tests/test_skill_run_rules.py` pins these run rules.
 - **Grade checks were silently off for the plugin's own briefs** — any "잠정"
   anywhere in a document disabled grade↔score checking, and the brief notation
   `13/20, D(안)` was not read as a grade, so `13/20, A(안)` passed. Exclusion is

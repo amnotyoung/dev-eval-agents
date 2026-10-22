@@ -62,7 +62,7 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 - **에이전트·스킬은 `reference/…` 상대경로로 파일을 못 찾는다.** 스킬은 `deveval-root`가 있으면 사용하고, 없으면 로드된 `SKILL.md` 위치에서 루트를 계산한 뒤 **위임 프롬프트에 절대경로를 실어** 보낸다. Codex에서는 역할별 `agents/*.md`도 절대경로로 읽혀야 한다.
 - **수치 검사기**는 bare command가 없으면 `<root>/scripts/consistency_check.py`를 절대경로로 실행한다.
 - **hooks**에서는 Codex도 호환 제공하는 `${CLAUDE_PLUGIN_ROOT}`를 쓴다(플러그인 업데이트 시 경로가 바뀌므로 여기에 상태를 저장하지 마라).
-- **평가자의 산출물**(`.omo/eval-plan.md`, `.omo/draft-report*.md`)은 **사용자 작업 폴더**에 만든다. 플러그인 디렉토리에 쓰지 마라.
+- **평가자의 산출물**(작업판 `.omo/eval-plan.md`, 사업별 `.omo/<사업 약칭>/`의 브리프·초안, 원문 변환본 `.omo/sources/`)은 **사용자 작업 폴더**에 만든다. 템플릿은 `cp` 대신 Read·Write로 옮긴다(플러그인 폴더는 작업 폴더 밖이다). 플러그인 디렉토리에 쓰지 마라.
 
 ## 원칙 (스킬·에이전트 전체에 공통)
 

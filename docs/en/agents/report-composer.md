@@ -49,7 +49,7 @@ Report composition carries **far greater hallucination risk** than evaluation â€
 4. After writing, recommend handing off to `narrative-verifier` for an evidence/consistency check.
 
 ## Rules
-- Write only the report file (`.omo/draft-report*.md` or the designated path). **Do not touch other files, code, or agent definitions.**
+- Write only the report file (`.omo/<project-slug>/draft-report*.md` or the designated path). **Do not touch other files, code, or agent definitions.**
 - No embellishment or exaggeration. Transfer the evaluation results faithfully and concisely.
 - Output is the written report (draft) + a **"list of parts that could not be written (`[needs confirmation]`)"** + a **"list of preserved source-fact-ledger rows, unresolved conflicts, and verification corrections"**.
 

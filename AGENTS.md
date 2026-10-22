@@ -73,7 +73,7 @@
    - 표준 5기준: 합산 20점 → 위 A~F 표.
    - **⚠️ 평가 불가 기준이 있으면 종합점수를 단정하지 마라.** "N개 평가 가능 / M개 근거 부족" 명시, 종합은 단서부 잠정 또는 보류.
    - 서술-등급 괴리 점검.
-5. **사람 인계** — `templates/auditable-evaluation-brief-template.md` 구조로 **감사 가능한 평가 브리프**를 작성한다. 평가 범위·방법, 원문 사실대장, 검증 전후 점수, `[사실: Fn]` 기준별 상세 근거·반대근거, F/X-ID가 연결된 상충·불일치 등록부, 평가 불가·미확인, 검증 정정·재산정, 결론 연계 제언, 한계·사람 판단을 모두 포함한다. 종합점수와 한 단락 근거만 있는 요약은 완료가 아니다. 파일로 작성했으면 `python3 scripts/auditable_output_check.py <브리프>`와 `python3 scripts/consistency_check.py <브리프> --mode project`를 통과시킨다. 끝에 "최종 등급은 평가담당관이 확정"이라고 명시.
+5. **사람 인계** — `templates/auditable-evaluation-brief-template.md` 구조로 **감사 가능한 평가 브리프**를 사용자 작업 폴더의 `.omo/<사업 약칭>/auditable-evaluation-brief.md`에 작성한다. 자료가 여러 사업의 합본이면 사업마다 폴더·브리프·F/X-ID를 따로 둔다. 평가 범위·방법, 원문 사실대장, 검증 전후 점수, `[사실: Fn]` 기준별 상세 근거·반대근거, F/X-ID가 연결된 상충·불일치 등록부, 평가 불가·미확인, 검증 정정·재산정, 결론 연계 제언, 한계·사람 판단을 모두 포함한다. 종합점수와 한 단락 근거만 있는 요약은 완료가 아니다. 파일로 작성했으면 `python3 scripts/auditable_output_check.py <브리프>`와 `python3 scripts/consistency_check.py <브리프> --mode project`를 통과시킨다. 끝에 "최종 등급은 평가담당관이 확정"이라고 명시.
 
 ## 기본 산출물 계약 — 중대 상충을 숨기지 않는다
 

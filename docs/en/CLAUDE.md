@@ -64,7 +64,7 @@ Plugin users run this from **their own working folder** — not from inside the 
 - **Agents and skills cannot find files via relative `reference/…` paths.** A skill uses `deveval-root` when available or derives the root from the loaded `SKILL.md` location, then **embeds absolute paths in the delegation prompt**. On Codex, role-specific `agents/*.md` files must also be loaded by absolute path.
 - **The numeric checker** is invoked as `<root>/scripts/consistency_check.py` when no bare command is available.
 - **Hooks** use `${CLAUDE_PLUGIN_ROOT}`, which Codex also provides as a compatibility variable (the path changes on plugin updates, so do not store state there).
-- **Evaluator outputs** (`.omo/eval-plan.md`, `.omo/draft-report*.md`) are created in the **user's working folder**. Do not write into the plugin directory.
+- **Evaluator outputs** (the plan board `.omo/eval-plan.md`, per-project briefs and drafts under `.omo/<project-slug>/`, and converted sources under `.omo/sources/`) are created in the **user's working folder**. Move templates with Read and Write, not `cp` (the plugin folder is outside the working folder). Do not write into the plugin directory.
 
 ## Principles (shared across all skills & agents)
 
