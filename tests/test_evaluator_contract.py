@@ -157,6 +157,30 @@ class RatingTableAlignment(unittest.TestCase):
             self.assertNotIn("| 16~18 |", body, "/".join(path))
 
 
+class ScoringCalibration(unittest.TestCase):
+    """블라인드 판정(e2e 기준선, 18659 5개 기준)에서 확인된 과잉 감점 원인을 막는다:
+    상충을 점수 범위로 넓힘, 일부 자료 부재를 감점으로 씀, 평가매트릭스 세부 질문·다른
+    기준의 사실로 감점, 보고서 단순 표기 오류를 감점 근거로 씀."""
+
+    def test_contract_point_estimates_and_absence_rules(self):
+        ko = read("reference", CONTRACT)
+        for token in ("점추정", "일부 자료가 없는 것은 감점 사유가 아니다", "채점 질문이 다루는 사실만",
+                      "0.5점 이상 바뀌는지", "단순 표기 오류"):
+            self.assertIn(token, ko)
+        en = read("docs", "en", "reference", CONTRACT)
+        for token in ("point estimate", "Partly missing data is not a reason to lower a score", "no score effect"):
+            self.assertIn(token, en)
+
+    def test_skill_and_verifier_follow_calibration(self):
+        skill = read("skills", "evaluate", "SKILL.md")
+        self.assertIn("점추정 종합점수·등급(안)", skill)
+        self.assertIn("Read·Grep·Glob를 쓴다", skill)
+        self.assertNotIn("유리한 값만 택해 단일 등급을 만들지 않는다", skill)
+        verifier = read("agents", "quality-verifier.md")
+        self.assertIn("점추정", verifier)
+        self.assertNotIn("단일값을 강제하지 않는다", verifier)
+
+
 class SourceAnalystRole(unittest.TestCase):
     """원문을 끝까지 읽는 역할은 자료 정리관 하나다(e2e에서 평가총괄이 직접 원문을 읽어
     위임 전에 컨텍스트 20만 토큰을 썼다). 검증자는 기준 간 교차 정합을 본다."""
