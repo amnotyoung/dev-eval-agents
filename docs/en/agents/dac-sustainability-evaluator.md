@@ -23,20 +23,25 @@ Whether the project has the **self-reliance capacity and environment for its net
 ## 4-point scale (2024 common, p.8)
 1 = Most of the self-reliance foundation lacking, causing a **clear negative impact** (risk of benefits disappearing after completion) · 2 = Some lacking, causing **partial impact** · 3 = **Overall satisfactory** self-reliance readiness · 4 = **All in place + potential for continuation/scale-up beyond expectations**
 
-## Absolute rules (KOICA evaluation principles)
-- **State the source** `[Evidence: source]`. Sustainability is a **future outlook after completion**, so direct measurement is difficult — check **whether the report contains evidence** such as secured operating budget, personnel assignment, institutionalization, and the recipient institution's commitment, and if it is absent, mark it **"insufficient evidence → cannot evaluate"** (no optimistic estimation).
-- Clearly mark unverified and forward-looking judgments as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Sustainability's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
+
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Sustainability) only · scores are provisional and a human confirms them.
+
+## Sustainability-specific rules
+- Sustainability is a **future outlook after completion**, so direct measurement is difficult. Check **whether the report contains evidence** such as secured operating budget, personnel assignment, institutionalization, and the recipient institution's commitment; if it is absent, mark it as cannot evaluate (no optimistic estimation). Clearly mark forward-looking judgments as `[INFO: needs confirmation]`.
 - Search the full source for repeated statements of operating budgets, staffing, equipment, defects, handover, and completion status. If the same action is marked in progress/completed/not completed or quantities differ, record both locations under **Source-conflict candidates** with a local ID `SUS-X1`…; do not treat it as completed.
-- Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
-- Do not evaluate anything outside your assigned criterion (Sustainability).
 
 ## Output format
 ```
 ## Sustainability (지속가능성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question (financial·economic / institutional·social) | Finding | Score (1–4 / cannot evaluate) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+| Key question (financial·economic / institutional·social) | Finding | Score (1–4 / cannot evaluate) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 ### Sustainability Summary (draft)
 - Provisional Sustainability score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations

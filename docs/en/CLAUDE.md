@@ -14,7 +14,7 @@ This file is the instruction Claude Code reads **when working in this repository
 .codex-plugin/plugin.json        Codex manifest (same name/version)
 .agents/plugins/marketplace.json Codex repository marketplace
 skills/                          the 4 evaluation workflows ← the user's actual entry point
-agents/                          12 dedicated evaluators & verifiers
+agents/                          11 dedicated evaluators & verifiers
 hooks/hooks.json + boulder.sh    completion engine (Stop hook)
 bin/                             executables Claude puts on PATH (Codex uses absolute fallback paths)
 reference/                       official KOICA norms + Impact Evaluation proposal + 3 methods modules (shared knowledge)
@@ -95,6 +95,10 @@ Changing these principles means updating all 4 `skills/` and the related agents 
 - `reference/개발평가-설계방법론-다이제스트.md` — theory of change, evaluation questions, design matrix, and validity
 - `reference/개발평가-자료분석방법론-다이제스트.md` — measurement, tools, sampling, bias, analysis, and triangulation
 - `reference/개발평가-관리보고윤리-다이제스트.md` — TOR, quality management, reporting, recommendations, independence, and ethics
+
+### Operating contract (not a knowledge layer)
+
+- `reference/평가관-공통계약.md` — the source, fact-ID, conflict, source-reading, independence, and output-structure rules shared by the six criterion evaluators. It is DevEval's operating contract and does not define scores or grades (the normative layer prevails). To change a shared rule, edit this file only; keep only the criterion's definition, key questions, rubric, and criterion-specific rules in the evaluator files. `tests/test_evaluator_contract.py` checks the evaluators' output-table columns against this contract.
 
 The methods source dates from 2009 and does not define current Coherence, scoring, or grades. Precedence is **official norms > specialist proposal > methods**, and skills delegate only the files needed for the task by absolute path.
 

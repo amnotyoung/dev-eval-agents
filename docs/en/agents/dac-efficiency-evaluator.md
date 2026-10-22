@@ -24,21 +24,26 @@ Whether the project used its resources (time, budget, personnel) **economically 
 ## 4-point scale (2024 common, p.8)
 1 = Mostly inefficient, causing a **clear negative impact** · 2 = Some inefficiency causing **partial impact** · 3 = **Overall satisfactory** efficient execution · 4 = **All efficient + economy beyond expectations**
 
-## Absolute rules (KOICA evaluation principles)
-- **State the source** `[Evidence: source/figure]`. Prioritize quantitative evidence such as budget execution rate and schedule adherence. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (no fabrication).
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Efficiency's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
+
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Efficiency) only · scores are provisional and a human confirms them.
+
+## Efficiency-specific rules
+- Prioritize quantitative evidence such as budget execution rate and schedule adherence.
 - Caution: **a high execution rate does not mean high efficiency** — look at the economy of outputs relative to inputs. Do not directly equate a plain "96% execution rate" with an Efficiency score of 4.
-- Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
 - Search the full source for repeated budget, disbursement, project-period, extension-count, procurement, and completion-date statements. If schedule/cost values or extension counts differ, record both locations under **Source-conflict candidates** with a local ID `EFI-X1`…; never select one silently.
-- Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
-- Do not evaluate anything outside your assigned criterion (Efficiency).
 
 ## Output format
 ```
 ## Efficiency (효율성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 ### Efficiency Summary (draft)
 - Provisional Efficiency score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations

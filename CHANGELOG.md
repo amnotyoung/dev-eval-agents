@@ -36,7 +36,30 @@ each slice below is recorded as a 0.x milestone.
 - The numeric checker flattens HTML tables (kordoc MCP's default output), so
   `colspan="4"` is no longer read as a composite score.
 
+- **Common evaluator contract** — `reference/평가관-공통계약.md` (with its
+  English mirror) now holds the rules all six criterion evaluators share:
+  source citation with `p.N`, no score without evidence (missing evidence is
+  never a 1), `[사실: Fn]` on score-critical claims, source-conflict
+  candidates, partial reading of large sources (Grep, then ≤300-line Reads),
+  independence, and the shared output tables. The evaluate skill and the Codex
+  `AGENTS.md` pass it to every evaluator.
+- `tests/test_evaluator_contract.py` parses each evaluator's output tables and
+  fails when their columns drift from the contract.
+
 ### Changed
+- **Criterion evaluators emit the fact-ID contract** — the evaluate skill
+  required `[사실: Fn]` on every claim, but none of the six `dac-*` output
+  formats had a fact-ID column. Each rating table now has one, each draft
+  returns a **fact-ledger additions** table, and duplicated generic rules were
+  replaced by a reference to the common contract plus criterion-specific
+  rules. The effectiveness evaluator no longer starts by reading the whole
+  source.
+- **Impact evaluator's 1-point definition follows the official scale** — it
+  read "most evidence of transformative effect lacking", which turned missing
+  evidence into a score; missing evidence is now *cannot evaluate*.
+- The Codex single-agent path reads the contract and the matching evaluator
+  file per criterion, and states that it cannot structurally guarantee
+  independence between criteria.
 - **Checker exit codes no longer report an unread file as a pass** —
   `consistency_check.py` now returns 3 (cannot determine) instead of 0 for a
   missing or undecodable file, an internal error, or a usage error (argparse's

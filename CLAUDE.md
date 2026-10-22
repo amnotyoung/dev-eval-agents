@@ -12,7 +12,7 @@
 .codex-plugin/plugin.json        Codex 매니페스트 (같은 name/version)
 .agents/plugins/marketplace.json Codex 저장소 마켓플레이스
 skills/                          평가 워크플로 4종 ← 사용자의 실제 진입점
-agents/                          전담 평가관·검증자 12명
+agents/                          전담 평가관·검증자 11명
 hooks/hooks.json + boulder.sh    완료 엔진 (Stop hook)
 bin/                             Claude가 PATH에 올리는 실행파일(Codex는 절대경로 폴백)
 reference/                       KOICA 공식 규범 + 영향평가 전문 제안 + 방법론 3종 (공용 지식)
@@ -93,6 +93,10 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 - `reference/개발평가-설계방법론-다이제스트.md` — 변화이론·평가질문·설계 매트릭스·타당도
 - `reference/개발평가-자료분석방법론-다이제스트.md` — 측정·도구·표본·편향·분석·삼각측량
 - `reference/개발평가-관리보고윤리-다이제스트.md` — TOR·품질관리·보고·제언·독립성·윤리
+
+### 운영 계약 (지식층 아님)
+
+- `reference/평가관-공통계약.md` — 기준 평가관 6명이 함께 따르는 출처·사실 ID·상충·원문 읽기·독립성·출력 구성 규칙. DevEval의 운영 계약이며 점수·등급 기준을 정하지 않는다(규범층이 우선). 공통 규칙을 바꿀 때는 이 파일만 고치고, 평가관 파일에는 기준별 정의·핵심질문·루브릭·고유 규칙만 둔다. `tests/test_evaluator_contract.py`가 평가관 출력 표의 열을 이 계약과 대조한다.
 
 방법론 원전은 2009년 자료라 현행 일관성 기준과 점수·등급을 포함하지 않는다. 충돌 시 **공식 규범 > 전문 제안 > 방법론** 순이며, 스킬은 과업에 필요한 파일만 절대경로로 위임한다.
 
