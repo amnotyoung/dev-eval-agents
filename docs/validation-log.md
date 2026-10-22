@@ -2,7 +2,7 @@
 
 > DevEval Agents가 ① **실제로 작동하는가**(실물 e2e) ② **실제 KOICA 평가 결과와 부합하는가**(대조)의 기록.
 >
-> ⚠️ **학습·실험 프로젝트의 자체 검증**이며 공식 검증이 아니다. 표본 소수(5건), 한계 존재(§4). 최종 갱신: 2026-08-02 (**e2e-8** 추가 — 실제 KOICA 종료평가 보고서 전문 대상 evaluate 트랙 풀 파이프라인(6평가관+검증자+작성자+수치검사+서술검증) 실물 실행; §1-1 수치 검사기 **실제 보고서 334건 전수 보정** — 공개 보고서 2건의 실제 국·영문 총점 불일치 검출).
+> ⚠️ **학습·실험 프로젝트의 자체 검증**이며 공식 검증이 아니다. 표본 소수(5건), 한계 존재(§4). 최종 갱신: 2026-10-22 (**§1-2** 블라인드 벤치마크 — 역할 개편 전후를 실제 보고서 3건과 AI 판정관 2명으로 비교; 이전: 2026-08-02 **e2e-8** 추가 — 실제 KOICA 종료평가 보고서 전문 대상 evaluate 트랙 풀 파이프라인(6평가관+검증자+작성자+수치검사+서술검증) 실물 실행; §1-1 수치 검사기 **실제 보고서 334건 전수 보정** — 공개 보고서 2건의 실제 국·영문 총점 불일치 검출).
 
 ---
 
@@ -97,6 +97,21 @@ Codex and on a fully open-weight stack** (multi-harness). e2e-6/e2e-7 add the
 reviewer and the new Impact-criterion evaluator each fired and routed correctly,
 handling the same project in two distinct roles.
 
+**1-2. Blind benchmark of the role redesign (2026-10-22).** Three real 2024-scheme
+KOICA final evaluation reports, with the human team's scores and grades removed,
+were evaluated headless with `/deveval:evaluate` (Sonnet 5.5, one run per case).
+Every criterion where the plugin and the human team differed (≥0.5, or ≥0.25 for
+the case whose grade differed) went to blind A/B adjudication by Claude and by
+Codex, each scoring the questions from the source on its own. All 24 judgments
+(12 discrepancies × 2 adjudicators) found the plugin's rating better supported;
+the adjudicators' own composites fall in the plugin's grade in all three cases
+(C, E, D) and in the human team's grade in one. On the two cases run by every
+variant, the final variant took 50.2 vs 57.2 minutes and $12.98 vs $18.18, with a
+mean per-criterion gap to the adjudicators of 0.10 vs 0.20. Caveats: three cases,
+one run each; adjudicators read both ratings, and the plugin's rationale is far
+more detailed than the human rating table, so anchoring or format bias is
+possible; the adjudicators are AI, not evaluation officers.
+
 **2. Comparison against real KOICA reports (5 cases).**
 
 | Project | Type | Human team | DevEval Agents | Agreement |
@@ -162,6 +177,46 @@ claude -p "<입력> 이 사업을 DAC 5대 기준으로 평가해줘" \
 | **e2e-8** | **실제 KOICA 종료평가 보고서 전문**(캄보디아 자궁경부암 AI검진 CTS, 추출 3,934줄)으로 **evaluate 트랙 풀 파이프라인** — 스킬의 이름 미등록 호스트 폴백 절차(역할 정의 전문+절대경로를 위임 프롬프트에 탑재) 사용, `oda-intelligence` 게이트웨이 증거 보강(상태 도구 먼저·일관성 평가관에게만 전달) 포함 | 6기준 평가관 병렬(적절2·일관2·효과 정수미확정[산출3·형평2]·효율3·지속 정수미확정[재정1·제도2]·타당성2/재무 평가불가) → `quality-verifier`가 **표본 근거 ~60건 원문 대조: 환각 0건**(정량 수치 전건 자릿수 일치), **실수 4건 반려·정정**(원보고서가 반박한 통계의 긍정 근거 재사용, 특허 발명자 오귀속, 소수점 점수, 재무 실적 강화 서술) → `report-composer` 요약 초안(국·영문 수치 일치, 종합은 **단서부 잠정 범위**로 보류: 5기준 10~12/20 E~D, CTS 6기준 12~14/24 "부분 성공적") → 수치검사기 **정직 기권(exit 3 — 잠정 범위뿐이라 단정 수치 없음)** → `narrative-verifier` 의미 검증. **원평가팀(11.7/24 부분 성공적)과 밴드 일치**, 재평정 과정에서 **원보고서 자체 결함 3건 재확인**(국·영문 총점 불일치 11.7 vs 12.7, 특허 '취득 3' vs '취득 1·출원 2' 표기 상충, 지속가능성 요약 "평가 불가" vs 본문 "(3/4점)" 모순) |
 
 → **실제 Claude Code가 CLAUDE.md 워크플로대로 작동**함을 **3회 재현**(사업평가 2회 + 품질심사 1회) 확인. "시뮬 ≠ 실물" 의심 해소. e2e-3은 슬라이스 7(가이드라인 v2) 룰브릭 적용도 입증. **e2e-4는 같은 공용 지식(`reference/`)이 Codex 하네스에서도 작동**함을 입증 — Claude Code(`.claude/`)와 Codex(`AGENTS.md`)가 *한 지식·같은 원칙*으로 평가(멀티 하네스). **e2e-6·e2e-7**은 **영향평가 트랙**(보고서 방법론 심사 `impact-evaluation-reviewer` + 사업 영향력 평정 신규 `dac-impact-evaluator`)이 **실제 KOICA 영향평가 보고서**(응에안성 산업기술학교)에서 **실물 발화·정확 라우팅**(각 런 다른 서브에이전트 0)함을 입증 — 신규 `dac-impact-evaluator`의 첫 실물 검증 포함. 두 런은 같은 사업을 *다른 역할*(보고서 심사 vs 사업 영향력 평정)로 처리해 **역할 분리**도 실증.
+
+---
+
+## 1-2. 블라인드 벤치마크 — 역할(R&R) 최적화 검증 (2026-10-22)
+
+**목적.** 역할 개편(자료 정리관·검증 분리·공통 계약·작성관 자체 검사·사실대장 축소)이 ① 인간 평가와 비슷한 결과를 내는지, ② 다를 때 플러그인 쪽이 더 타당한 근거가 있는지, ③ 같은 품질에서 더 빠르고 싼지를 실측했다.
+
+**방법.**
+- 입력: 2024 체계(5기준·20점) 실제 KOICA 종료평가 보고서 3건을 kordoc으로 변환한 뒤 **인간 평가팀의 점수·등급 표기를 지웠다**(서술은 남김 — 한계 참조).
+- 실행: `claude -p --plugin-dir <변형> --model claude-sonnet-5-5`, `/deveval:evaluate` 한 번(헤드리스, 사례당 1회).
+- 판정: 플러그인과 인간의 기준 평점이 0.5점 이상 다르면(18465는 등급이 갈려 0.25점 이상) 그 기준을 **블라인드 A/B 판정**에 넘겼다. 판정관은 누가 A·B인지 모른 채 블라인드 원문과 공식 루브릭으로 질문별 점수를 스스로 매기고 어느 평정이 더 타당한지 고른다. 판정관은 두 모델이다 — Claude(Opus 5.5 서브에이전트)와 Codex(`gpt-5.6-sol`, 읽기 전용).
+
+**결과 — 최종 변형(v7).**
+
+| 사업 | 인간 | 플러그인 | 판정관 독자 종합(Claude / Codex) | 기준별 차이(인간) | 시간 | 비용 |
+|---|---|---|---|---|---|---|
+| 베트남 VKIST 설립지원 | 18.7 **A** | 14.5 **C** | 15.0 C / 14.5 C | 0.84 | 20.5분 | $5.64 |
+| 인도네시아 사회문제해결 혁신창업 | 10.0 **E** | 11.17 **E** | 11.0 E / 11.0 E | 0.53 | 29.7분 | $7.34 |
+| UNMAS DR콩고 폭발물 제거 | 14.1 **C** | 12.67 **D** | 12.85 D / 12.6 D | 0.31 | 29.8분 | $7.32 |
+
+*판정관 독자 종합은 판정한 기준의 독자 평점에, 판정하지 않은 기준(차이가 임계 미만)은 인간 점수를 더한 값.*
+
+- **불일치 12건 × 판정관 2명 = 24판정 모두 "플러그인 쪽이 더 타당"**(동등 0, 인간 0). 판정관 독자 종합의 등급은 3건 모두 플러그인 등급과 같고, 인간 등급과는 1건만 같다.
+- 판정관이 지적한 인간 평정의 공통 약점: 4점("모두 달성 + 기대 이상")을 주면서 원문에 적힌 반대 사실(기간 2배·하자 보수·시스템 미작동·기초선 미정의 등)을 다루지 않음, 근거로 든 서술이 원문에 없음, 부정 서술만 들고 3점을 줌.
+- 판정관이 지적한 플러그인의 약점: 점수와 관련이 약한 상충을 표에 실어 핵심을 흐림, 일부 감점 사유가 문서 간 표기 차이, 인용 쪽수 오류 몇 건.
+
+**변형 비교 — 공통 사례 2건(VKIST·인도네시아).**
+
+| 변형 | 판정관 평균과의 기준별 차이 | 시간 합 | 비용 합 |
+|---|---|---|---|
+| 개편 전(base) | 0.20 | 57.2분 | $18.18 |
+| 최종(v7) | **0.10** | **50.2분 (−12%)** | **$12.98 (−29%)** |
+
+중간 변형에서 확인한 병목과 고친 것: 평가총괄이 원문을 직접 읽음(자료 정리관 신설), 비동기 위임 뒤 `sleep` 대기 7회(`run_in_background: false` 명시), 사실대장 78→157행 팽창(60행 상한), 작성관의 칸 단위 Edit 35회 이상(Write 한 번), 종합점수 줄 형식 때문에 수치 검사기 exit 3 반복(종합 줄과 민감도 줄 분리), 복합 셸 명령 승인 거부(단일 명령).
+
+**한계.**
+- 사례 3건, 사례·변형당 1회 실행. 같은 사례를 변형만 바꿔 다시 돌려도 시간이 최대 9분, 비용이 최대 $2 달랐다(v5·v6·v7 비교) — 변형 간 작은 차이는 잡음일 수 있다.
+- **앵커링·형식 편향 가능성** — 판정관은 두 평정과 그 근거를 함께 읽는다. 인간 쪽 근거는 결과표의 짧은 산정 이유뿐이고 플러그인 쪽은 쪽 인용이 달린 상세 근거라, 자세한 쪽이 유리할 수 있다. Codex의 독자 평점은 판정한 12건 모두 플러그인 점수와 같았다. 판정관이 원문에서 질문별 점수를 스스로 매기게 해 완화했지만 완전히 독립된 재채점은 아니다.
+- 블라인드는 점수·등급 표기만 지웠고 평가팀 서술(판단 문장)은 남았다.
+- 판정관은 AI다 — 전문가(평가담당관) 교차 채점은 여전히 미실시.
 
 ---
 

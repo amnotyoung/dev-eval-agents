@@ -63,12 +63,33 @@ each slice below is recorded as a 0.x milestone.
   visibility questions become unscored checks that inform the scored ones.
 - **Source analyst** — a new `source-analyst` agent is the only role that
   reads the whole source: it writes the brief's scope and source-fact ledger
-  (30–80 score-critical rows) and a per-question page index. The lead
+  (at most 60 score-critical rows, identical repeats on one row) and a
+  per-question page index. The lead
   evaluator no longer reads the source (in the e2e baseline it reached 207k
   tokens of context before delegating); evaluators and the verifier start from
   the ledger and index and Grep the rest.
 - **Cross-criterion consistency** — the verifier checks for the same fact read
   two ways, double penalties, and contradictory narratives across criteria.
+- **Scoring calibration** — each scored question gets a point estimate
+  (sensitivity is reported separately, not as a range score); partial absence
+  of evidence is not a penalty; a question uses only the facts it covers; a
+  conflict matters only when it moves a question score by 0.5 or more; simple
+  report typos are not penalties; official records outweigh after-the-fact
+  statements.
+- **Roles that produce an artifact check it themselves** — the source analyst
+  runs `--ledger-only` until its ledger passes; the report composer assembles
+  brief sections 3–9 from the saved criterion drafts and verification result
+  and runs both checkers; the lead evaluator saves those two files, delegates
+  assembly, and only confirms (it no longer edits the brief or reads checker
+  code).
+- **Leaner hand-offs** — the ledger is capped at 60 rows (2–4 key facts per
+  scored question; identical repeats share one row with all locations). The
+  composer reads its inputs once, writes the whole brief with one Write, does
+  not re-read the source or the checker scripts, and fixes only the lines the
+  checkers name. Measured on two real KOICA final reports (blind inputs,
+  `docs/validation-log.md` §1-2): 57.2 → 50.2 minutes and $18.18 → $12.98 for
+  both cases, with ratings closer to independent adjudicators (mean gap 0.20 →
+  0.10).
 - **One agent-instructions document** — the repository-development context
   (`CLAUDE.md`) and the Codex direct-run evaluation fallback (`AGENTS.md`)
   are merged into a single `AGENTS.md`: Part 1 for developing the plugin,
@@ -103,6 +124,21 @@ each slice below is recorded as a 0.x milestone.
   contradicted the /16 legend; /24 and other schemes are no longer judged.
 
 ### Fixed
+- **The lead evaluator polled with `sleep`** — when a delegation left
+  `run_in_background` unset, the host ran the five criterion evaluators
+  asynchronously and the lead slept and re-read its whole context seven times.
+  All four skills now pass `run_in_background: false` on every delegation.
+- **Approval prompts from compound checker commands** — checker runs wrapped in
+  `cd`, `&&`, shell variables or `echo $?`, and `sed -i` edits, were denied
+  (each is an approval prompt for a real user). Checkers now run as one
+  absolute-path command, and the source analyst fixes ledger rows with Edit.
+- **The composite line skipped both checks** — the brief template put the
+  sensitivity range on the composite line; a line with '잠정', '범위' or '~'
+  is skipped by both checkers, so the score-sum and grade checks never ran and
+  `consistency_check.py` returned exit 3. The composite line now carries only
+  `score/20, grade`; the range has its own `민감도` line. Single-row ledger
+  verdicts must stay exactly `단일 출처 — 전체검색 완료` (cross-references go
+  to section 4 and the conflict register).
 - **Evaluations stopped halfway in headless runs** — a real end-to-end run on a
   137-page, three-project HWP report delegated the fact-ledger work in the
   background and ended its turn; the headless runner killed the subagents
