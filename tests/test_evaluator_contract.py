@@ -224,6 +224,16 @@ class SelfCheckingRoles(unittest.TestCase):
         self.assertIn("단일 출처 — 전체검색 완료", ko)
         self.assertIn("## Self-check", read("docs", "en", "agents", "source-analyst.md"))
 
+    def test_uncheckable_scores_never_force_invention(self):
+        ko = read("agents", "report-composer.md")
+        self.assertIn("수치 검사 exit 3은 통과가 아니다", ko)
+        self.assertIn("점수·근거를 만들지 않는다", ko)
+        self.assertIn("Numeric exit 3 is not a pass", read("docs", "en", "agents", "report-composer.md"))
+
+    def test_ledger_size_never_discards_material_evidence(self):
+        self.assertIn("권장치", read("agents", "source-analyst.md"))
+        self.assertIn("중요한 표기를 삭제하지 않는다", read("agents", "source-analyst.md"))
+
     def test_report_composer_assembles_and_checks_the_brief(self):
         ko = read("agents", "report-composer.md")
         self.assertIn("## 감사 가능한 브리프 조립", ko)

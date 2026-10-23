@@ -10,6 +10,8 @@ description: 영향평가(Impact Evaluation) 보고서의 인과추론 방법론
 
 ## 호스트 호환
 
+- **호스트 도구 차이:** `run_in_background: false`는 해당 매개변수를 지원하는 위임 도구에서만 쓴다. Codex처럼 생성과 대기가 분리된 호스트에서는 실제 도구 스키마대로 위임하고 모든 결과를 기다린 뒤 다음 단계로 간다. Read·Grep·Glob가 없는 호스트에서는 읽기 전용 `rg`·`sed` 등의 실행 도구로 같은 범위를 읽을 수 있다.
+
 - `deveval-root`가 있으면 그 출력으로 플러그인 루트를 구한다. 없으면 호스트가
   노출한 이 `SKILL.md`의 절대경로에 정확히
   `realpath(dirname(<SKILL.md 절대경로>)/../..)` 또는 동등한 경로 정규화를 적용한다.

@@ -1,6 +1,7 @@
 """평가 근거·상충·검증 정정이 최종 산출물에서 사라지지 않는지 회귀 검사."""
 
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -41,6 +42,13 @@ def run_text(text, *extra_args):
 
 
 class CheckerBehavior(unittest.TestCase):
+    def test_supporting_evidence_cannot_be_empty_even_with_fact_ids(self):
+        text = read("tests", "fixtures", "auditable-brief-clean.md")
+        text = re.sub(r"\[근거:[^\]]*\]", "", text)
+        result = run_text(text)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("지지근거가 비어 있음", result.stderr)
+
     def test_complete_brief_passes(self):
         result = run_fixture("auditable-brief-clean.md")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

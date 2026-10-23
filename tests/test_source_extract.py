@@ -156,6 +156,29 @@ class SourceExtract(unittest.TestCase):
         result = self.run_extract("--engine", "ocrmagic", "x.pdf")
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
 
+    def test_index_named_source_is_not_replaced_by_inventory(self):
+        src = self.source("index.md", "평가 원문 본문".encode())
+        result = self.run_extract(src)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("평가 원문 본문", self.converted("index-source"))
+        self.assertIn("원문 변환본 색인", self.converted("index"))
+
+    def test_unrelated_output_file_is_preserved(self):
+        src = self.source("report.txt", b"source report")
+        out = os.path.join(self.work, ".omo", "sources")
+        os.makedirs(out)
+        with open(os.path.join(out, "report.md"), "w") as fh:
+            fh.write("user notes")
+        result = self.run_extract(src)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(self.converted("report"), "user notes")
+        self.assertEqual(len([n for n in os.listdir(out) if n.startswith("report-")]), 1)
+
+    def test_empty_source_is_not_successful_conversion(self):
+        result = self.run_extract(self.source("empty.txt", b"  \n"))
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        self.assertIn("읽을 수 있는 본문 없음", result.stderr)
+
 
 class KordocOutputReadsCleanlyInChecker(unittest.TestCase):
     """kordoc MCP 기본 출력(HTML 표)의 colspan 숫자를 점수로 읽지 않는다."""

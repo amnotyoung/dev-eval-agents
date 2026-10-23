@@ -36,7 +36,7 @@
 
 거버넌스: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md).
 
-## 🎛️ 시스템 구성 — 11 에이전트, 두 평가 유형, 세 하네스
+## 🎛️ 시스템 구성 — 12 에이전트, 두 평가 유형, 세 하네스
 
 KOICA 평가는 **유형이 다르다.** 이 시스템은 두 유형을 구분해 다룬다.
 
@@ -80,13 +80,14 @@ KOICA 평가는 **유형이 다르다.** 이 시스템은 두 유형을 구분�
 
 > ⚠️ 종료평가의 6기준 틀을 영향평가에 들이대지 않는다. 기획단계 대상 평가는 별도의 3요소·7항목 평가성으로 본다. KIEP 2025 자료는 정책연구의 **가이드라인(안)**이며, 10질문과 3단계 표지는 DevEval 운용 프레임이지 공식 KOICA/KIEP 판정표가 아니다.
 
-### 에이전트 카탈로그 (11)
+### 에이전트 카탈로그 (12)
 
 | 역할 | 에이전트 | 권한 |
 |------|---------|:---:|
 | 종료평가 DAC 6기준 | `dac-{relevance,coherence,effectiveness,efficiency,sustainability,impact}-evaluator` — 영향력은 사후평가라 20점 종합 제외 | 읽기 |
 | 근거 검증 | `quality-verifier` | 읽기 |
 | 보고서 작성 | `report-composer` | **쓰기** |
+| 원문 사실대장·쪽 색인 | `source-analyst` | 지정 파일 쓰기 |
 | 서술 검증 (환각·일관성) | `narrative-verifier` | 읽기 |
 | 보고서 품질심사 (24문항/A~D) | `report-quality-inspector` | 읽기 |
 | 영향평가 검토 (6개 추진원칙/10개 운용질문) | `impact-evaluation-reviewer` | 읽기 |
@@ -98,7 +99,7 @@ KOICA 평가는 **유형이 다르다.** 이 시스템은 두 유형을 구분�
 | 설계 원리 | 구현 |
 |---------|------|
 | **병렬 다각도** | 6기준 평가관이 서로 다른 관점으로 병렬 평가 |
-| **역할 = 권한** | 평가관·검증자는 읽기전용 / `report-composer`만 쓰기 |
+| **역할 = 권한** | 평가관·검증자는 읽기전용 / `source-analyst`·`report-composer`는 지정 산출물만 쓰기 |
 | **근거 게이트** | "근거 없으면 등급 없음 / 서술 없음" (지어내기 금지) |
 | **완료 주장 불신** | `quality-verifier`·`narrative-verifier`가 근거·일관성 검증 |
 | **완료 강제** | 완료 엔진(Stop hook) — 정체·상한 가드 포함 |
@@ -176,6 +177,9 @@ codex exec "samples/sample-evaluation-report.md 이 사업을 DAC 기준으로 �
 ollama pull qwen2.5:14b
 python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 ```
+사용자 입력·출력의 상대경로는 현재 작업 폴더 기준이다. 러너는 감사·수치 검사를
+통과해야 exit 0, 위반은 2, 확인 불가는 3을 반환하고 저장 초안에도 상태를 적는다.
+이는 형식·수치 검사이며 원문 사실의 독립 검증이나 모델 간 품질 동치를 뜻하지 않는다.
 무료 Google Colab로도 재현 가능: [`notebooks/open-model-demo.ipynb`](notebooks/open-model-demo.ipynb).
 
 ## 🔌 권장 동반 설치 — ODA Intelligence 플러그인 (선택)

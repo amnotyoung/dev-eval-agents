@@ -21,6 +21,17 @@ def read(*parts):
 
 
 class DelegationRuns(unittest.TestCase):
+    def test_host_adapters_do_not_require_an_unsupported_background_parameter(self):
+        for name in SKILLS:
+            body = read("skills", name, "SKILL.md")
+            self.assertIn("해당 매개변수를 지원하는 위임 도구에서만", body)
+            self.assertIn("모든 결과를 기다린 뒤", body)
+
+    def test_codex_writer_roles_keep_scoped_write_permissions(self):
+        body = read("skills", "evaluate", "SKILL.md")
+        self.assertIn("읽기 전용 제약은 기준 평가관·검증자에만 적용", body)
+        self.assertIn("산출물의 쓰기·수정과 검사 실행을 허용", body)
+
     def test_every_skill_delegates_in_the_foreground(self):
         for name in SKILLS:
             body = read("skills", name, "SKILL.md")

@@ -157,9 +157,14 @@ def run_kordoc(src: Path, ocr: bool) -> dict:
             data = json.loads(out.read_text(encoding="utf-8"))
         except (OSError, ValueError) as exc:
             raise Unavailable(f"kordoc 결과를 읽을 수 없음: {exc}") from None
+    if not isinstance(data, dict):
+        raise Unavailable("kordoc 결과가 JSON 객체가 아님")
     if not data.get("success", True):
         raise Unavailable(f"kordoc 파싱 실패: {data.get('error') or data.get('code') or '사유 미상'}")
-    doc = kordoc_document(data, version)
+    try:
+        doc = kordoc_document(data, version)
+    except (TypeError, ValueError, KeyError, AttributeError) as exc:
+        raise Unavailable(f"kordoc 쪽 구조를 읽을 수 없음: {exc}") from None
     doc["signature"] = kordoc_signature(version, ocr)
     return doc
 
@@ -247,10 +252,15 @@ def wanted_signatures(ext: str, engine: str, ocr: bool) -> set[str]:
 
 
 def target_path(out_dir: Path, src: Path, digest: str) -> Path:
-    path = out_dir / f"{src.stem}.md"
-    existing = read_header(path)
-    if path.exists() and existing.get("원본") not in (None, str(src)) and existing.get("SHA-256") != digest:
-        path = out_dir / f"{src.stem}-{digest[:8]}.md"
+    # index.md is reserved for the generated inventory. Never overwrite an
+    # unrelated user file, even when it has no provenance header.
+    stem = f"{src.stem}-source" if src.stem.casefold() == "index" else src.stem
+    path = out_dir / f"{stem}.md"
+    counter = 0
+    while path.exists() and read_header(path).get("원본") != str(src):
+        suffix = f"-{counter}" if counter else ""
+        path = out_dir / f"{stem}-{digest[:8]}{suffix}.md"
+        counter += 1
     return path
 
 
@@ -283,6 +293,10 @@ def convert(src: Path, out_dir: Path, engine: str, ocr: bool, force: bool) -> tu
         errors.append(f"지원하지 않는 형식 {ext or '(확장자 없음)'}")
     if result is None:
         raise Unavailable("; ".join(errors) or "쓸 수 있는 변환기 없음")
+    readable = re.sub(r"<!--.*?-->", "", result["body"], flags=re.DOTALL)
+    readable = "\n".join(line for line in readable.splitlines() if not IMAGE_LINE.match(line))
+    if not readable.strip():
+        raise Unavailable("읽을 수 있는 본문 없음 — OCR 또는 텍스트 원문 필요")
 
     if errors:
         result["warnings"].insert(0, "앞선 변환기 실패 — " + "; ".join(errors))
@@ -349,7 +363,7 @@ def main(argv=None) -> int:
             continue
         try:
             path, fields, cached = convert(src, out_dir, args.engine, args.ocr, args.force)
-        except Unavailable as exc:
+        except (Unavailable, OSError, UnicodeError) as exc:
             failures.append((src, str(exc)))
             continue
         state = "기존 변환본 사용" if cached else "변환"

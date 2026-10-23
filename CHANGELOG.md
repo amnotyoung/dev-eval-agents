@@ -10,6 +10,25 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+## [0.13.0] — 2026-10-23
+
+### Release review hardening
+- Open-model output now runs both the audit-contract and numeric checks before
+  returning success. Invalid drafts remain available with an explicit failed
+  validation label and exit 2; unreadable inputs, empty responses, and
+  uncheckable numeric results return 3. User target/output paths resolve from
+  the working folder; bundled references remain relative to the plugin.
+- Audit checking rejects empty supporting-evidence cells even when fact IDs
+  remain. Source conversion preserves unrelated files, reserves `index.md`
+  for the inventory, and rejects empty text or malformed converter results.
+- Codex delegation preserves the source analyst/composer's scoped write
+  permission and adapts foreground/wait semantics to the available tools.
+  Legitimately withheld scores remain withheld: numeric exit 3 is disclosed,
+  never repaired by inventing scores. The 60-row ledger limit is advisory
+  when material evidence or conflicts require more space.
+- Public documentation now describes the two writing roles, conversion/cache
+  data flows, optional network access, and the open runner's validation limits.
+
 ### Added
 - **Source-fact ledger before scoring** — `deveval:evaluate` now records one
   row per score-critical source occurrence under stable `F` IDs and runs an
