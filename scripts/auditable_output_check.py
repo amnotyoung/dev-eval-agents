@@ -18,7 +18,7 @@ import re
 import sys
 import unicodedata
 from collections import defaultdict
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 from pathlib import Path
 
 from consistency_check import band20
@@ -526,8 +526,7 @@ def inspect_scores(overall: str, detail: str) -> list[str]:
         stated = lo
         if parsed['hi']:
             violations.append("5개 기준이 모두 점수인데 종합점수가 범위임 — 점추정과 민감도를 별도 줄에 적어야 함")
-        exponent = min(stated.as_tuple().exponent, 0)
-        if total.quantize(Decimal(1).scaleb(exponent), rounding=ROUND_HALF_UP) != stated:
+        if total != stated:
             violations.append(
                 f"종합 평정의 기준별 검증 후 점수 합 {total}이(가) 검증 후 종합점수 {stated}/20과 다름"
             )
@@ -721,6 +720,9 @@ def main() -> int:
     )
     parser.add_argument("--isolation", help="원시 로그와 재대조할 독립성 확인서 JSON")
     parser.add_argument("--require-isolation", action="store_true", help="확인서 없이 병렬 평가를 통과시키지 않음")
+    parser.add_argument("--scores", help="질문별 점수 JSON 정본")
+    parser.add_argument("--before", help="검증 전 질문별 점수 JSON 정본")
+    parser.add_argument("--require-scores", action="store_true", help="계산 정본·코드 투영 없이 통과시키지 않음")
     args = parser.parse_args()
     try:
         raw = Path(args.brief).read_bytes()
@@ -741,6 +743,26 @@ def main() -> int:
         violations, _fact_ids, _conflicts = inspect_ledger(text)
     else:
         violations = inspect(text)
+        scores = Path(args.scores) if args.scores else Path(args.brief).parent / "verified-scores.json"
+        if args.require_scores or args.scores or scores.exists() or "<!-- deveval:score-input" in text:
+            try:
+                import score_calculate
+                result = score_calculate.verify_projection(args.brief, args.scores, args.before)
+                _ledger_errors, fact_ids, _conflicts = inspect_ledger(text)
+                used_facts = {f for c in result["criteria"] for q in c["questions"] for f in q["fact_ids"]}
+                used_facts.update(f for s in result.get("scenarios", []) for change in s["changes"] for f in change["fact_ids"])
+                violations.extend(f"점수 정본의 {f}가 원문 사실대장에 없음" for f in sorted(used_facts - fact_ids))
+                manifest_path = Path(args.brief).parent / "delegation-manifest.json"
+                if manifest_path.exists():
+                    import json
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    if result["source_sha256"] != manifest.get("source_sha256"):
+                        violations.append("점수 정본의 원문 해시가 위임 입력팩과 다름")
+            except OSError as exc:
+                print(f"점수 정본 확인 불가(exit 3): {exc}", file=sys.stderr)
+                return 3
+            except (ValueError, KeyError, TypeError) as exc:
+                violations.append(f"점수 정본·코드 투영: {exc}")
         receipt = Path(args.isolation) if args.isolation else Path(args.brief).parent / "isolation.json"
         if args.require_isolation or args.isolation or receipt.exists():
             try:

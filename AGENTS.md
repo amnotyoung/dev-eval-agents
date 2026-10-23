@@ -183,6 +183,8 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 
 ## 평가 워크플로 (Codex 단일 에이전트)
 
+**점수 정본과 코드 계산:** 각 기준의 질문별 `score/status/fact_ids/reason`을 `templates/score-input-template.json`과 `docs/score-contract.md`에 맞춰 `ratings.json`에 보존하고, 자기 검증 후 전체 정본을 `verified-scores.json`에 작성한다. 단일 컨텍스트의 검증 상태는 `conditional`로 두고 한계를 적는다. 평균·합계·등급을 직접 산출하지 않는다. `python3 scripts/score_calculate.py render --input <사업폴더>/verified-scores.json --before <사업폴더>/ratings.json --brief <브리프> --out <사업폴더>/score-result.json`으로 계산표를 생성하고 감사 검사에 `--require-scores`를 붙인다. 이 폴백은 독립성 확인서를 만들지 않는다.
+
 사용자가 평가 대상을 주며 평가를 요청하면:
 
 1. **자료 확인 + 원문 사실대장 작성 + 사업유형 판별** — 대상이 PDF·HWP·HWPX·DOCX면 먼저 `python3 scripts/source_extract.py <원문…>`로 사용자 작업 폴더의 `.omo/sources/`에 쪽 표지(`<!-- p.N -->`)가 있는 변환본을 만들고 그 변환본을 읽는다(kordoc 고정 버전 → PDF는 pdftotext 폴백). exit 3(변환 불가)은 통과가 아니다 — 텍스트 원문을 요청하고, 원문을 읽지 못한 채 평정하지 않는다. 변환본 머리 주석의 경고(그림 영역·OCR 저신뢰·텍스트 없는 쪽)는 한계에 옮기고 그 쪽의 핵심 수치는 `[INFO: 확인 필요]`로 둔다. 대상을 읽고 범위를 파악한다. 문서명·버전·작성일을 기록하고, 핵심 지표·횟수·사업기간·예산·수량·완료/하자 상태의 반복 표기를 원문 전체에서 검색한다. `templates/auditable-evaluation-brief-template.md`의 원문 사실대장에 한 표기당 한 행을 쓰고, 같은 판단대상·지표·목표/실적 역할에는 같은 `F1`, `F2`…를 반복한다. 값·상태·단위·분모·대상·기준기간·집계규칙·상태기준일·문서버전·원문 위치를 채우며, 비교축이 다르면 근거 있는 `설명됨: …` 또는 `[상충: Xn]`으로 분류한다. 파일 작업본이면 평정 전에 `python3 scripts/auditable_output_check.py --ledger-only <브리프>`를 통과시킨다.

@@ -33,7 +33,9 @@ deepseek, mistral, ...). This is the point: the harness/model is replaceable.
 
 import argparse
 import json
+import hashlib
 import os
+import re
 import sys
 from pathlib import Path
 import urllib.error
@@ -41,6 +43,7 @@ import urllib.request
 
 import auditable_output_check
 import consistency_check
+import score_calculate
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -54,6 +57,8 @@ DEFAULT_REFERENCES = [
     "reference/개발평가-설계방법론-다이제스트.md",
     "reference/개발평가-자료분석방법론-다이제스트.md",
     "templates/auditable-evaluation-brief-template.md",
+    "docs/score-contract.md",
+    "templates/score-input-template.json",
 ]
 
 OLLAMA_URL = os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
@@ -79,7 +84,7 @@ def evaluation_instructions(text):
     return text
 
 
-def build_messages(target_path, reference_paths):
+def build_messages(target_path, reference_paths, target_bytes=None):
     """Assemble the same context the Codex harness gets: rules + reference,
     then the evaluation target as the user turn."""
     agents_md = evaluation_instructions(read(reference_paths[0]))
@@ -95,7 +100,9 @@ def build_messages(target_path, reference_paths):
         + "방법론 지식으로 사업문서의 증거 공백을 메우지 마라.\n\n"
         + knowledge
     )
-    target = Path(target_path).read_text(encoding="utf-8-sig")
+    target_bytes = Path(target_path).read_bytes() if target_bytes is None else target_bytes
+    target = target_bytes.decode("utf-8-sig")
+    source_hash = hashlib.sha256(target_bytes).hexdigest()
     user = (
         "다음 사업 종료보고서를 KOICA 2024 평가지침의 DAC 기준으로 평가해줘.\n"
         "평정 전에 점수를 좌우하는 원문 표기를 한 행씩 F-ID 사실대장으로 만들고, "
@@ -105,6 +112,10 @@ def build_messages(target_path, reference_paths):
         "상충·불일치 등록부에 남겨라. 검증 전후 점수와 정정 내역을 보인 뒤 종합점수와 "
         "A~F 등급(안)을 산정하고, 주입된 감사 가능한 평가 브리프 템플릿의 구조를 따르며, "
         "최종 등급 확정은 사람 몫임을 명시해라.\n\n"
+        "평균·합계·등급은 계산하지 마라. 브리프 3절은 제목만 두고 4절은 기준별 제목과 근거를 써라. "
+        "답변 끝에 score-contract v1 전체 입력 객체를 정확히 하나의 json 코드 블록으로 반환하라. "
+        "질문 점수·상태·F-ID·이유를 모두 채워라. 단일 모델 자기검증이므로 verification은 conditional로 둔다. "
+        f"source_sha256은 {source_hash}를 그대로 사용하라.\n\n"
         "===== 평가 대상 =====\n" + target
     )
     return [
@@ -158,12 +169,17 @@ def main(argv=None):
     ap.add_argument("--temperature", type=float, default=0.2)
     args = ap.parse_args(argv)
 
+    if args.out and Path(args.out).expanduser().resolve() == Path(args.target).resolve():
+        print("[open_runner] Output must not overwrite the source report.", file=sys.stderr)
+        return 3
+
     print(f"[open_runner] Ollama: {OLLAMA_URL}", file=sys.stderr)
     print(f"[open_runner] model : {args.model}", file=sys.stderr)
     print(f"[open_runner] target: {args.target}", file=sys.stderr)
 
     try:
-        messages = build_messages(args.target, DEFAULT_REFERENCES)
+        target_bytes = Path(args.target).read_bytes()
+        messages = build_messages(args.target, DEFAULT_REFERENCES, target_bytes)
     except (OSError, UnicodeError) as exc:
         print(f"[open_runner] Cannot read input; not validated: {exc}", file=sys.stderr)
         return 3
@@ -182,7 +198,29 @@ def main(argv=None):
         print("[open_runner] Invalid model response; not validated.", file=sys.stderr)
         return 3
     content = data["message"].get("content", "")
-    status, findings = validate_output(content)
+    authority = None
+    if not isinstance(content, str) or not content.strip():
+        status, findings = 3, ["Empty/non-text model output; not validated."]
+    else:
+        blocks = list(re.finditer(r"```json\s*\n(.*?)\n```", content, re.DOTALL))
+        try:
+            candidates = [(b, score_calculate.loads(b.group(1))) for b in blocks]
+            candidates = [(b,v) for b,v in candidates if isinstance(v,dict) and "criteria" in v]
+            if len(candidates) != 1:
+                raise FileNotFoundError("Exactly one structured question-score JSON block is required.")
+            block, authority = candidates[0]
+            if authority.get("source_sha256") != hashlib.sha256(target_bytes).hexdigest():
+                raise score_calculate.Invalid("Question-score source hash differs from the actual input.")
+            if authority.get("verification") == "passed":
+                authority["verification"] = "conditional"  # one model is not independent verification
+            body = content[:block.start()] + content[block.end():]
+            name = Path(args.out).stem + ".scores.json" if args.out else "verified-scores.json"
+            content, _ = score_calculate.render_text(body, authority, after_name=name)
+            status, findings = validate_output(content)
+        except FileNotFoundError as exc:
+            authority = None; status, findings = 3, [str(exc)]
+        except (ValueError, KeyError, TypeError) as exc:
+            authority = None; status, findings = 2, [str(exc)]
     for finding in findings:
         print(f"[open_runner] validation (exit {status}): {finding}", file=sys.stderr)
     if not isinstance(content, str) or not content.strip():
@@ -192,6 +230,8 @@ def main(argv=None):
     print(f"[open_runner] tokens: prompt={prompt_count} completion={ev_count}", file=sys.stderr)
 
     print(content)
+    if not args.out and authority is not None:
+        print("\n```json\n" + score_calculate.dumps(authority) + "```")
 
     if args.out:
         out_path = Path(args.out).expanduser().resolve()
@@ -206,8 +246,14 @@ def main(argv=None):
         )
         validation = f"> Validation exit code: **{status}** (0 = structural/numeric pass; 2 = violations; 3 = cannot determine).\n"
         try:
+            if authority is not None:
+                score_path = out_path.with_name(out_path.stem + ".scores.json")
+                if score_path == Path(args.target).resolve():
+                    raise OSError("Score sidecar would overwrite the input report.")
+                score_path.write_text(score_calculate.dumps(authority),encoding="utf-8")
             with open(out_path, "w", encoding="utf-8") as fh:
-                fh.write(header.replace("\n\n---", "\n" + validation + "\n---") + content + "\n")
+                single = "> Execution: single model; context isolation and independent source verification were not performed.\n"
+                fh.write(header.replace("\n\n---", "\n" + validation + single + "\n---") + content + "\n")
         except OSError as exc:
             print(f"[open_runner] Cannot write output: {exc}", file=sys.stderr)
             return 3

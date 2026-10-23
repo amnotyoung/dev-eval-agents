@@ -79,7 +79,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 - Enabling factors: ...   · Disabling factors: ...
 
 ### Effectiveness Summary (draft)
-- Provisional Effectiveness rating: (mean of ①–③, two decimals — e.g. 3·4·4 → 3.67)
+- Provisional Effectiveness rating: pending code calculation — return the question-score JSON in common contract §7.
 - Score rationale: (for each question, why this score and not the adjacent higher/lower scores)
 - Evidence-confirmed parts / **parts that cannot be evaluated due to insufficient evidence** (state explicitly)
 - Strengths / weaknesses (balanced)

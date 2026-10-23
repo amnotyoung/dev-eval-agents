@@ -189,6 +189,14 @@ Shared knowledge has four non-interchangeable layers.
 
 ## Evaluation Workflow (Codex single agent)
 
+**Question-score authority and calculation:** preserve each question's
+`score/status/fact_ids/reason` in `ratings.json`, following
+`templates/score-input-template.json` and `docs/score-contract.md`. After
+self-verification, write the full `verified-scores.json` with `conditional`
+status and the single-context limitation. Do not calculate aggregates yourself.
+Run `python3 scripts/score_calculate.py render --input <project-folder>/verified-scores.json --before <project-folder>/ratings.json --brief <brief> --out <project-folder>/score-result.json`,
+then audit with `--require-scores`. This fallback never creates an isolation receipt.
+
 When the user provides an evaluation target and requests an evaluation:
 
 1. **Confirm the materials + build the source-fact ledger + determine the project type** — if the target is a PDF, HWP, HWPX, or DOCX file, first run `python3 scripts/source_extract.py <sources…>` to create page-marked (`<!-- p.N -->`) text copies under `.omo/sources/` in the user's working folder, and read those copies (pinned kordoc → pdftotext fallback for PDF). Exit 3 (cannot convert) is not a pass — ask for the source text and never rate without reading the source. Carry the copy's header warnings (image regions, low-confidence OCR, pages without text) into the limitations and keep score-critical figures on those pages as `[INFO: needs verification]`. Then read the target and grasp its scope. Record document names, versions, and dates; search the full source for repeated key indicators, counts, project dates, budgets, quantities, and completion/defect status. In the source-fact ledger from `templates/auditable-evaluation-brief-template.md`, use one row per source occurrence and reuse the same `F1`, `F2`, and so on for the same decision object, indicator, and target/actual role. Record value/status, unit, denominator/population, reference period, aggregation rule, as-of date, document version, and source location. When comparison axes differ, classify them with evidence as `explained: …` or `[Conflict: Xn]`. For a file-backed working brief, run `python3 scripts/auditable_output_check.py --ledger-only <brief>` before rating.

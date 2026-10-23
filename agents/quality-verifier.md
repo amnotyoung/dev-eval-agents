@@ -80,6 +80,9 @@ KOICA 2024는 "보고서 서술내용과 평가등급 배정 간 괴리가 없�
 
 ## 절대 규칙
 
+- **질문 점수 정본:** `ratings.json`을 받으면 각 질문의 `score/status/fact_ids/reason`을 원문과 대조한다. 정정할 질문만 근거에 따라 고치고, 최종 답변 끝에 전체 JSON 객체를 정확히 하나의 `json` 코드 블록으로 반환한다. `schema_version/project/source_sha256/profile`은 보존하고 `verification`을 `passed/conditional/rejected`로 지정한다. 파일은 쓰지 않는다. 평균·합계·등급은 계산하지 않고 `score_calculate.py`에 맡긴다. 입력 계약은 `<root>/docs/score-contract.md`다.
+- 숫자 민감도가 필요하면 `scenarios`에 근거 있는 대안 질문 점수와 F-ID·이유를 넣는다. 각 시나리오는 `id`, `reason`, `changes`를 가지며 변경은 `criterion/question/score/fact_ids/reason`이다. 종합 범위·등급 경계를 직접 계산하지 않는다.
+
 - **NEVER** 평정을 그냥 믿지 마라. 반드시 원문을 직접 확인한다.
 - 원문에 데이터가 없는데 점수·평정을 단정했다면 → **반려**: "근거 불충분, 평가 불가로 정정 필요".
 - 상충이 최종 점수에 영향을 주지 않더라도 **상충·불일치 등록부에서는 삭제하지 마라**. 영향 없음의 이유를 쓰면 된다.

@@ -394,6 +394,13 @@ class CheckerBehavior(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("점수 합 13", result.stderr)
 
+    def test_rounding_a_composite_to_integer_cannot_change_the_grade(self):
+        text=read("tests", "fixtures", "auditable-brief-clean.md")
+        text=text.replace('| 적절성 | 3 | 3 |','| 적절성 | 3 | 3.5 |').replace('13/20, D(안)','14/20, C')
+        result=run_text(text)
+        self.assertEqual(result.returncode,2,result.stdout+result.stderr)
+        self.assertIn('점수 합 13.5',result.stderr)
+
     def test_duplicate_summary_criterion_or_composite_is_rejected(self):
         base = read("tests", "fixtures", "auditable-brief-clean.md")
         for original in ("| 적절성 | 3 | 3 | 확인됨 | 없음 | 수요 부합 |", "- 검증 후 종합점수·등급(안): 13/20, D(안)"):

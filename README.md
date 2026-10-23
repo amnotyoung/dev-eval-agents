@@ -130,6 +130,12 @@ guards.
 
 ## ▶️ Quick start
 
+Version 0.14 keeps question judgments as structured data and generates means,
+totals, grades and report score tables with code. Criterion workers use fresh
+contexts; the final authored-output gate verifies native delegation records
+and the generated tables. Keep host transcripts available for that check.
+Details and migration: [question-score contract](docs/score-contract.md).
+
 **How it works, in three steps** — ① prepare the material to evaluate (project
 plan, PDM, completion report, …) as Markdown / plain text → ② start a harness and
 ask for an evaluation, pointing it at the file → ③ the system returns

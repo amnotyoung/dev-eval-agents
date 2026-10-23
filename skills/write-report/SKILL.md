@@ -19,6 +19,7 @@ description: 평가 결과로 KOICA 표준 종료평가보고서 초안을 장�
 ## 절차
 
 1. **전제 확인** — 평가 결과에는 기준별 점수·지지근거뿐 아니라 **원문 사실대장, 상세 평정의 `[사실: Fn]` 연결, 반대·제약근거, 상충·불일치 등록부, 평가 불가 항목, 검증 정정과 검증 후 점수**가 있어야 한다. 없으면 없는 필드를 "상충 없음/정정 없음"으로 추정하지 말고 `deveval:evaluate`로 감사 가능한 브리프를 먼저 완성한다. 브리프는 사업마다 `.omo/<사업 약칭>/auditable-evaluation-brief.md`에 있다. 합본이면 사업마다 보고서를 따로 쓴다.
+   - 0.14 자체 산출물은 `ratings.json`·`verified-scores.json`을 함께 사용한다. 예전 자료에 질문별 점수가 없으면 기준 평균을 질문 점수로 역산하지 않는다. 원래 질문별 평정 근거를 확보하거나 evaluate에서 다시 평정한다. 입력 계약은 `<root>/docs/score-contract.md`다.
 
 2. **경로 확보** — 위 호스트 호환 절차로 `<root>`를 구한다. **규범층은 기존에 검증된 평가 결과와 현행 KOICA 기준**이며, 보고서 구조 템플릿은 `<root>/templates/evaluation-report-template.md`, 평가매트릭스 양식은 `<root>/templates/evaluation-design-matrix-template.md`, 보고·윤리 방법론은 `<root>/reference/개발평가-관리보고윤리-다이제스트.md`다. 변화이론·평가매트릭스를 재구성할 때만 `<root>/reference/개발평가-설계방법론-다이제스트.md`, 조사방법·표본·분석·한계를 기술할 때만 `<root>/reference/개발평가-자료분석방법론-다이제스트.md`를 추가한다. 방법론 파일은 구조·추적·표현을 돕는 보조자료이며 현행 KOICA 기준·점수를 바꾸지 않는다.
    - **원자료가 PDF·HWP면** `report-composer`·`narrative-verifier`(Read·Grep·Glob만 사용)가 검색할 수 있게 텍스트 변환본을 쓴다. `deveval:evaluate` 때 만든 사용자 작업 폴더의 `.omo/sources/index.md`가 있으면 그 변환본을 재사용하고, 없으면 `deveval-extract <원문 경로…>`(명령이 없으면 `python3 <root>/scripts/source_extract.py <원문 경로…>`)로 만든다. exit 3(변환 불가)은 통과가 아니다 — 처리 규칙은 `deveval:evaluate`의 '원문 텍스트화'와 같다. 이하 '사업 원자료 절대경로'는 변환본 절대경로를 뜻하고, 원문 위치는 변환본의 `<!-- p.N -->` 표지로 인용한다.
@@ -28,6 +29,8 @@ description: 평가 결과로 KOICA 표준 종료평가보고서 초안을 장�
    - 초안은 그 사업 폴더 `.omo/<사업 약칭>/draft-report*.md`에 저장한다(평가자의 로컬 산출물 — 플러그인 디렉토리에 쓰지 마라).
 
 4. **수치 일관성 점검 (코드)** — 초안에 대해 실행:
+   - 먼저 `python3 <root>/scripts/score_calculate.py export --input <사업폴더>/verified-scores.json --before <사업폴더>/ratings.json --out <사업폴더>/score-tables.md`로 생성한 계산표·정본 연결 표지를 보고서에 그대로 포함한다. 현재 평정의 평균·합계·등급을 직접 계산하거나 생성 블록을 고치지 않는다.
+   - `python3 <root>/scripts/score_calculate.py check --input <사업폴더>/verified-scores.json --before <사업폴더>/ratings.json --brief <보고서>`로 JSON 정본과 보고서 계산표를 대조한다. 실패하면 완료가 아니다. 이어 아래 검사는 추가 서술의 수치 모순을 확인한다.
    ```
    deveval-consistency-check <초안 경로>
    ```

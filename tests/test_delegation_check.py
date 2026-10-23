@@ -22,7 +22,7 @@ class DelegationContract(unittest.TestCase):
         self.source = self.root / "source.md"; self.source.write_text("source")
         self.index = self.root / "index.md"; self.index.write_text("index")
         self.path, self.manifest = dc.prepare(self.brief, self.source, self.index, self.root)
-        self.prompt = f"Read {self.manifest['packet']} [DEVEVAL_PACKET_SHA256: {self.manifest['packet_sha256']}]"
+        self.prompt = f"Read {self.manifest['packet']} [DEVEVAL_PACKET_SHA256: {self.manifest['packet_sha256']}] [DEVEVAL_INPUT_SHA256: {self.manifest['input_sha256']}]"
 
     def trace(self, rows):
         path = self.root / "trace.jsonl"
@@ -42,12 +42,21 @@ class DelegationContract(unittest.TestCase):
             ])
         return rows
 
-    def test_prepare_excludes_peer_ratings_and_reuses_identical_snapshot(self):
+    def test_prepare_excludes_peer_ratings_and_preserves_existing_run(self):
         self.assertNotIn("PEER_SCORE_CANARY", Path(self.manifest['packet']).read_text())
-        self.assertEqual(dc.prepare(self.brief, self.source, self.index, self.root)[1], self.manifest)
+        with self.assertRaisesRegex(ValueError, "이미 생성됨"):
+            dc.prepare(self.brief, self.source, self.index, self.root)
+        self.path.unlink()
         self.brief.write_text(self.brief.read_text().replace("F1: fact", "F1: changed"))
         with self.assertRaisesRegex(ValueError, "새 실행 폴더"):
             dc.prepare(self.brief, self.source, self.index, self.root)
+
+    def test_new_run_cannot_reuse_old_native_calls(self):
+        trace=self.trace(self.codex())
+        self.path.unlink()
+        new_path,new_manifest=dc.prepare(self.brief,self.source,self.index,self.root)
+        self.assertNotEqual(new_manifest['run_id'],self.manifest['run_id'])
+        self.assertEqual(dc.verify(new_path,trace)['status'],'failed')
 
     def test_five_successful_empty_history_calls_pass(self):
         result = dc.verify(self.path, self.trace(self.codex()))
@@ -76,6 +85,24 @@ class DelegationContract(unittest.TestCase):
         self.prompt += ' also read criterion-drafts.md'
         result = dc.verify(self.path, self.trace(self.codex()))
         self.assertEqual(result['status'], 'failed')
+
+    def test_rehashing_changed_source_does_not_rewrite_native_call_evidence(self):
+        trace=self.trace(self.codex())
+        self.source.write_text('changed')
+        self.manifest['source_sha256']=dc.digest(self.source)
+        self.manifest['input_sha256']=dc.input_digest(self.manifest)
+        self.path.write_text(json.dumps(self.manifest))
+        self.assertEqual(dc.verify(self.path,trace)['status'],'failed')
+
+    def test_another_project_in_same_parent_trace_does_not_invalidate_receipt(self):
+        rows=self.codex(); extra=copy.deepcopy(rows[-2:])
+        a=json.loads(extra[0]['payload']['arguments'])
+        a['message']='Other /work/other/source-pack.md [DEVEVAL_INPUT_SHA256: '+'a'*64+']'
+        extra[0]['payload']['arguments']=json.dumps(a)
+        extra[0]['payload']['call_id']='other';extra[1]['payload']['call_id']='other'
+        result=dc.verify(self.path,self.trace(rows+extra))
+        self.assertEqual(result['status'],'passed',result)
+        self.assertEqual(len(result['criterion_calls']),5)
 
     def test_receipt_is_rechecked_against_native_evidence(self):
         trace = self.trace(self.codex())
