@@ -205,6 +205,11 @@ When the user provides an evaluation target and requests an evaluation:
 
 ## Default output contract — never hide a material conflict
 
+An authored brief passes only after all five criterion scores, the composite,
+and its grade have been parsed and checked. Missing/unrecognized fields and
+duplicate criterion rows fail. The word provisional does not bypass arithmetic;
+legitimately unscorable results explicitly retain `산정 보류`.
+
 Distinguish a successful check from its limits. The audit checker must return 0;
 numeric exit 3 is not a pass. When evidence gaps legitimately require a withheld
 composite with no checkable numbers, record that limitation and hand off to a
