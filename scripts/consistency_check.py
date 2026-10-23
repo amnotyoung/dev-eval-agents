@@ -277,6 +277,12 @@ def find_grades_af(text):
     pat_en = re.compile(r"[Gg]rade\s*[::]?\s*\**\s*([A-F])(?![A-Za-z+인~∼])")
     # 브리프 표기 `종합점수·등급(안): 13/20, D(안)` — 등급이 점수 뒤에 `X(안)`으로 온다
     pat_draft = re.compile(r"(?<![A-Za-z])([A-F])\s*\(안\)")
+    # The shipped composer emits `11.67/20, E` without a second `(안)`.
+    # Read the letter immediately after the score, not an arbitrary later A–F.
+    pat_composite_grade = re.compile(
+        r"(?<![\d.])\d+(?:\.\d+)?\s*(?:점)?\s*/\s*20(?:점)?"
+        r"\s*[,;·:—–-]\s*\**\s*([A-F])(?![A-Za-z+인~∼])"
+    )
     for lineno, line in numbered(text):
         if is_excluded(line) or "품질" in line or "용역" in line:
             continue
@@ -286,6 +292,7 @@ def find_grades_af(text):
                 found.add(m.group(1))
         if "등급" in line or re.search(r"grade", line, re.IGNORECASE):
             found.update(m.group(1) for m in pat_draft.finditer(line))
+            found.update(m.group(1) for m in pat_composite_grade.finditer(line))
         out.extend((g, lineno) for g in sorted(found))
     return out
 
