@@ -259,6 +259,11 @@ installation, real-report execution, and the grade-parser defect found by
 mutating actual output. The 334-report sweep tests the numeric checker, not
 AI evaluation accuracy. Independent human expert cross-scoring remains pending.
 
+The [0.14 verification record](docs/release-0.14-validation.md) adds 218
+regressions, 15 hook cases, a native history-isolation probe, a fresh real-report
+workflow, final-code replay, and 11 rejected mutations of the actual artifacts.
+It distinguishes inspectable native call metadata from encrypted prompt bodies.
+
 ## 🔌 Platform independence
 
 The mandatory dependency is *a capable LLM agent-harness* — a category, not a

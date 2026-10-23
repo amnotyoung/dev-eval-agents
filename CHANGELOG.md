@@ -42,6 +42,14 @@ each slice below is recorded as a 0.x milestone.
   (Codex non-ephemeral mode). This is an evidence check, not a filesystem sandbox
   or a guarantee of expert scoring accuracy.
 
+### Validation
+- 218 Python regressions and 15 hook cases passed. A fresh installed candidate
+  completed a 64-page real-report workflow; final installed code replayed the
+  unchanged question judgments and rejected 11 mutations of its artifacts.
+  Five isolated workers and a history-inheriting positive control verified
+  parent-history behavior. See `docs/release-0.14-validation.md` for commits,
+  native-log visibility limits, and the candidate/final-replay distinction.
+
 ## [0.13.1] — 2026-10-23
 
 ### Fixed
