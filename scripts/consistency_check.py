@@ -13,7 +13,8 @@
       (국문↔영문 요약 불일치 — 캄보디아 종료평가의 11.7 vs 12.7 — 를 잡는 핵심 형식)
    ② a+b+c+d 산술 — `평균 점수(a)~(d)`의 합이 종합점수와 같은가 (실제 보고서 최빈 사고)
    ③ 등급 전건 일치 — A~F 문자 또는 라벨(매우 성공적/성공적/부분 성공적/미흡)
-   ④ 등급 ↔ 점수 정합 — /20은 A~F 등급표, 4기준(/16)은 평균(종합÷기준수) 4단계 밴드
+   ④ 등급 ↔ 점수 정합 — /20은 KOICA 2024 A~F 등급표(문자·라벨), /16은 국무조정실
+      2015 지침 라벨 구간(14·11·8점). /24 등 공식 구간이 확인되지 않은 체계는 판정하지 않는다
   [품질검토]
    ⑤ 총점(`NN/100`) 전건 일치·세부항목 합산==총점·등급(A~D)↔총점↔Pass/Non-Pass
 
@@ -27,15 +28,18 @@
   - `8/20개소`(개수)·`7/20(월)`(일정) 같은 N/M 표기는 점수가 아니다 — 단위·요일이
     붙으면 제외한다.
 '잠정·범위·보류' 표기가 있는 줄은 정당한 복수 값이므로 일치 검사에서 제외한다.
+검증 전·정정 전 값이나 `14→13`, `C→D` 같은 변경 이력 줄도 현재 값 주장이 아니므로
+제외한다 — 감사 가능한 브리프는 검증 전후 점수를 함께 남기는 것이 계약이다.
+제외는 **줄 단위**다. 문서 어딘가에 '잠정'이 있다고 등급↔점수 검사 전체를 끄지 않는다.
 다건 묶음(평가용역) 보고서는 사업별로 다른 종합점수·등급이 정상이다 — 이 검사는
 단일 사업 문서 기준이므로, 묶음이면 사업 단위로 잘라서 검사하라.
-**확인 불가와 통과를 구분**한다 — 검사할 수치를 하나도 못 찾으면 '통과'가 아니라
-'확인 불가'로 알린다(거짓 초록불 방지). fail-open: 크래시 시 종료 0.
+**확인 불가와 통과를 구분**한다 — 검사할 수치를 하나도 못 찾거나, 파일을 읽지
+못하거나, 검사기 자체가 실패하면 '통과'가 아니라 '확인 불가'로 알린다(거짓 초록불 방지).
 
 사용법:
     python3 scripts/consistency_check.py <report.md> [--mode auto|project|quality]
 종료 코드: 0 = 통과 / 2 = 위반(한국어 번호 목록, stderr) / 3 = 확인 불가(검사할 수치
-없음 — 통과 아님). 읽기 실패·내부 오류는 fail-open으로 0.
+없음·읽기 실패·사용법 오류·내부 오류 — 통과 아님).
 표준 라이브러리만 사용.
 """
 
@@ -50,21 +54,30 @@ PROVISIONAL = ("잠정", "범위", "보류", "가정", "~")
 # KOICA 2024 종합 등급표(/20, 5기준) — 반개구간 [하한, 상한)
 GRADE_20 = [(Decimal(18), "A"), (Decimal(16), "B"), (Decimal(14), "C"),
             (Decimal(12), "D"), (Decimal(10), "E"), (None, "F")]
+# KOICA 2024 등급표의 문자↔국무조정실 라벨 대응 (다이제스트 §2 표)
+LETTER_LABEL_20 = {"A": "매우 성공적", "B": "성공적", "C": "성공적",
+                   "D": "부분 성공적", "E": "부분 성공적", "F": "미흡"}
 # 품질검토 v2(/100)
 GRADE_Q = [(Decimal(90), "A"), (Decimal(80), "B"), (Decimal(60), "C"), (None, "D")]
-# 4점척도 라벨 밴드 — 평균(종합÷기준수) 기준 (KOICA/국조실 4단계)
-LABEL_BANDS = [(Decimal("3.5"), "매우 성공적"), (Decimal("2.5"), "성공적"),
-               (Decimal("1.5"), "부분 성공적"), (None, "미흡")]
+# 국무조정실 ODA 사업평가등급제 시행지침(2015.6) — /16 종합점수의 라벨 구간.
+# 실제 보고서 범례: "14점 이상이면 매우 성공적, 11점 이상 14점 미만이면 성공적,
+# 8점 이상 11점 미만이면 부분 성공적, 8점 미만이면 미흡"
+LABEL_16 = [(Decimal(14), "매우 성공적"), (Decimal(11), "성공적"),
+            (Decimal(8), "부분 성공적"), (None, "미흡")]
 # 라벨 매칭(긴 것 먼저 — '성공적'이 '매우 성공적'·'부분 성공적'의 부분문자열)
 LABEL_ALT = r"매우\s*성공적|부분\s*성공적|성공적|미흡"
 # 사업 종합점수 검사 상한 — /24로 작성된 기존·외부 보고서도 불일치 검사용으로 읽는다
 COMPOSITE_MAX = Decimal(24)
+# 등급↔점수 판정에 쓸 종합점수가 놓인 줄의 점수 문맥
+SCORE_CONTEXT = re.compile(r"점수|종합|총점|평점|\d\s*점|만점|등급|score|points?|grade", re.IGNORECASE)
 # 만족도·설문 종합점수(5점 척도 등)는 DAC 종합점수가 아니다
 SURVEY_WORDS = ("만족도", "설문", "응답률", "응답자", "리커트")
 
 
 def norm_label(s):
-    return re.sub(r"\s+", " ", s).strip()
+    """'부분성공적'·'부분  성공적'을 같은 라벨 '부분 성공적'으로 맞춘다."""
+    compact = re.sub(r"\s+", "", s)
+    return {"매우성공적": "매우 성공적", "부분성공적": "부분 성공적"}.get(compact, compact)
 
 
 def distinct_labels(line):
@@ -102,19 +115,31 @@ def bandq(total):
     return "D"
 
 
-def band_label(mean):
-    for lo, label in LABEL_BANDS:
-        if lo is None or mean >= lo:
+def band_label16(total):
+    for lo, label in LABEL_16:
+        if lo is None or total >= lo:
             return label
     return "미흡"
 
 
-def dec2(x):
-    return Decimal(x).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-
 def is_provisional(line):
     return any(k in line for k in PROVISIONAL)
+
+
+HISTORY_WORDS = ("검증 전", "정정 전", "재산정 전", "수정 전")
+# 점수 이력 `14→13`, `14/20 -> 13/20` / 등급 이력 `C→D`, `C(안) → D(안)`
+HISTORY_ARROW = re.compile(
+    r"\d(?:\.\d+)?\s*(?:/\s*\d{1,3})?\s*점?\s*(?:→|->)\s*\d"
+    r"|(?<![A-Za-z])[A-F]\s*(?:\(안\))?\s*(?:→|->)\s*[A-F](?![A-Za-z])")
+
+
+def is_history(line):
+    """검증 전·정정 전 값이나 변경 이력 줄 — 현재 값 주장이 아니다."""
+    return any(w in line for w in HISTORY_WORDS) or bool(HISTORY_ARROW.search(line))
+
+
+def is_excluded(line):
+    return is_provisional(line) or is_mismatch_quote(line) or is_history(line)
 
 
 def numbered(text):
@@ -126,7 +151,8 @@ def detect_mode(text):
         r"품질\s*검토|품질\s*등급", r"세부항목", r"총점\s*[::]?\s*\**\s*\d{1,3}\s*/\s*100", r"Non-?Pass"))
     if q >= 2:
         return "quality"
-    if re.search(r"\d\s*/\s*(16|20|24)(?!\d)|종합\s*점수|등급|" + LABEL_ALT, text):
+    if re.search(r"\d\s*/\s*(16|20|24)(?!\d)|종합\s*점수|등급|점\s*만점\s*(?:중|에)"
+                 r"|out\s+of\s+(?:16|20|24)(?!\d)|" + LABEL_ALT, text, re.IGNORECASE):
         return "project"
     return "none"
 
@@ -143,11 +169,11 @@ def find_totals(text, denoms, require_words=None):
     """
     out = {}
     pat = re.compile(
-        r"(?<![\d./])(\d{1,3}(?:\.\d{1,2})?)\s*(?:점)?\s*/\s*(" + "|".join(denoms) + r")"
+        r"(?<![\d./])(\d{1,3}(?:\.\d{1,3})?)\s*(?:점)?\s*/\s*(" + "|".join(denoms) + r")"
         r"(?!\d)(?![,.]\d)(?!\s*[-–~])"
         r"(?!\s*(?:[개명건회차호인주]|문항|개소|가구|과목|\(?[월화수목금토일]\)))")
     for lineno, line in numbered(text):
-        if is_provisional(line) or is_mismatch_quote(line):
+        if is_excluded(line):
             continue
         if require_words and not any(w in line for w in require_words):
             continue
@@ -169,13 +195,19 @@ def find_totals_alt(text, denoms):
     국문↔영문 요약이 다른 값을 적는 사고(캄보디아 11.7 vs 12.7)는 이 형식에서만 잡힌다.
     """
     out = {}
-    pat_ko = re.compile(r"(?<![\d.])(\d{1,3})\s*점\s*만점\s*중\s*(\d{1,3}(?:\.\d{1,2})?)")
-    pat_en = re.compile(r"(?<![\d.])(\d{1,3}(?:\.\d{1,2})?)\s*(?:점|points?)?\s*out\s+of\s+(\d{1,3})(?!\d)",
+    value = r"(\d{1,3}(?:\.\d{1,3})?)(?!\d)(?!\.\d)(?!\s*[-–~∼]\s*\d)"
+    pat_ko = re.compile(r"(?<![\d.])(\d{1,3})\s*점\s*만점\s*중\s*(?:총\s*)?" + value)
+    # '20점 만점에 15점'은 심리검사·시험 점수에도 흔한 표기라 종합 평정 문맥이 있는 줄만 읽는다
+    pat_ko_e = re.compile(r"(?<![\d.])(\d{1,3})\s*점\s*만점\s*에\s*(?:총\s*)?" + value)
+    pat_en = re.compile(r"(?<![\d.])(\d{1,3}(?:\.\d{1,3})?)\s*(?:점|points?)?\s*out\s+of\s+(\d{1,3})(?!\d)",
                         re.IGNORECASE)
     for lineno, line in numbered(text):
-        if is_provisional(line) or is_mismatch_quote(line):
+        if is_excluded(line):
             continue
-        for m in pat_ko.finditer(line):
+        ko_hits = list(pat_ko.finditer(line))
+        if re.search(r"종합|총점|평가\s*(?:결과|점수)", line) and not any(w in line for w in SURVEY_WORDS):
+            ko_hits += list(pat_ko_e.finditer(line))
+        for m in ko_hits:
             if m.group(1) in denoms:
                 try:
                     out.setdefault(m.group(1), []).append((Decimal(m.group(2)), lineno))
@@ -201,11 +233,11 @@ def find_composite_labeled(text):
     절차어가 없다).
     """
     out = []
-    pat = re.compile(r"종합\s*(?:평가\s*)?점수([^\d\n]{0,40})(\d{1,3}(?:\.\d{1,2})?)"
+    pat = re.compile(r"종합\s*(?:평가\s*)?점수([^\d\n]{0,40})(\d{1,3}(?:\.\d{1,3})?)(?!\d)(?!\.\d)"
                      r"(?!\s*점?\s*(?:이상|미만|만점))")
     gap_stopwords = ("산정", "확정", "기준", "등급", "보류", "제외", "미포함")
     for lineno, line in numbered(text):
-        if is_provisional(line) or is_threshold_def(line) or is_mismatch_quote(line):
+        if is_excluded(line) or is_threshold_def(line):
             continue
         if any(w in line for w in SURVEY_WORDS):
             continue
@@ -224,7 +256,7 @@ def find_composite_labeled(text):
 def find_criterion_means(text):
     """평균 점수(a)~(f)의 값. [Decimal] — 문서에 표기된 4~6개 기준 점수 셀."""
     means = []
-    pat = re.compile(r"평균\s*점수\s*\(([a-fA-F])\)[^\d\n]{0,20}(\d(?:\.\d{1,2})?)")
+    pat = re.compile(r"평균\s*점수\s*\(([a-fA-F])\)[^\d\n]{0,20}(\d(?:\.\d{1,3})?)(?!\d)")
     for m in pat.finditer(text):
         try:
             means.append(Decimal(m.group(2)))
@@ -243,12 +275,18 @@ def find_grades_af(text):
     out = []
     pat_ko = re.compile(r"등급(?:\(안\))?\s*[::]?\s*\**\s*([A-F])(?![A-Za-z+인~∼])")
     pat_en = re.compile(r"[Gg]rade\s*[::]?\s*\**\s*([A-F])(?![A-Za-z+인~∼])")
+    # 브리프 표기 `종합점수·등급(안): 13/20, D(안)` — 등급이 점수 뒤에 `X(안)`으로 온다
+    pat_draft = re.compile(r"(?<![A-Za-z])([A-F])\s*\(안\)")
     for lineno, line in numbered(text):
-        if is_provisional(line) or is_mismatch_quote(line) or "품질" in line or "용역" in line:
+        if is_excluded(line) or "품질" in line or "용역" in line:
             continue
+        found = set()
         for pat in (pat_ko, pat_en):
             for m in pat.finditer(line):
-                out.append((m.group(1), lineno))
+                found.add(m.group(1))
+        if "등급" in line or re.search(r"grade", line, re.IGNORECASE):
+            found.update(m.group(1) for m in pat_draft.finditer(line))
+        out.extend((g, lineno) for g in sorted(found))
     return out
 
 
@@ -261,7 +299,7 @@ def find_grades_label(text):
     out = []
     pat = re.compile(r"(" + LABEL_ALT + r")")
     for lineno, line in numbered(text):
-        if is_provisional(line) or is_mismatch_quote(line) or "등급" not in line:
+        if is_excluded(line) or "등급" not in line:
             continue
         if distinct_labels(line) >= 3 or is_threshold_def(line):
             continue
@@ -291,8 +329,10 @@ def check_project(text, violations):
     checks = 0
     # ① 종합점수 전건 일치 (분모부 + 역순·영문 + 라벨 맨숫자)
     comp_vals = {}  # Decimal -> [lineno]
+    comp_denoms = set()  # 종합점수에 명시된 분모(체계) — 16·20·24
     for finder in (find_totals, find_totals_alt):
-        for _denom, entries in finder(text, ["16", "20", "24"]).items():
+        for denom, entries in finder(text, ["16", "20", "24"]).items():
+            comp_denoms.add(denom)
             for val, lineno in entries:
                 comp_vals.setdefault(val, []).append(lineno)
     for val, lineno in find_composite_labeled(text):
@@ -303,13 +343,20 @@ def check_project(text, violations):
             desc = " vs ".join(f"{v} (line {ls[0]})" for v, ls in sorted(comp_vals.items()))
             violations.append(f"종합점수 표기 불일치 — {desc}. 같은 종합점수는 문서 전체에서 일치해야 합니다")
     composite = next(iter(comp_vals)) if len(comp_vals) == 1 else None
+    lines = text.splitlines()
+    # ④ 판정은 점수 문맥이 있는 줄에서 읽은 종합점수에만 한다 — 일정표 `10/16`(10월 16일) 같은
+    # 날짜를 종합점수로 오인해 등급과 대조하지 않도록.
+    composite_in_context = composite is not None and any(
+        SCORE_CONTEXT.search(lines[n - 1]) for n in comp_vals[composite])
 
     # ② a+b+c+d = 종합점수 — 기준 수는 4~6개(구형·현행 또는 외부 보고서 자체 체계).
     # 그 밖의 개수는 표 추출이 불완전하거나 다른 표를 잡은 것이므로 합산하지 않는다.
     means = find_criterion_means(text)
     if 4 <= len(means) <= 6 and composite is not None:
         checks += 1
-        s = dec2(sum(means))
+        # 종합점수가 적힌 자릿수로 반올림해 비교한다 — 3.33+…=11.67을 11.7로 적는 건 정상
+        exp = min(composite.as_tuple().exponent, 0)
+        s = sum(means).quantize(Decimal(1).scaleb(exp), rounding=ROUND_HALF_UP)
         if s != composite:
             cells = " + ".join(str(m) for m in means)
             violations.append(f"기준 평균 합 불일치 — {cells} = {s} 인데 종합점수는 {composite} (a+b+c+d 산술 오류)")
@@ -326,22 +373,39 @@ def check_project(text, violations):
         if len(label_set) > 1:
             violations.append(f"등급 표기 불일치 — {' vs '.join(sorted(label_set))} (라벨)")
 
-    # ④ 등급 ↔ 점수 재계산 (확정 단일값 + 잠정 없음일 때만)
-    if composite is not None and not any(k in text for k in ("잠정", "보류")):
-        if find_totals(text, ["20"]).get("20") and len(af_set) == 1:
-            expected, stated = band20(composite), next(iter(af_set))
-            if stated != expected:
-                violations.append(
-                    f"등급-점수 괴리 — 종합점수 {composite}/20의 등급표 판정은 {expected}인데 본문 등급은 {stated}")
-        if len(label_set) == 1 and 4 <= len(means) <= 6:
-            n_crit = len(means)
-            mean = dec2(composite / Decimal(n_crit))
-            expected, stated = band_label(mean), next(iter(label_set))
-            if norm_label(stated) != expected:
-                violations.append(
-                    f"등급-점수 괴리 — 종합 {composite}(평균 {mean}, {n_crit}기준)의 밴드 판정은 "
-                    f"'{expected}'인데 본문 등급은 '{stated}' "
-                    f"[밴드: 평균 3.5↑ 매우 성공적 / 2.5↑ 성공적 / 1.5↑ 부분 성공적 / 그 미만 미흡]")
+    # ④ 등급 ↔ 점수 재계산 (확정 단일값일 때만). 잠정·보류·이력 줄은 추출 단계에서
+    # 이미 빠졌다 — 문서 어딘가의 '잠정 점수' 문구 때문에 이 검사 전체를 끄지 않는다.
+    # 체계는 종합점수에 적힌 분모로 정한다. 분모가 없으면 평균 점수(a)~(d) 4개 = 국조실 4기준 /16.
+    #   /20 → KOICA 2024 A~F 등급표(문자·라벨 모두)
+    #   /16 → 국무조정실 2015 지침 라벨(14·11·8점). 2021~23년 5기준 /16 보고서도 같은 라벨 기준을
+    #         쓰지만 KOICA 문자 등급의 구간은 다르다(예: 14.1 매우 성공적·B) — 문자는 판정하지 않는다.
+    #   /24·기타 → 공식 라벨 구간이 확인되지 않아 판정하지 않는다(일치 검사 ①③은 그대로 한다).
+    scheme20 = composite_in_context and comp_denoms == {"20"}
+    scheme16 = composite_in_context and (comp_denoms == {"16"} or (not comp_denoms and len(means) == 4))
+    af_one = next(iter(af_set)) if len(af_set) == 1 else None
+    label_one = norm_label(next(iter(label_set))) if len(label_set) == 1 else None
+    if scheme20 and af_one and label_one and LETTER_LABEL_20[af_one] != label_one:
+        violations.append(
+            f"등급 문자-라벨 불일치 — {af_one}은(는) 2024 등급표에서 '{LETTER_LABEL_20[af_one]}'인데 "
+            f"본문 라벨은 '{label_one}' [A 매우 성공적 / B·C 성공적 / D·E 부분 성공적 / F 미흡]")
+    if scheme20:
+        expected = band20(composite)
+        if af_one and af_one != expected:
+            violations.append(
+                f"등급-점수 괴리 — 종합점수 {composite}/20의 등급표 판정은 {expected}인데 본문 등급은 {af_one}")
+        # 문자-라벨 불일치를 이미 보고했으면 같은 원인의 라벨-점수 괴리는 되풀이하지 않는다
+        label_reported = af_one and LETTER_LABEL_20[af_one] != label_one
+        if label_one and label_one != LETTER_LABEL_20[expected] and not label_reported:
+            violations.append(
+                f"등급-점수 괴리 — 종합점수 {composite}/20의 등급표 판정은 {expected}"
+                f"('{LETTER_LABEL_20[expected]}')인데 본문 라벨은 '{label_one}'")
+    elif scheme16 and label_one:
+        expected = band_label16(composite)
+        if label_one != expected:
+            violations.append(
+                f"등급-점수 괴리 — 종합점수 {composite}/16의 라벨 판정은 '{expected}'인데 본문 등급은 "
+                f"'{label_one}' [국무조정실 2015: 14점↑ 매우 성공적 / 11점↑ 성공적 / 8점↑ 부분 성공적 / "
+                f"8점 미만 미흡]")
     return checks
 
 
@@ -387,13 +451,24 @@ SUPPORTED = ("지원 형식: 종합점수 NN/16·20·24, 'NN점 만점 중 X', '
              "매우 성공적/성공적/부분 성공적/미흡, 품질 총점 NN/100")
 
 
+def read_text(path):
+    """UTF-8(BOM 허용)을 먼저, 한글 윈도 산출물(CP949)을 다음으로 읽는다."""
+    with open(path, "rb") as fh:
+        raw = fh.read()
+    for enc in ("utf-8-sig", "cp949"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    raise UnicodeDecodeError("utf-8/cp949", raw[:1], 0, 1, "UTF-8·CP949로 읽을 수 없음")
+
+
 def run(path, mode):
     try:
-        with open(path, encoding="utf-8") as fh:
-            text = fh.read()
-    except OSError as exc:
-        print(f"[consistency_check] 읽기 실패 — 검사 생략(fail-open): {exc}", file=sys.stderr)
-        return 0
+        text = read_text(path)
+    except (OSError, UnicodeDecodeError) as exc:
+        print(f"[consistency_check] 읽기 실패 — 확인 불가(통과 아님, exit 3): {exc}", file=sys.stderr)
+        return 3
     if mode == "auto":
         mode = detect_mode(text)
     if mode == "none":
@@ -416,16 +491,25 @@ def run(path, mode):
     return 0
 
 
+class _ArgParser(argparse.ArgumentParser):
+    """사용법 오류를 argparse 기본값(exit 2 = 위반과 같은 코드) 대신 확인 불가(3)로 낸다."""
+
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        print(f"[consistency_check] 사용법 오류 — 확인 불가(통과 아님, exit 3): {message}", file=sys.stderr)
+        sys.exit(3)
+
+
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="평가보고서 수치 일관성 검사 (형식 무관·독립)")
+    ap = _ArgParser(description="평가보고서 수치 일관성 검사 (형식 무관·독립)")
     ap.add_argument("report", help="검사할 보고서 마크다운 경로")
     ap.add_argument("--mode", choices=("auto", "project", "quality"), default="auto")
     args = ap.parse_args(argv)
     try:
         return run(args.report, args.mode)
-    except Exception as exc:  # noqa: BLE001 — fail-open
-        print(f"[consistency_check] 내부 오류 — 검사 생략(fail-open): {exc}", file=sys.stderr)
-        return 0
+    except Exception as exc:  # noqa: BLE001 — 검사기 결함은 통과가 아니다
+        print(f"[consistency_check] 내부 오류 — 확인 불가(통과 아님, exit 3): {exc}", file=sys.stderr)
+        return 3
 
 
 if __name__ == "__main__":

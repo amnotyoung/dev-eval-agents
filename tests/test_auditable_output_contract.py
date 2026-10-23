@@ -300,6 +300,90 @@ class CheckerBehavior(unittest.TestCase):
         self.assertIn("원문 사실대장", result.stderr)
         self.assertIn("자리표시자", result.stderr)
 
+    def test_mechanically_filled_template_fails(self):
+        """`[ ]`·`[사업명]`만 치환하고 사실대장 1행·'중대 상충 없음'만 채운 템플릿은 통과가 아니다."""
+        import re
+
+        text = read("templates", "auditable-evaluation-brief-template.md")
+        text = text.replace("[사업명]", "예시사업").replace("[ ]", "[내용]").replace("[없음/Xn]", "없음")
+        text = re.sub(
+            r"(?m)^\| F1 \| \[동일한.*$",
+            "| F1 | 수요 부합 상태 | 부합 | 해당 없음 | 사업대상지역 | 설계기간 | 질적 판단 | "
+            "2023-12-01 | 종료보고서 v1 | p.10 | 단일 출처 — 전체검색 완료 |",
+            text,
+        )
+        text = re.sub(r"(?m)^\| X1 \| \[사실: F1\].*$", "", text)
+        text = text.replace(
+            "| ID | 사실 ID | 쟁점 | 값·진술 A(원문 위치) | 값·진술 B(원문 위치) | 대조 결과·가능한 설명 | 해결 상태 | 점수·결론 영향 | 후속 확인 |\n"
+            "|---|---|---|---|---|---|---|---|---|\n",
+            "중대 상충 없음 — 핵심 지표·횟수·기간·예산·완료 상태의 반복 표기를 점검함.\n",
+        )
+        result = run_text(text)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("템플릿 자리표시자가 남아 있음", result.stderr)
+
+    def test_plugin_markers_are_not_placeholders(self):
+        """`[사실: F1]`·`[근거: …]`·`[INFO: 확인 필요]`·`[사람 판단 필요]`는 정상 값이다."""
+        text = read("tests", "fixtures", "auditable-brief-clean.md").replace(
+            "| 운영재원 | 단서부 | 예산서 없음 | 지속가능성 | 예산서 |",
+            "| 운영재원 | 단서부 | [INFO: 확인 필요] | 지속가능성 | [사람 판단 필요] |",
+            1,
+        )
+        result = run_text(text)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_scores_removed_from_summary_fail(self):
+        import re
+
+        text = re.sub(
+            r"(?m)^(\| (?:적절성|일관성|효과성|효율성|지속가능성) \|) \d \| \d \|",
+            r"\1  |  |",
+            read("tests", "fixtures", "auditable-brief-clean.md"),
+        )
+        result = run_text(text)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("검증 후 점수 형식 오류", result.stderr)
+
+    def test_unavailable_criterion_cannot_keep_a_score(self):
+        """근거 없으면 등급 없음 — '기준 전체 평가 불가'인 기준에 점수가 남으면 안 된다."""
+        text = read("tests", "fixtures", "auditable-brief-clean.md").replace(
+            "### 지속가능성\n", "### 지속가능성\n기준 전체 평가 불가 — 운영예산 자료 미제공\n", 1
+        )
+        result = run_text(text)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("지속가능성은(는) 상세 평정에서 '기준 전체 평가 불가'인데", result.stderr)
+        self.assertIn("단정함", result.stderr)
+
+    def test_honest_unavailable_brief_passes(self):
+        """평가 불가 기준을 점수 없이 두고 종합을 보류·범위로 적은 브리프는 통과한다."""
+        base = read("tests", "fixtures", "auditable-brief-clean.md").replace(
+            "| 지속가능성 | 2 | 2 | 단서 필요 |", "| 지속가능성 | 2 | 평가 불가 | 근거 없음 |", 1
+        ).replace("### 지속가능성\n", "### 지속가능성\n기준 전체 평가 불가 — 운영예산 자료 미제공\n", 1)
+        for composite in ("산정 보류 — 4개 기준 평가 가능 / 1개 근거 부족", "단서부 잠정 범위 12~14/20, D(안)"):
+            result = run_text(base.replace("13/20, D(안)", composite))
+            self.assertEqual(result.returncode, 0, composite + result.stdout + result.stderr)
+        result = run_text(base)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("단정함", result.stderr)
+
+    def test_criterion_scores_must_sum_to_composite(self):
+        text = read("tests", "fixtures", "auditable-brief-clean.md").replace("13/20, D(안)", "14/20, C(안)")
+        result = run_text(text)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("점수 합 13", result.stderr)
+
+    def test_cp949_brief_is_read(self):
+        # CP949에는 줄표(—)가 없다 — 한글 윈도 문서처럼 하이픈으로 쓴다.
+        text = read("tests", "fixtures", "auditable-brief-clean.md").replace("—", "-")
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "brief.md")
+            with open(path, "wb") as stream:
+                stream.write(text.encode("cp949", errors="strict"))
+            result = subprocess.run(
+                [sys.executable, CHECKER, path], check=False, text=True, capture_output=True
+            )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_detail_fact_reference_missing_from_ledger_fails(self):
         text = read("tests", "fixtures", "auditable-brief-clean.md").replace(
             "[사실: F5] | [근거: 보고서 p.40]",

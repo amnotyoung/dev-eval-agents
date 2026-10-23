@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 # DevEval 기본 평가 브리프의 감사추적 산출물 계약 검사 래퍼.
 #   deveval-audit-output-check <evaluation-brief.md>
-exec python3 "$(dirname "$0")/../scripts/auditable_output_check.py" "$@"
+# 심볼릭 링크로 PATH에 올려도 플러그인 루트를 잃지 않도록 실제 위치를 따라간다.
+src="${BASH_SOURCE[0]}"
+while [ -L "$src" ]; do
+  dir="$(cd -P "$(dirname "$src")" && pwd)"
+  src="$(readlink "$src")"
+  case "$src" in /*) ;; *) src="$dir/$src" ;; esac
+done
+here="$(cd -P "$(dirname "$src")" && pwd)"
+exec python3 "$here/../scripts/auditable_output_check.py" "$@"
