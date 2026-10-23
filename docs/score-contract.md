@@ -38,6 +38,9 @@ optional `aggregation`, `weight_basis`, `summary`, and `conflict_ids`. Inputs
 with `verification: not_reviewed` may retain their own local candidate IDs
 (REL-Xn/COH-Xn/EFF-Xn/EFI-Xn/SUS-Xn). Verified inputs allow only global `X1`, …
 IDs, and the final audit requires every listed ID to exist in the register.
+Omitting `conflict_ids` means unreported, not "no conflicts": the generated
+table marks it for confirmation and the computation is conditional. Use `[]`
+only when the verifier actually confirms that no conflict applies.
 `aggregation` is `mean` or `weighted_mean`. Weighted means require a cited
 `weight_basis` and a positive `weight` on every question, with sum exactly 1.
 

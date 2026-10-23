@@ -753,7 +753,7 @@ def main() -> int:
                 used_facts.update(f for s in result.get("scenarios", []) for change in s["changes"] for f in change["fact_ids"])
                 violations.extend(f"점수 정본의 {f}가 원문 사실대장에 없음" for f in sorted(used_facts - fact_ids))
                 registered = {cells[0].upper() for cells in conflict_table(section(text, "상충·불일치 등록부") or "")[1] if cells and CONFLICT_ID.fullmatch(cells[0])}
-                used_conflicts = {x for c in result['criteria'] for x in c['conflict_ids']}
+                used_conflicts = {x for c in result['criteria'] for x in (c['conflict_ids'] or [])}
                 violations.extend(f"점수 정본의 {x}가 상충 등록부에 없음" for x in sorted(used_conflicts - registered))
                 manifest_path = Path(args.brief).parent / "delegation-manifest.json"
                 if manifest_path.exists():

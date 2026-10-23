@@ -177,13 +177,14 @@ def calculate(data):
         results.append({"criterion": name, "label": label, "score": str(mean) if mean is not None else None,
                         "scored_questions": scored, "excluded_questions": [q['id'] for q in questions if q['status'] != 'scored'],
                         "numerator": str(numerator), "denominator": str(denominator), "questions": questions,
-                        "summary": c.get("summary", ""), "conflict_ids": c.get("conflict_ids", [])})
+                        "summary": c.get("summary", ""), "conflict_ids": c.get("conflict_ids")})
     total = sum(Decimal(c["score"]) for c in results) if all(c["score"] is not None for c in results) else None
-    verification = "conditional" if data["verification"] == "passed" and any(c["excluded_questions"] for c in results) else data["verification"]
+    incomplete = any(c["excluded_questions"] or c["conflict_ids"] is None for c in results)
+    verification = "conditional" if data["verification"] == "passed" and incomplete else data["verification"]
     result = {"schema_version": 1, "project": data["project"], "profile": profile, "source_sha256": data["source_sha256"],
             "input_sha256": input_hash(data), "verification": verification, "criteria": results,
             "total": str(total) if total is not None else None, "grade": band20(total) if total is not None else None,
-            "conditional": data["verification"] != "passed" or any(c["excluded_questions"] for c in results)}
+            "conditional": data["verification"] != "passed" or incomplete}
     scenarios = data.get("scenarios", [])
     require(isinstance(scenarios, list) and len(scenarios) <= 20, "민감도 시나리오는 최대 20개 목록")
     seen = set(); result["scenarios"] = []
@@ -223,7 +224,8 @@ def summary_block(after, before=None):
     for c in after["criteria"]:
         state = "근거 없음" if c["score"] is None else ("단서 필요" if after["conditional"] else "확인됨")
         coverage = f"{len(c['scored_questions'])}/{len(c['questions'])}개 질문 평가"
-        rows.append(f"| {c['label']} | {display(pre[c['criterion']]) if c['criterion'] in pre else '미제공'} | {display(c['score'])} | {state} | {', '.join(c['conflict_ids']) or '없음'} | {cell(c['summary'] or coverage)} |")
+        conflicts = "[INFO: 상충 ID 미기재 — 등록부 확인]" if c['conflict_ids'] is None else (', '.join(c['conflict_ids']) or '없음')
+        rows.append(f"| {c['label']} | {display(pre[c['criterion']]) if c['criterion'] in pre else '미제공'} | {display(c['score'])} | {state} | {conflicts} | {cell(c['summary'] or coverage)} |")
     composite = f"{display(after['total'])}/20, {after['grade']}" if after["total"] is not None else "산정 보류"
     rows += [f"- 검증 후 종합점수·등급(안): {composite}",
              f"- 검증 판정: {VERIFICATION[after['verification']]}",

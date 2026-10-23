@@ -54,6 +54,14 @@ class Arithmetic(unittest.TestCase):
                 for q in c['questions']:q['score']=score
             self.assertEqual(sc.calculate(d)['grade'],grade)
 
+    def test_omitted_conflict_metadata_is_not_rendered_as_no_conflicts(self):
+        d=example();d['verification']='passed'
+        r=sc.calculate(d)
+        self.assertEqual(r['verification'],'conditional')
+        self.assertIn('[INFO: 상충 ID 미기재',sc.summary_block(r))
+        for c in d['criteria']:c['conflict_ids']=[]
+        self.assertEqual(sc.calculate(d)['verification'],'passed')
+
     def test_invalid_question_scores_are_not_coerced(self):
         for score in (True,'3',0,4.5,3.25,float('nan'),float('inf')):
             with self.subTest(score=score):
