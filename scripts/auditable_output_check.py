@@ -18,8 +18,10 @@ import re
 import sys
 import unicodedata
 from collections import defaultdict
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 from pathlib import Path
+
+from consistency_check import band20
 
 
 REQUIRED_SECTIONS = (
@@ -94,6 +96,13 @@ SCORE_RANGE = re.compile(r"\d(?:\.\d{1,2})?[~∼–-]\d(?:\.\d{1,2})?")
 UNSCORED = re.compile(r"평가\s*불가|보류|근거\s*불충분|산정\s*불가")
 COMPOSITE_20 = re.compile(r"(?<![\d.])(\d{1,2}(?:\.\d{1,2})?)\s*/\s*20(?!\d)")
 COMPOSITE_QUALIFIED = re.compile(r"보류|잠정|범위|단서|[~∼]|\d\s*[–-]\s*\d")
+STRICT_COMPOSITE = re.compile(
+    r"(?:(?:단서부|잠정|범위)\s*)*"
+    r"(?P<lo>\d{1,2}(?:\.\d{1,2})?)(?:\s*[~∼–-]\s*(?P<hi>\d{1,2}(?:\.\d{1,2})?))?"
+    r"\s*/\s*20\s*,\s*(?P<grade>[A-F])(?:\(안\))?"
+    r"(?:\s*[~∼–-]\s*(?P<grade_hi>[A-F])(?:\(안\))?)?"
+    r"(?:\s*[—–-]\s*(?:매우 성공적|부분 성공적|성공적|미흡))?\s*"
+)
 CONFLICT_HEADERS = (
     "ID",
     "사실 ID",
@@ -444,7 +453,8 @@ def score_kind(cell: str) -> str:
     if SCORE_VALUE.fullmatch(compact):
         return "score" if 1 <= float(compact) <= 4 else "invalid"
     if SCORE_RANGE.fullmatch(compact):
-        return "range"
+        lo, hi = re.split(r"[~∼–-]", compact)
+        return "range" if 1 <= Decimal(lo) <= Decimal(hi) <= 4 else "invalid"
     if UNSCORED.search(cell):
         return "unscored"
     return "invalid"
@@ -458,12 +468,17 @@ def inspect_scores(overall: str, detail: str) -> list[str]:
         return ["종합 평정 표 누락 — '기준' 열과 '검증 후' 점수 열이 있는 기준별 표가 필요함"]
     kinds: dict[str, str] = {}
     for criterion in CRITERIA:
+        count = sum(bool(row and row[0].strip("* ") == criterion)
+                    for row in (markdown_cells(line) for line in overall.splitlines()))
+        if count > 1:
+            violations.append(f"종합 평정 표의 {criterion} 행이 중복됨")
+    for criterion in CRITERIA:
         if criterion not in cells:
             violations.append(f"종합 평정 표에 {criterion} 행이 없음")
             continue
         kind = score_kind(cells[criterion])
         kinds[criterion] = kind
-        if kind == "invalid":
+        if kind in ("invalid", "placeholder"):
             violations.append(
                 f"종합 평정 {criterion}의 검증 후 점수 형식 오류: '{cells[criterion]}' — "
                 "1~4점, 범위(예: 2~3) 또는 '평가 불가'로 적어야 함"
@@ -477,26 +492,41 @@ def inspect_scores(overall: str, detail: str) -> list[str]:
         if unavailable:
             kinds[criterion] = "unscored"
 
-    composite_line = next(
-        (line for line in overall.splitlines() if re.search(r"검증 후 종합\s*점수", line)), None
-    )
-    if composite_line is None:
+    composite_lines = [line for line in overall.splitlines() if re.search(r"검증 후 종합\s*점수", line)]
+    if not composite_lines:
         violations.append("종합 평정에 '검증 후 종합점수·등급(안)' 줄이 없음")
         return violations
+    if len(composite_lines) != 1:
+        violations.append("검증 후 종합점수·등급 줄은 정확히 하나여야 함")
+    composite_line = composite_lines[0]
     value = composite_line.split(":", 1)[1] if ":" in composite_line else composite_line
-    single = COMPOSITE_20.search(value)
-    qualified = bool(COMPOSITE_QUALIFIED.search(value))
+    value = value.replace("**", "").strip()
     unscored = [criterion for criterion, kind in kinds.items() if kind in ("unscored", "range")]
-    if unscored and single and not qualified:
+    if re.fullmatch(r"산정 보류(?:\s*[—–-]\s*[^\n]+)?", value) and not re.search(r"/\s*20|(?<![A-Za-z0-9])[A-F](?![A-Za-z0-9])", value):
+        return violations
+    parsed = STRICT_COMPOSITE.fullmatch(value)
+    if parsed is None:
+        violations.append("종합점수와 등급을 모두 해석할 수 없음 — '13/20, D' 또는 명시적 '산정 보류'가 필요함")
+        return violations
+    lo = Decimal(parsed['lo'])
+    hi = Decimal(parsed['hi']) if parsed['hi'] else lo
+    if not 5 <= lo <= hi <= 20:
+        violations.append("종합점수 범위 오류 — 5~20점 안의 오름차순 값이어야 함")
+    expected = (band20(lo), band20(hi))
+    stated_grades = (parsed['grade'], parsed['grade_hi'] or parsed['grade'])
+    if stated_grades != expected:
+        violations.append(f"종합 등급-점수 괴리 — {lo}~{hi}/20은 {expected[0]}~{expected[1]}인데 {stated_grades[0]}~{stated_grades[1]}로 표기됨")
+    if unscored and not parsed['hi']:
         violations.append(
-            f"평가 불가·범위 기준({', '.join(unscored)})이 있는데 종합점수를 {single.group(1)}/20으로 "
+            f"평가 불가·범위 기준({', '.join(unscored)})이 있는데 종합점수를 {lo}/20으로 "
             "단정함 — 단서부 범위 또는 산정 보류로 적어야 함"
         )
-    if single and not qualified and all(kinds.get(c) == "score" for c in CRITERIA):
+    if all(kinds.get(c) == "score" for c in CRITERIA):
         total = sum(Decimal(re.sub(r"[*\s점]", "", re.sub(r"\s*\([^()]*\)\s*$", "", cells[c]))) for c in CRITERIA)
-        stated = Decimal(single.group(1))
-        exponent = min(stated.as_tuple().exponent, 0)
-        if total.quantize(Decimal(1).scaleb(exponent), rounding=ROUND_HALF_UP) != stated:
+        stated = lo
+        if parsed['hi']:
+            violations.append("5개 기준이 모두 점수인데 종합점수가 범위임 — 점추정과 민감도를 별도 줄에 적어야 함")
+        if total != stated:
             violations.append(
                 f"종합 평정의 기준별 검증 후 점수 합 {total}이(가) 검증 후 종합점수 {stated}/20과 다름"
             )
@@ -688,6 +718,11 @@ def main() -> int:
         action="store_true",
         help="평정 전 작업본에서 원문 사실대장 계약만 조기 검사",
     )
+    parser.add_argument("--isolation", help="원시 로그와 재대조할 독립성 확인서 JSON")
+    parser.add_argument("--require-isolation", action="store_true", help="확인서 없이 병렬 평가를 통과시키지 않음")
+    parser.add_argument("--scores", help="질문별 점수 JSON 정본")
+    parser.add_argument("--before", help="검증 전 질문별 점수 JSON 정본")
+    parser.add_argument("--require-scores", action="store_true", help="계산 정본·코드 투영 없이 통과시키지 않음")
     args = parser.parse_args()
     try:
         raw = Path(args.brief).read_bytes()
@@ -708,6 +743,40 @@ def main() -> int:
         violations, _fact_ids, _conflicts = inspect_ledger(text)
     else:
         violations = inspect(text)
+        scores = Path(args.scores) if args.scores else Path(args.brief).parent / "verified-scores.json"
+        if args.require_scores or args.scores or scores.exists() or "<!-- deveval:score-input" in text:
+            try:
+                import score_calculate
+                result = score_calculate.verify_projection(args.brief, args.scores, args.before)
+                _ledger_errors, fact_ids, _conflicts = inspect_ledger(text)
+                used_facts = {f for c in result["criteria"] for q in c["questions"] for f in q["fact_ids"]}
+                used_facts.update(f for s in result.get("scenarios", []) for change in s["changes"] for f in change["fact_ids"])
+                violations.extend(f"점수 정본의 {f}가 원문 사실대장에 없음" for f in sorted(used_facts - fact_ids))
+                registered = {cells[0].upper() for cells in conflict_table(section(text, "상충·불일치 등록부") or "")[1] if cells and CONFLICT_ID.fullmatch(cells[0])}
+                used_conflicts = {x for c in result['criteria'] for x in (c['conflict_ids'] or [])}
+                violations.extend(f"점수 정본의 {x}가 상충 등록부에 없음" for x in sorted(used_conflicts - registered))
+                manifest_path = Path(args.brief).parent / "delegation-manifest.json"
+                if manifest_path.exists():
+                    import json
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    if result["source_sha256"] != manifest.get("source_sha256"):
+                        violations.append("점수 정본의 원문 해시가 위임 입력팩과 다름")
+            except OSError as exc:
+                print(f"점수 정본 확인 불가(exit 3): {exc}", file=sys.stderr)
+                return 3
+            except (ValueError, KeyError, TypeError) as exc:
+                violations.append(f"점수 정본·코드 투영: {exc}")
+        receipt = Path(args.isolation) if args.isolation else Path(args.brief).parent / "isolation.json"
+        if args.require_isolation or args.isolation or receipt.exists():
+            try:
+                import delegation_check
+                result = delegation_check.verify_receipt(receipt)
+                violations.extend("독립성: " + item for item in result["violations"])
+                if not result.get("prompt_bodies_verified") and "[INFO: 위임문 본문 미검증 — 암호화된 로그]" not in (section(text, "한계·사람 판단") or ""):
+                    violations.append("독립성 한계 누락 — 9절에 [INFO: 위임문 본문 미검증 — 암호화된 로그]를 남겨야 함")
+            except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+                print(f"독립성 확인 불가(exit 3): {exc}", file=sys.stderr)
+                return 3
     if violations:
         label = "원문 사실대장" if args.ledger_only else "감사 가능한 평가 브리프"
         print(f"{label} 계약 위반:", file=sys.stderr)

@@ -138,6 +138,8 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 
 ⚠️ **직접 실행 폴백**: 설치형 Codex 플러그인은 `skills/`에서 서브에이전트를 위임하지만, 이 2부 경로는 의존성이 적은 순차 폴백으로 유지한다. **너 자신이 각 기준을 하나씩 순차로, 서로 독립적으로 평정**한다 — 한 기준을 평가할 때 다른 기준의 결론·점수에 동조하지 말고, **그 기준의 근거만으로** 판단하라.
 
+설치형 병렬 경로는 기준 평가관마다 `fork_turns: "none"`과 고정 `source-pack.md`를 사용하고 `scripts/delegation_check.py`로 원시 위임 기록을 검사한다. 이 단일 컨텍스트 폴백은 그 구조적 독립성을 제공하지 못하므로 독립성 검증 통과를 주장하거나 `isolation.json`을 만들어내지 않는다.
+
 ## 절대 원칙 (NON-NEGOTIABLE)
 
 1. **근거 없으면 등급 없음.** 모든 평정은 출처(문서·섹션·수치)를 동반한다. 데이터 없으면 **"근거 불충분 → 평가 불가"**로 명시.
@@ -181,6 +183,8 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 
 ## 평가 워크플로 (Codex 단일 에이전트)
 
+**점수 정본과 코드 계산:** 각 기준의 질문별 `score/status/fact_ids/reason`을 `templates/score-input-template.json`과 `docs/score-contract.md`에 맞춰 `ratings.json`에 보존하고, 자기 검증 후 전체 정본을 `verified-scores.json`에 작성한다. 단일 컨텍스트의 검증 상태는 `conditional`로 두고 한계를 적는다. 평균·합계·등급을 직접 산출하지 않는다. `python3 scripts/score_calculate.py render --input <사업폴더>/verified-scores.json --before <사업폴더>/ratings.json --brief <브리프> --out <사업폴더>/score-result.json`으로 계산표를 생성하고 감사 검사에 `--require-scores`를 붙인다. 이 폴백은 독립성 확인서를 만들지 않는다.
+
 사용자가 평가 대상을 주며 평가를 요청하면:
 
 1. **자료 확인 + 원문 사실대장 작성 + 사업유형 판별** — 대상이 PDF·HWP·HWPX·DOCX면 먼저 `python3 scripts/source_extract.py <원문…>`로 사용자 작업 폴더의 `.omo/sources/`에 쪽 표지(`<!-- p.N -->`)가 있는 변환본을 만들고 그 변환본을 읽는다(kordoc 고정 버전 → PDF는 pdftotext 폴백). exit 3(변환 불가)은 통과가 아니다 — 텍스트 원문을 요청하고, 원문을 읽지 못한 채 평정하지 않는다. 변환본 머리 주석의 경고(그림 영역·OCR 저신뢰·텍스트 없는 쪽)는 한계에 옮기고 그 쪽의 핵심 수치는 `[INFO: 확인 필요]`로 둔다. 대상을 읽고 범위를 파악한다. 문서명·버전·작성일을 기록하고, 핵심 지표·횟수·사업기간·예산·수량·완료/하자 상태의 반복 표기를 원문 전체에서 검색한다. `templates/auditable-evaluation-brief-template.md`의 원문 사실대장에 한 표기당 한 행을 쓰고, 같은 판단대상·지표·목표/실적 역할에는 같은 `F1`, `F2`…를 반복한다. 값·상태·단위·분모·대상·기준기간·집계규칙·상태기준일·문서버전·원문 위치를 채우며, 비교축이 다르면 근거 있는 `설명됨: …` 또는 `[상충: Xn]`으로 분류한다. 파일 작업본이면 평정 전에 `python3 scripts/auditable_output_check.py --ledger-only <브리프>`를 통과시킨다.
@@ -202,6 +206,8 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 5. **사람 인계** — `templates/auditable-evaluation-brief-template.md` 구조로 **감사 가능한 평가 브리프**를 사용자 작업 폴더의 `.omo/<사업 약칭>/auditable-evaluation-brief.md`에 작성한다. 자료가 여러 사업의 합본이면 사업마다 폴더·브리프·F/X-ID를 따로 둔다. 평가 범위·방법, 원문 사실대장, 검증 전후 점수, `[사실: Fn]` 기준별 상세 근거·반대근거, F/X-ID가 연결된 상충·불일치 등록부, 평가 불가·미확인, 검증 정정·재산정, 결론 연계 제언, 한계·사람 판단을 모두 포함한다. 종합점수와 한 단락 근거만 있는 요약은 완료가 아니다. 파일로 작성했으면 `python3 scripts/auditable_output_check.py <브리프>`와 `python3 scripts/consistency_check.py <브리프> --mode project`를 통과시킨다. 끝에 "최종 등급은 평가담당관이 확정"이라고 명시.
 
 ## 기본 산출물 계약 — 중대 상충을 숨기지 않는다
+
+자체 브리프의 5개 기준 점수·종합점수·등급은 전부 해석하고 대조해야 통과한다. 누락·형식 미인식·중복 기준 행은 실패다. `잠정`이라는 말로 계산 검사를 생략하지 않으며, 근거가 부족한 결과는 명시적 `산정 보류`로 남긴다.
 
 자동검사는 성공 코드와 한계를 구분한다. 감사 검사 exit 0이 필요하며, 수치 검사 exit 3은 통과가 아니다. 근거 부족으로 정당하게 종합 산정을 보류해 수치가 없는 경우에는 그 한계를 기록해 사람에게 넘긴다. 파일 오류 등 다른 확인 불가·계약 위반은 해결하거나 실패를 명시한다. 검사를 통과하려고 근거 없는 점수·근거를 만들지 않는다. 원문 사실대장 60행은 권장 분량이며 중대 근거·반대근거·상충을 보존하려면 초과할 수 있다.
 

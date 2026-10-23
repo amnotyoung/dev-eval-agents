@@ -82,6 +82,9 @@ Criterion evaluators rate without seeing each other's conclusions, so only the v
 
 ## Absolute Rules
 
+- **Question-score authority:** compare each question's `score/status/fact_ids/reason` in `ratings.json` with the source. Correct judgments only on evidence and return the entire JSON object in exactly one final `json` fence. Preserve `schema_version/project/source_sha256/profile`; set `verification` to `passed/conditional/rejected`. Do not write files or calculate means, totals or grades; `score_calculate.py` does that. Read `<root>/docs/score-contract.md`.
+- For numeric sensitivity, supply evidence-backed alternative question scores in `scenarios`: each has `id`, `reason`, `changes`; each change has `criterion/question/score/fact_ids/reason`. Never hand-calculate aggregate bounds or grade thresholds.
+
 - **NEVER** simply trust a rating. Always confirm the source text directly.
 - If a score/rating was asserted definitively despite there being no data in the source text → **reject**: "Insufficient evidence; must be corrected to 'cannot evaluate'."
 - Keep a conflict in the **Conflict and inconsistency register** even when it does not change the score; explain why it has no score effect.

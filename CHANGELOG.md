@@ -10,6 +10,46 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+## [0.14.0] — 2026-10-23
+
+### Changed
+- Authored briefs require all criterion scores, the composite and its grade to
+  parse and agree. Missing/unrecognized grades, duplicate rows, invalid ranges,
+  and integer-rounding shortcuts fail; provisional wording never disables the
+  audit. Explicitly withheld results remain unscored.
+- Criterion workers start without inherited history (`fork_turns: "none"` on
+  Codex; fresh registered agents on Claude). A frozen source packet and run-
+  specific hashes bind the source/index/ledger to native delegation calls.
+  `delegation_check.py` verifies all five calls and rechecks the receipt against
+  native JSONL evidence; absent evidence is unverified, never a pass.
+- Question judgments are now authoritative structured inputs: `ratings.json`
+  and `verified-scores.json`. `score_calculate.py` calculates means, weighted
+  means, exclusions, rounding, totals, grade bands and optional sensitivity
+  scenarios. It generates report score blocks and detects any divergence from
+  the JSON. Evaluators supply judgments; they do not calculate aggregates.
+- The installed evaluation's final gate requires both score authority and
+  isolation evidence. Direct/single-model fallbacks use the same calculator
+  but cannot claim verified context isolation. The open runner now requires a
+  question-score JSON block and preserves a score sidecar with file output.
+
+### Migration
+- Existing external reports retain the free-form consistency checker. New
+  authored outputs use the strict gate. If an old evaluation lacks question
+  scores, do not invent them from criterion averages: recover the original
+  judgments or re-evaluate. See `docs/score-contract.md`.
+- Use a new project-run folder for a new evaluation; frozen delegation inputs
+  cannot be silently replaced. Preserve native transcripts for isolation checks
+  (Codex non-ephemeral mode). This is an evidence check, not a filesystem sandbox
+  or a guarantee of expert scoring accuracy.
+
+### Validation
+- 218 Python regressions and 15 hook cases passed. A fresh installed candidate
+  completed a 64-page real-report workflow; final installed code replayed the
+  unchanged question judgments and rejected 11 mutations of its artifacts.
+  Five isolated workers and a history-inheriting positive control verified
+  parent-history behavior. See `docs/release-0.14-validation.md` for commits,
+  native-log visibility limits, and the candidate/final-replay distinction.
+
 ## [0.13.1] — 2026-10-23
 
 ### Fixed

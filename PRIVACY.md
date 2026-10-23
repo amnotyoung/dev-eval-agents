@@ -78,6 +78,17 @@ is the user or their organization**, under whichever law applies to them:
 
 ## Data retention / 데이터 보존
 
+For isolation verification, the local checker reads the native transcript of
+the evaluation session and records call IDs, hashes and file paths in
+`isolation.json`; it does not send the full transcript to a service. Question
+score JSON and frozen input packets also remain in the project working folder.
+Protect them like the original reports. Native logs must remain available to
+recheck the isolation evidence; a missing log is not a successful verification.
+
+독립성 검사는 현재 평가 세션의 원시 로그를 로컬에서 읽고 호출 ID·해시·경로를
+확인서에 남긴다. 전체 로그를 외부로 전송하지 않는다. 질문 점수 JSON·입력팩·로그는
+원문과 같은 수준으로 보호하며, 로그가 없어 재대조할 수 없으면 확인 불가로 표시한다.
+
 Document conversion writes complete text copies and source-path/SHA-256
 metadata under the working folder's `.omo/sources/`. Evaluation drafts and
 logs can also contain source information. These are user-controlled local

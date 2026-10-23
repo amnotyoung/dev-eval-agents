@@ -24,6 +24,12 @@ on the user's own machine.
     installation uses its installed version and records that version.
 
 The optional ODA Intelligence integration queries a remote read-only gateway.
+
+`delegation_check.py` checks native Codex/Claude call evidence for the current
+workspace. Its receipt is not a filesystem sandbox, and cannot establish the
+truth of a model's judgments. `score_calculate.py` accepts question judgments
+and computes report values; `auditable_output_check.py --require-scores
+--require-isolation` fails when mandatory artifacts cannot be verified.
 Local conversion does not make a hosted LLM workflow offline. Conversion
 copies in `.omo/sources/` retain the source contents and must be protected like
 the originals. Model instructions and checker passes do not establish factual

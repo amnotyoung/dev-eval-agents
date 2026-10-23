@@ -130,6 +130,12 @@ guards.
 
 ## ▶️ Quick start
 
+Version 0.14 keeps question judgments as structured data and generates means,
+totals, grades and report score tables with code. Criterion workers use fresh
+contexts; the final authored-output gate verifies native delegation records
+and the generated tables. Keep host transcripts available for that check.
+Details and migration: [question-score contract](docs/score-contract.md).
+
 **How it works, in three steps** — ① prepare the material to evaluate (project
 plan, PDM, completion report, …) as Markdown / plain text → ② start a harness and
 ask for an evaluation, pointing it at the file → ③ the system returns
@@ -252,6 +258,11 @@ report comparisons, and the five-case blind benchmark. The
 installation, real-report execution, and the grade-parser defect found by
 mutating actual output. The 334-report sweep tests the numeric checker, not
 AI evaluation accuracy. Independent human expert cross-scoring remains pending.
+
+The [0.14 verification record](docs/release-0.14-validation.md) adds 218
+regressions, 15 hook cases, a native history-isolation probe, a fresh real-report
+workflow, final-code replay, and 11 rejected mutations of the actual artifacts.
+It distinguishes inspectable native call metadata from encrypted prompt bodies.
 
 ## 🔌 Platform independence
 

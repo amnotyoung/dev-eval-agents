@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "project": "사업 약칭을 입력",
+  "source_sha256": "delegation-manifest.json의 source_sha256을 그대로 입력",
+  "profile": "koica-2024",
+  "verification": "not_reviewed",
+  "criteria": [
+    {
+      "criterion": "relevance",
+      "aggregation": "mean",
+      "questions": [
+        {
+          "id": "q1",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q2",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "criterion": "coherence",
+      "aggregation": "mean",
+      "questions": [
+        {
+          "id": "q1",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q2",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "criterion": "effectiveness",
+      "aggregation": "mean",
+      "questions": [
+        {
+          "id": "q1",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q2",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q3",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "criterion": "efficiency",
+      "aggregation": "mean",
+      "questions": [
+        {
+          "id": "q1",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q2",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "criterion": "sustainability",
+      "aggregation": "mean",
+      "questions": [
+        {
+          "id": "q1",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        },
+        {
+          "id": "q2",
+          "status": "pending",
+          "score": null,
+          "fact_ids": [],
+          "reason": ""
+        }
+      ]
+    }
+  ]
+}

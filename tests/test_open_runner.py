@@ -2,6 +2,7 @@
 
 import contextlib
 import io
+import hashlib
 from pathlib import Path
 import sys
 import tempfile
@@ -11,6 +12,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import open_runner
+from test_score_calculate import example
 
 
 class OpenRunnerValidation(unittest.TestCase):
@@ -42,8 +44,21 @@ class OpenRunnerValidation(unittest.TestCase):
             with patch.object(open_runner, "chat", return_value={"message": {"content": "13/20, A"}}), \
                     contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 status = open_runner.main(["--out", str(output)])
-            self.assertEqual(status, 2)
-            self.assertIn("Validation exit code: **2**", output.read_text())
+            self.assertEqual(status, 3)
+            self.assertIn("Validation exit code: **3**", output.read_text())
+
+    def test_main_generates_scores_from_structured_question_judgments(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)/'source.md';target.write_text('synthetic source')
+            output=Path(tmp)/'result.md'
+            authority=example();authority['source_sha256']=hashlib.sha256(target.read_bytes()).hexdigest()
+            raw=self.clean.replace('13/20, D(안)','19/20, A')+'\n```json\n'+open_runner.score_calculate.dumps(authority)+'```\n'
+            with patch.object(open_runner,'chat',return_value={'message':{'content':raw}}), contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                status=open_runner.main(['--target',str(target),'--out',str(output)])
+            self.assertEqual(status,0)
+            self.assertIn('13/20, D',output.read_text())
+            self.assertNotIn('19/20, A',output.read_text())
+            self.assertEqual(open_runner.score_calculate.verify_projection(output)['grade'],'D')
 
     def test_missing_target_never_calls_model(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(open_runner, "chat") as chat, \

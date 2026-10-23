@@ -367,7 +367,7 @@ class CheckerBehavior(unittest.TestCase):
         base = read("tests", "fixtures", "auditable-brief-clean.md").replace(
             "| 지속가능성 | 2 | 2 | 단서 필요 |", "| 지속가능성 | 2 | 평가 불가 | 근거 없음 |", 1
         ).replace("### 지속가능성\n", "### 지속가능성\n기준 전체 평가 불가 — 운영예산 자료 미제공\n", 1)
-        for composite in ("산정 보류 — 4개 기준 평가 가능 / 1개 근거 부족", "단서부 잠정 범위 12~14/20, D(안)"):
+        for composite in ("산정 보류 — 4개 기준 평가 가능 / 1개 근거 부족", "단서부 잠정 범위 12~14/20, D~C"):
             result = run_text(base.replace("13/20, D(안)", composite))
             self.assertEqual(result.returncode, 0, composite + result.stdout + result.stderr)
         result = run_text(base)
@@ -380,6 +380,39 @@ class CheckerBehavior(unittest.TestCase):
             "| 효율성 | 2 | 2 | 확인됨 |", "| 효율성 | 2 | 2.00 (2+2) | 확인됨 |", 1)
         result = run_text(text)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_composite_cannot_pass_with_missing_or_unparsed_required_fields(self):
+        base = read("tests", "fixtures", "auditable-brief-clean.md")
+        for value in ("13/20", "13/20, [A]", "D", "결과 확인 필요", "13/20, G", "잠정 13/20, A"):
+            with self.subTest(value=value):
+                result = run_text(base.replace("13/20, D(안)", value))
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+
+    def test_provisional_word_does_not_disable_arithmetic(self):
+        base = read("tests", "fixtures", "auditable-brief-clean.md")
+        result = run_text(base.replace("13/20, D(안)", "잠정 19/20, A"))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("점수 합 13", result.stderr)
+
+    def test_rounding_a_composite_to_integer_cannot_change_the_grade(self):
+        text=read("tests", "fixtures", "auditable-brief-clean.md")
+        text=text.replace('| 적절성 | 3 | 3 |','| 적절성 | 3 | 3.5 |').replace('13/20, D(안)','14/20, C')
+        result=run_text(text)
+        self.assertEqual(result.returncode,2,result.stdout+result.stderr)
+        self.assertIn('점수 합 13.5',result.stderr)
+
+    def test_duplicate_summary_criterion_or_composite_is_rejected(self):
+        base = read("tests", "fixtures", "auditable-brief-clean.md")
+        for original in ("| 적절성 | 3 | 3 | 확인됨 | 없음 | 수요 부합 |", "- 검증 후 종합점수·등급(안): 13/20, D(안)"):
+            with self.subTest(original=original):
+                result = run_text(base.replace(original, original + "\n" + original))
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+
+    def test_criterion_range_must_be_ordered_and_within_scale(self):
+        base = read("tests", "fixtures", "auditable-brief-clean.md")
+        for value in ("0~3", "3~2", "4~5", "9~10", "—"):
+            result = run_text(base.replace("| 효율성 | 2 | 2 |", f"| 효율성 | 2 | {value} |"))
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
 
     def test_criterion_scores_must_sum_to_composite(self):
         text = read("tests", "fixtures", "auditable-brief-clean.md").replace("13/20, D(안)", "14/20, C(안)")
