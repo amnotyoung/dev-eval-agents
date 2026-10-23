@@ -11,9 +11,14 @@
 > **Project Evaluation Regulation No. 536** (digests in `reference/`).
 
 The system is **portable Markdown**: agent instructions plus a shared knowledge
-base and one shell hook. The same agents already run on **three independent
+base and one shell hook. The shared evaluation knowledge runs on **three independent
 stacks** — [Claude Code](https://claude.com/claude-code), Codex, and a **fully
 open-weight** model — so the tool is not locked to any single vendor.
+
+This is an **independent research prototype**. Outputs are provisional drafts
+for human review. Installation, workflow completion, numeric consistency, and
+expert scoring accuracy are separate claims; see the
+[release verification record](docs/release-0.13-validation.md).
 
 ---
 
@@ -241,17 +246,19 @@ augments — never replaces — the project documents. Details:
 
 ## ✅ Validation
 
-Records of the system actually running and agreeing with real KOICA evaluations:
-**[`docs/validation-log.md`](docs/validation-log.md)** — 5 end-to-end runs
-(Claude Code ×3, Codex ×1, open-weight ×1) and 4 real-report comparisons
-(Cambodia: grade match). ⚠️ Self-validation of a learning/research project (small
-sample); expert cross-validation is ongoing.
+The [validation log](docs/validation-log.md) records historical workflow runs,
+report comparisons, and the five-case blind benchmark. The
+[0.13 release verification](docs/release-0.13-validation.md) records clean
+installation, real-report execution, and the grade-parser defect found by
+mutating actual output. The 334-report sweep tests the numeric checker, not
+AI evaluation accuracy. Independent human expert cross-scoring remains pending.
 
 ## 🔌 Platform independence
 
 The mandatory dependency is *a capable LLM agent-harness* — a category, not a
-product. The same agents run on Claude Code, Codex, and an open-weight model
-(Qwen2.5, Apache-2.0) with **no change to the core product**. Full evidence:
+product. Claude Code, Codex, and the open-weight runner use the shared evaluation
+knowledge, with different orchestration and validation behavior. Portability
+does not imply equivalent model quality. Full evidence:
 [`docs/platform-independence.md`](docs/platform-independence.md).
 
 ## 📜 License
