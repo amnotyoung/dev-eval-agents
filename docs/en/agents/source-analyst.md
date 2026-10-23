@@ -19,6 +19,8 @@ If you did not receive the paths, do not guess — ask for them.
 
 ## How to read
 
+The 60-row limit below is a size recommendation. Exceed it when needed to preserve score-critical evidence, counterevidence or material conflicts, and explain why in the limitations. Never discard a material occurrence to meet the limit.
+
 - Read your page range from the start in Reads of 300 lines or fewer, to the end. Do not re-read a span you have read.
 - If the source contains another evaluation team's scores or grades, do not copy them into the ledger (a judgment is not a fact). Copy only the **facts** that team established (figures, status, documents).
 

@@ -13,8 +13,9 @@ the user's own machine.
 
 - **No accounts, no telemetry, no analytics, no database, no server.**
 - It stores no personal data and transmits nothing on its own. The optional
-  `scripts/open_runner.py` talks only to a **local** endpoint
-  (`http://localhost:11434`).
+  `scripts/open_runner.py` defaults to a local endpoint
+  (`http://localhost:11434`); an explicit `OLLAMA_HOST` override sends the
+  report to that endpoint instead.
 - Its outputs are plain-text/Markdown files written to the user's local disk.
 
 **아무것도 수집하지 않는다.** 계정·텔레메트리·분석·DB·서버가 없고, 개인정보를
@@ -76,6 +77,20 @@ is the user or their organization**, under whichever law applies to them:
 사용자가 준수한다.
 
 ## Data retention / 데이터 보존
+
+Document conversion writes complete text copies and source-path/SHA-256
+metadata under the working folder's `.omo/sources/`. Evaluation drafts and
+logs can also contain source information. These are user-controlled local
+files, not centrally retained records; delete them according to your retention
+policy. Do not share or commit the conversion cache. The optional evidence
+gateway receives the search queries supplied to it; keep personal or
+confidential source text out of those queries. npx/OCR downloads are separate
+from hosted-LLM transmission of report contents.
+
+원문 변환본·경로·해시가 `.omo/sources/`에 남으며 초안·로그에도 원문 정보가
+포함될 수 있다. 사용자 보존정책에 따라 삭제하고 변환 캐시는 공유·커밋하지
+않는다. 선택적 외부 게이트웨이에는 검색어가 전달되므로 개인정보·비공개 원문을
+넣지 않는다. `OLLAMA_HOST`를 바꾸면 해당 서버로 보고서가 전송된다.
 
 The project retains **no** user data (nothing to retain — it has no store).
 Outputs live only where the user saves them and can be deleted at any time.

@@ -9,12 +9,26 @@ on the user's own machine.
 
 - It exposes **no network service**, opens **no ports**, and ships **no server**.
 - It stores **no credentials** and manages **no user accounts**.
-- The only executable code is:
-  - [`.claude/hooks/boulder.sh`](.claude/hooks/boulder.sh) — a Stop hook that
+- Executable components include:
+  - [`hooks/boulder.sh`](hooks/boulder.sh) — a Stop hook that
     reads a local plan file (`.omo/eval-plan.md`) and counts unchecked items. It
     performs no network I/O and writes only a local state file.
   - [`scripts/open_runner.py`](scripts/open_runner.py) — an optional runner that
-    talks to a **local** Ollama endpoint (`http://localhost:11434`).
+    defaults to a local Ollama endpoint (`http://localhost:11434`). Setting
+    `OLLAMA_HOST` selects a different endpoint, which receives the input report.
+  - The audit/numeric checkers and repository validation scripts under
+    `scripts/`, plus their `bin/` wrappers.
+  - [`scripts/source_extract.py`](scripts/source_extract.py) — local document
+    conversion through kordoc or pdftotext. The npx fallback downloads the
+    pinned kordoc package from npm; OCR may download model assets. A PATH
+    installation uses its installed version and records that version.
+
+The optional ODA Intelligence integration queries a remote read-only gateway.
+Local conversion does not make a hosted LLM workflow offline. Conversion
+copies in `.omo/sources/` retain the source contents and must be protected like
+the originals. Model instructions and checker passes do not establish factual
+correctness or eliminate prompt injection; source verification and the human
+decision gate remain required.
 
 The main residual risks are therefore (a) prompt-injection via untrusted
 evaluation documents fed to the agents, and (b) the usual risks of whichever LLM

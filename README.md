@@ -57,7 +57,7 @@ nine indicators:
 
 Governance: [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) · [`SECURITY.md`](SECURITY.md) · [`CHANGELOG.md`](CHANGELOG.md).
 
-## 🎛️ System — 11 agents, two evaluation types, three harnesses
+## 🎛️ System — 12 agents, two evaluation types, three harnesses
 
 KOICA evaluation comes in **different types**; the system handles two of them
 distinctly.
@@ -95,12 +95,13 @@ seven items. Adequate / Conditional / Inadequate is a project triage label, not
 an official KOICA/KIEP verdict. The 6-criteria frame is deliberately **not**
 applied here.
 
-### Agent catalog (11)
+### Agent catalog (12)
 
 | Role | Agent | Access |
 |------|-------|:---:|
 | Final-eval DAC criteria (6) | `dac-{relevance,coherence,effectiveness,efficiency,sustainability,impact}-evaluator` — Impact is ex-post, excluded from the 20-pt composite | read |
 | Evidence verification | `quality-verifier` | read |
+| Source facts and page index | `source-analyst` | scoped write |
 | Report composition | `report-composer` | **write** |
 | Narrative verification (hallucination/consistency) | `narrative-verifier` | read |
 | Report quality inspection (24-item / A–D) | `report-quality-inspector` | read |
@@ -115,7 +116,7 @@ guards.
 | Design principle | Implementation |
 |------------------|----------------|
 | Parallel multi-angle | six criteria evaluated in parallel, each from its own angle |
-| Role = authority | evaluators/verifiers are read-only; only `report-composer` writes |
+| Role = authority | evaluators/verifiers are read-only; `source-analyst` and `report-composer` write only delegated artifacts |
 | Evidence gate | *no evidence → no grade / no text* (fabrication prohibited) |
 | Distrust completion claims | `quality-verifier` / `narrative-verifier` check evidence & consistency |
 | Completion enforcement | Stop hook with stagnation / cap guards |
@@ -135,7 +136,7 @@ evidence-backed draft (the *human gate*).
 
 | Ask it this | You get | Handled by |
 |-------------|---------|------------|
-| `evaluate this project against the DAC criteria` | 6-criteria scores + a draft **A–F grade** | final-eval team |
+| `evaluate this project against the DAC criteria` | 5 scored criteria + a draft **A–F grade**; Impact separately when relevant | final-eval team |
 | `review this impact-evaluation report` | causal-method review → **project triage label** + source status | `impact-evaluation-reviewer` |
 | `inspect the quality of this evaluation report` | 24-item meta-review → quality grade **A–D** | `report-quality-inspector` |
 
@@ -210,6 +211,10 @@ codex exec "samples/sample-evaluation-report.md 이 사업을 DAC 기준으로 �
 ollama pull qwen2.5:14b
 python3 scripts/open_runner.py --out docs/open-model-demo-output.md
 ```
+Run from a writable working folder and choose an output path there. The runner
+returns 0 only after structural and numeric checks, 2 for invalid output, and
+3 when validation cannot be completed. Saved drafts show that status. These
+checks do not independently verify the source facts or establish model parity.
 Or reproduce it on free Google Colab: [`notebooks/open-model-demo.ipynb`](notebooks/open-model-demo.ipynb).
 
 ## 🔌 Optional companion — ODA Intelligence plugin

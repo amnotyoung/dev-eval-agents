@@ -205,6 +205,14 @@ When the user provides an evaluation target and requests an evaluation:
 
 ## Default output contract — never hide a material conflict
 
+Distinguish a successful check from its limits. The audit checker must return 0;
+numeric exit 3 is not a pass. When evidence gaps legitimately require a withheld
+composite with no checkable numbers, record that limitation and hand off to a
+human. Resolve other unreadable-input/contract failures or report the remaining
+failure. Never invent evidence or scores to pass a check. The ledger's 60-row
+limit is advisory: exceed it to preserve material evidence, counterevidence or
+conflicts.
+
 A **material conflict** is an inconsistency for which choosing one value could change a factual finding, achievement, quality/safety/defect status, schedule/cost, criterion score, composite grade, or recommendation. A possible unit/date explanation does not resolve it until it is actually checked. Link each affected finding with `[Conflict: X1]` to the same ID in the **Conflict and inconsistency register**. Keep the conflict with a reason for no effect even when the score does not change.
 
 The source-fact ledger is not the conflict register. The ledger preserves score-critical source occurrences row by row whether or not they conflict; the register records the judgment and effect of differences that remain unexplained. Link factual statements in the final detailed rating back to the ledger with `[Fact: F1]`.

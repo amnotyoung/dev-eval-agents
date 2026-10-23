@@ -533,6 +533,19 @@ def inspect(text: str) -> list[str]:
     for field in ("지지근거", "반대·제약근거", "근거 상태", "인접 점수"):
         if field not in detail:
             violations.append(f"상세 평정 필드 누락: {field}")
+    support_column = None
+    for line_number, line in enumerate(detail.splitlines(), 1):
+        cells = markdown_cells(line)
+        if cells is None or is_separator(cells):
+            continue
+        if any("핵심질문" in cell for cell in cells):
+            support_column = next((i for i, cell in enumerate(cells) if "지지근거" in cell), None)
+            continue
+        if support_column is not None and FACT_MARKER.search(line):
+            support = cells[support_column] if len(cells) > support_column else ""
+            if (not support or normalized(support) in PLACEHOLDER_VALUES
+                    or re.fullmatch(r"\[\s*(?:근거|출처)\s*:\s*\]", support)):
+                violations.append(f"상세 평정 행 {line_number}의 지지근거가 비어 있음")
     detail_facts = {item.upper() for item in FACT_MARKER.findall(detail)}
     detail_conflict_links: dict[str, set[str]] = defaultdict(set)
     for line_number, line in enumerate(detail.splitlines(), 1):
