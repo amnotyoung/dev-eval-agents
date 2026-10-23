@@ -25,20 +25,25 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 ## 4-point scale (2024 common, p.8)
 1 = Most not considered, causing a **clear negative impact** · 2 = Some not considered, causing **partial impact** · 3 = **Overall satisfactory** consideration/achievement · 4 = **All considered + synergy beyond expectations**
 
-## Absolute rules (KOICA evaluation principles)
-- **State the source** `[Evidence: source]`. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (no fabrication). For Coherence, information on other projects and other donors is often absent from the report, so if it is missing, honestly mark it as cannot evaluate.
-- Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Coherence's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
+
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Coherence) only · scores are provisional and a human confirms them.
+
+## Coherence-specific rules
+- Information on other projects and other donors is often absent from the report. If it is missing, honestly mark it as cannot evaluate.
 - Search the full source for repeated descriptions of duplication, coordination, joint plans, and linkage status. If the name, scope, or status of the same relationship differs, record both locations under **Source-conflict candidates** with a local ID `COH-X1`…; do not assume harmonization.
-- Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
-- Do not evaluate anything outside your assigned criterion (Coherence).
 
 ## Output format
 ```
 ## Coherence (일관성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question (internal/external/int'l org) | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+| Key question (internal/external/int'l org) | Finding | Score (1–4 / cannot evaluate / N/A) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 ### Coherence Summary (draft)
 - Provisional Coherence score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations

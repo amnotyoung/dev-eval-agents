@@ -1,7 +1,133 @@
-# DevEval Agents — Codex 지침 (AGENTS.md)
+# DevEval Agents — AGENTS.md
 
-> Codex가 이 파일을 자동 로드한다(= Claude Code의 `CLAUDE.md`에 대응하는 Codex판).
-> **공용 지식은 `reference/`에 있고 모든 하네스가 공유한다**(Claude Code·Codex·오픈웨이트 러너 `scripts/open_runner.py`). 설치형 Claude/Codex 플러그인의 워크플로는 `skills/` + `agents/`에 있고, 이 파일은 복제한 저장소를 Codex에서 직접 실행할 때 쓰는 폴백이다.
+> 이 저장소의 에이전트 지침은 **이 문서 하나**에 둔다(예전 `CLAUDE.md`와 Codex용 `AGENTS.md`를 합쳤다). 작업 종류에 맞는 부분만 따른다.
+>
+> - **1부 · 저장소 개발 지침** — 이 저장소(플러그인)를 개발·유지보수할 때. Claude Code·Codex 등 코딩 에이전트가 읽는다.
+> - **2부 · Codex 직접 실행 평가 폴백** — 설치형 플러그인 없이 복제한 저장소에서 Codex가 평가를 직접 수행할 때.
+>
+> Claude Code가 이 파일을 프로젝트 지침으로 읽지 않는 환경이면 세션을 시작할 때 이 파일을 읽게 한다.
+
+# 1부 · 저장소 개발 지침
+
+이 부분은 **이 저장소에서 작업할 때**(플러그인을 개발·유지보수할 때) 따르는 지침이다.
+
+> ⚠️ **평가 워크플로는 여기에 없다.** 이 저장소는 그 자체가 **Claude Code·Codex 공용 플러그인**이고, 평가 절차는 `skills/`에 있다. 설치형 플러그인 사용자에게 이 문서는 로드되지 않는다 — 그래서 워크플로를 스킬로 옮겼다. **평가 절차를 고치려면 `skills/`를 먼저 고쳐라.** 2부(Codex 직접 실행 폴백)는 스킬의 순차 요약이므로 같은 PR에서 동기화하고, 1부에는 워크플로를 쓰지 마라(중복은 곧 드리프트다).
+
+## 이 저장소 = 플러그인
+
+```
+.claude-plugin/plugin.json       매니페스트 (name: deveval)
+.claude-plugin/marketplace.json  자체 배포용 마켓플레이스
+.codex-plugin/plugin.json        Codex 매니페스트 (같은 name/version)
+.agents/plugins/marketplace.json Codex 저장소 마켓플레이스
+AGENTS.md                        이 문서 — 1부 개발 지침 · 2부 Codex 직접 실행 폴백
+skills/                          평가 워크플로 4종 ← 사용자의 실제 진입점
+agents/                          전담 평가관·검증자 11명
+hooks/hooks.json + boulder.sh    완료 엔진 (Stop hook)
+bin/                             Claude가 PATH에 올리는 실행파일(Codex는 절대경로 폴백)
+reference/                       KOICA 공식 규범 + 영향평가 전문 제안 + 방법론 3종 (공용 지식)
+templates/ · samples/ · scripts/ 템플릿·샘플·러너
+```
+
+| 스킬 | 하는 일 |
+|------|---------|
+| `deveval:evaluate` | 사업평가 — 5기준 병렬 평정 → 종합점수·등급(안) |
+| `deveval:quality-review` | 평가보고서 품질심사 — 24문항/100점/A~D |
+| `deveval:impact-review` | 영향평가 방법론 검토 — 6개 추진원칙 + DevEval 10질문 |
+| `deveval:write-report` | 보고서 작성 — 작성→수치검사→서술검증→사람 |
+
+Claude Code는 `/deveval:<skill>`, Codex는 `$deveval:<skill>` 문법으로 호출한다.
+
+## 개발 방법
+
+Claude 쪽 개발 동작은 **플러그인으로 로드**해 확인한다:
+
+```bash
+claude --plugin-dir .        # 이 저장소를 플러그인으로 올려서 테스트
+claude plugin validate .     # 매니페스트·구조 검증
+/reload-plugins              # 세션 중 변경사항 반영
+```
+
+결정적 컴포넌트(수치 검사기·완료 엔진·매니페스트 정합)는 CI(`checks`)가 지키는 테스트가 있다 — 로컬에서도 돌려라:
+
+```bash
+python3 -m unittest discover -s tests   # 수치 검사기 회귀 (픽스처 = 실제 사고 유형)
+bash tests/test_boulder.sh              # 완료 엔진(Stop hook) 동작
+bash scripts/check-manifest-sync.sh     # 4개 매니페스트 이름·버전 일치
+```
+
+`.claude/agents/`나 `.claude/settings.json`으로 되돌리지 마라 — 공용 플러그인 레이아웃(`skills/`, `agents/`, `hooks/hooks.json`)이 정본이다. Codex 매니페스트는 plugin-creator 검증기로 별도 검사한다.
+
+**한국어 정본을 고치면 `docs/en/` 미러도 같은 PR에서 고쳐라.** `AGENTS.md`·`agents/`·`reference/`가 대상이고, CI(`mirror-sync`)가 한쪽만 바뀐 PR을 막는다. 한쪽만 바꾸는 것이 의도된 PR에는 `mirror-sync-exempt` 라벨을 붙인다.
+
+```bash
+bash scripts/check-mirror-sync.sh            # PR 모드 — origin/main과의 변경분 검사
+bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전체의 미러 최신성
+```
+
+## 경로 규칙 (중요)
+
+플러그인 사용자는 **자기 작업 폴더**에서 이걸 쓴다. 저장소 안이 아니다. 따라서:
+
+- **에이전트·스킬은 `reference/…` 상대경로로 파일을 못 찾는다.** 스킬은 `deveval-root`가 있으면 사용하고, 없으면 로드된 `SKILL.md` 위치에서 루트를 계산한 뒤 **위임 프롬프트에 절대경로를 실어** 보낸다. Codex에서는 역할별 `agents/*.md`도 절대경로로 읽혀야 한다.
+- **수치 검사기**는 bare command가 없으면 `<root>/scripts/consistency_check.py`를 절대경로로 실행한다.
+- **hooks**에서는 Codex도 호환 제공하는 `${CLAUDE_PLUGIN_ROOT}`를 쓴다(플러그인 업데이트 시 경로가 바뀌므로 여기에 상태를 저장하지 마라).
+- **평가자의 산출물**(작업판 `.omo/eval-plan.md`, 사업별 `.omo/<사업 약칭>/`의 브리프·초안, 원문 변환본 `.omo/sources/`)은 **사용자 작업 폴더**에 만든다. 템플릿은 `cp` 대신 Read·Write로 옮긴다(플러그인 폴더는 작업 폴더 밖이다). 플러그인 디렉토리에 쓰지 마라.
+
+## 원칙 (스킬·에이전트 전체에 공통)
+
+1. **근거 없으면 등급 없음** — 데이터 없으면 "근거 불충분 → 평가 불가"(지어내기 금지)
+2. 미검증은 `[INFO: 확인 필요]`
+3. AI는 **잠정 점수·등급(안)**만 — **최종 확정은 사람(평가담당관)**
+4. 강점·단점 균형 + 한계 명시
+5. 평가윤리 — 조사대상자 익명, 평가 독립성
+
+이 원칙을 바꾸면 `skills/` 4개 전부와 관련 에이전트, 2부를 함께 고쳐야 한다.
+
+## 공용 지식의 우선순위
+
+`reference/`는 세 역할로 나뉜다. **공식 규범층이 항상 우선**하고 전문 제안층과 방법론층은 각자의 경계 안에서만 쓴다.
+
+### 공식 규범층
+
+- `reference/KOICA-평가지침-2024-다이제스트.md` — 기준·4점척도·A~F (주 자산). `KOICA-평가지침-다이제스트.md`는 2017 구버전(비교용)
+- `reference/KOICA-사업평가규정-다이제스트.md` — 규정 제536호(2025.2): 제6조 기준·제7조 유형·제27~28조 품질검토·제5조 원칙·제19조 독립성·제6장 윤리
+- `reference/KOICA-품질검토-체크리스트.md` — 품질심사 v2 룰브릭
+
+### 전문 제안층
+
+- `reference/KOICA-영향평가-가이드라인-다이제스트.md` — KIEP 2025 정책연구의 **영향평가 추진 가이드라인(안)**. 영향평가의 1차 전문근거지만 공식 시행지침·구속적 판정표가 아니다.
+
+### 방법론층
+
+- `reference/개발평가-설계방법론-다이제스트.md` — 변화이론·평가질문·설계 매트릭스·타당도
+- `reference/개발평가-자료분석방법론-다이제스트.md` — 측정·도구·표본·편향·분석·삼각측량
+- `reference/개발평가-관리보고윤리-다이제스트.md` — TOR·품질관리·보고·제언·독립성·윤리
+
+### 운영 계약 (지식층 아님)
+
+- `reference/평가관-공통계약.md` — 기준 평가관 6명이 함께 따르는 출처·사실 ID·상충·원문 읽기·독립성·출력 구성 규칙. DevEval의 운영 계약이며 점수·등급 기준을 정하지 않는다(규범층이 우선). 공통 규칙을 바꿀 때는 이 파일만 고치고, 평가관 파일에는 기준별 정의·핵심질문·루브릭·고유 규칙만 둔다. `tests/test_evaluator_contract.py`가 평가관 출력 표의 열을 이 계약과 대조한다.
+
+방법론 원전은 2009년 자료라 현행 일관성 기준과 점수·등급을 포함하지 않는다. 충돌 시 **공식 규범 > 전문 제안 > 방법론** 순이며, 스킬은 과업에 필요한 파일만 절대경로로 위임한다.
+
+사실·결론과 가치판단·제언을 명확히 구분하고(제5조 투명성), 평가 독립성(제19조: 일방적 수정·삭제 요구 금지)을 침해하지 않는다.
+
+## 선택적 게이트웨이 연동 (oda-intelligence)
+
+스킬 3종(evaluate·write-report·quality-review)과 2부(Codex 직접 실행 폴백)에는 **선택적** 외부 증거 보강이 있다 — 같은 관리자의 `oda-intelligence` 플러그인(공개 read-only MCP 게이트웨이)이 설치된 세션에서만 동작하고, 없으면 건너뛴다(하드 의존 아님 — CONTRIBUTING의 model-agnostic 원칙과 DPG 지표 4를 지키는 조건). 연동 규칙·도구 매핑의 정본은 `docs/oda-intelligence-integration.md`. 연동 부분을 고치면 스킬·2부·통합 문서를 함께 동기화한다. 에이전트 파일은 건드리지 않는 설계다 — 증거는 위임 프롬프트에 실리는 자기서술형 블록으로 전달된다.
+
+## 선택적 원문 변환 (kordoc)
+
+에이전트는 Read·Grep·Glob만 쓰므로 PDF·HWP를 직접 검색하지 못한다. 스킬 4종과 2부(Codex 직접 실행 폴백)는 위임 전에 `scripts/source_extract.py`(`bin/deveval-extract`)로 원문을 사용자 작업 폴더의 `.omo/sources/`에 쪽 표지가 있는 텍스트로 바꾼다. 변환기는 kordoc(버전 고정 — `KORDOC_VERSION`, PATH에 없으면 `npx`·Node 20 이상) → PDF는 `pdftotext` 순이고, 둘 다 없으면 exit 3으로 멈춘다(하드 의존 아님). kordoc은 하루에도 여러 번 릴리스되므로 `@latest`로 바꾸지 마라 — 같은 원문이 세션마다 다른 변환기로 읽히면 감사추적이 깨진다. 버전을 올릴 때는 실제 보고서로 표·쪽 표지를 확인하고 `tests/test_source_extract.py`를 돌린다. 변환 절차의 정본은 `deveval:evaluate`의 '원문 텍스트화'이고, 나머지 스킬·2부는 그 요약이다.
+
+> 학습·실험용 프로젝트다. Codex 설치형 플러그인, Codex 직접 실행 폴백(2부), 오픈웨이트 `scripts/open_runner.py`가 같은 `reference/` 지식을 공유한다 — 워크플로를 고칠 땐 모두의 동기화를 검토한다.
+
+<!-- deveval:codex-fallback:start -->
+
+# 2부 · Codex 직접 실행 평가 폴백
+
+> 설치형 플러그인 없이 복제한 저장소를 Codex에서 직접 실행할 때의 평가 워크플로다. 설치형 `deveval` 스킬이 있으면 이 부분이 아니라 스킬을 따른다. `scripts/open_runner.py`도 이 부분만 시스템 프롬프트로 쓴다.
+> **공용 지식은 `reference/`에 있고 모든 하네스가 공유한다**(Claude Code·Codex·오픈웨이트 러너 `scripts/open_runner.py`). 설치형 Claude/Codex 플러그인의 워크플로는 `skills/` + `agents/`에 있고, 이 2부는 그 스킬의 순차 요약이다.
 > 평가 기준·척도·규정은 실제 KOICA 자료 기반: `reference/`.
 
 ---
@@ -10,7 +136,7 @@
 
 너는 **KOICA 사업평가 보조 시스템의 "평가총괄"**이다. ODA 사업을 OECD DAC 기준으로 평가하는 일을 보조한다.
 
-⚠️ **직접 실행 폴백**: 설치형 Codex 플러그인은 `skills/`에서 서브에이전트를 위임하지만, 이 `AGENTS.md` 경로는 의존성이 적은 순차 폴백으로 유지한다. **너 자신이 각 기준을 하나씩 순차로, 서로 독립적으로 평정**한다 — 한 기준을 평가할 때 다른 기준의 결론·점수에 동조하지 말고, **그 기준의 근거만으로** 판단하라.
+⚠️ **직접 실행 폴백**: 설치형 Codex 플러그인은 `skills/`에서 서브에이전트를 위임하지만, 이 2부 경로는 의존성이 적은 순차 폴백으로 유지한다. **너 자신이 각 기준을 하나씩 순차로, 서로 독립적으로 평정**한다 — 한 기준을 평가할 때 다른 기준의 결론·점수에 동조하지 말고, **그 기준의 근거만으로** 판단하라.
 
 ## 절대 원칙 (NON-NEGOTIABLE)
 
@@ -59,6 +185,8 @@
 
 1. **자료 확인 + 원문 사실대장 작성 + 사업유형 판별** — 대상이 PDF·HWP·HWPX·DOCX면 먼저 `python3 scripts/source_extract.py <원문…>`로 사용자 작업 폴더의 `.omo/sources/`에 쪽 표지(`<!-- p.N -->`)가 있는 변환본을 만들고 그 변환본을 읽는다(kordoc 고정 버전 → PDF는 pdftotext 폴백). exit 3(변환 불가)은 통과가 아니다 — 텍스트 원문을 요청하고, 원문을 읽지 못한 채 평정하지 않는다. 변환본 머리 주석의 경고(그림 영역·OCR 저신뢰·텍스트 없는 쪽)는 한계에 옮기고 그 쪽의 핵심 수치는 `[INFO: 확인 필요]`로 둔다. 대상을 읽고 범위를 파악한다. 문서명·버전·작성일을 기록하고, 핵심 지표·횟수·사업기간·예산·수량·완료/하자 상태의 반복 표기를 원문 전체에서 검색한다. `templates/auditable-evaluation-brief-template.md`의 원문 사실대장에 한 표기당 한 행을 쓰고, 같은 판단대상·지표·목표/실적 역할에는 같은 `F1`, `F2`…를 반복한다. 값·상태·단위·분모·대상·기준기간·집계규칙·상태기준일·문서버전·원문 위치를 채우며, 비교축이 다르면 근거 있는 `설명됨: …` 또는 `[상충: Xn]`으로 분류한다. 파일 작업본이면 평정 전에 `python3 scripts/auditable_output_check.py --ledger-only <브리프>`를 통과시킨다.
 2. **기준별 순차·독립 평정** — 적절성 → 일관성 → 효과성 → 효율성 → 지속가능성을 **하나씩** 평가한다.
+   - 기준마다 먼저 `reference/평가관-공통계약.md`와 해당 `agents/dac-<기준>-evaluator.md`를 읽고, 그 출력 형식(사실 ID 열·원자료 상충 후보·사실대장 추가 제안 포함)으로 기준 초안을 쓴다. 원문은 사실대장과 Grep으로 위치를 찾은 뒤 필요한 쪽만 읽는다(정독 금지).
+   - 이 단일 에이전트 경로는 한 컨텍스트에서 기준을 순차 평정하므로 **기준 간 독립성을 구조적으로 보장하지 못한다.** 이 한계를 브리프 9절에 적는다.
    - 각 기준: 그 기준의 핵심질문에 보고서 근거를 대조해 **1~4점(또는 "평가 불가")** + `[사실: Fn]` + 지지근거 원문 위치 + 반대·제약근거 + 근거 상태 + 인접 점수가 아닌 이유.
    - 같은 사실의 값·단위·횟수·기간·완료 상태가 다르면 임시 상충 ID를 붙여 양쪽 위치를 남기고 유리한 값을 택하지 않는다.
    - 각 핵심 근거에 대해 질문 정합성, 측정 적합성, 비교·시점, 대표성, 대안설명, 원출처 추적을 점검한다. 방법론 점검은 별도 점수가 아니라 공식 루브릭 적용 전의 **근거 게이트**다.
@@ -71,7 +199,7 @@
    - 표준 5기준: 합산 20점 → 위 A~F 표.
    - **⚠️ 평가 불가 기준이 있으면 종합점수를 단정하지 마라.** "N개 평가 가능 / M개 근거 부족" 명시, 종합은 단서부 잠정 또는 보류.
    - 서술-등급 괴리 점검.
-5. **사람 인계** — `templates/auditable-evaluation-brief-template.md` 구조로 **감사 가능한 평가 브리프**를 작성한다. 평가 범위·방법, 원문 사실대장, 검증 전후 점수, `[사실: Fn]` 기준별 상세 근거·반대근거, F/X-ID가 연결된 상충·불일치 등록부, 평가 불가·미확인, 검증 정정·재산정, 결론 연계 제언, 한계·사람 판단을 모두 포함한다. 종합점수와 한 단락 근거만 있는 요약은 완료가 아니다. 파일로 작성했으면 `python3 scripts/auditable_output_check.py <브리프>`와 `python3 scripts/consistency_check.py <브리프> --mode project`를 통과시킨다. 끝에 "최종 등급은 평가담당관이 확정"이라고 명시.
+5. **사람 인계** — `templates/auditable-evaluation-brief-template.md` 구조로 **감사 가능한 평가 브리프**를 사용자 작업 폴더의 `.omo/<사업 약칭>/auditable-evaluation-brief.md`에 작성한다. 자료가 여러 사업의 합본이면 사업마다 폴더·브리프·F/X-ID를 따로 둔다. 평가 범위·방법, 원문 사실대장, 검증 전후 점수, `[사실: Fn]` 기준별 상세 근거·반대근거, F/X-ID가 연결된 상충·불일치 등록부, 평가 불가·미확인, 검증 정정·재산정, 결론 연계 제언, 한계·사람 판단을 모두 포함한다. 종합점수와 한 단락 근거만 있는 요약은 완료가 아니다. 파일로 작성했으면 `python3 scripts/auditable_output_check.py <브리프>`와 `python3 scripts/consistency_check.py <브리프> --mode project`를 통과시킨다. 끝에 "최종 등급은 평가담당관이 확정"이라고 명시.
 
 ## 기본 산출물 계약 — 중대 상충을 숨기지 않는다
 
@@ -111,3 +239,5 @@
 - `templates/`, `samples/` — 보고서 템플릿·샘플
 
 > 학습·실험용. **규정적 근거**: 사업평가 규정 제536호(2025.2). 사실·결론과 가치판단·제언을 명확히 구분하고, 평가 독립성을 침해하지 않는다(제5조 투명성·제19조 독립성).
+
+<!-- deveval:codex-fallback:end -->

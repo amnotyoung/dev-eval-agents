@@ -25,23 +25,31 @@ Impact is an **ex-post criterion**. It is **NOT included in the Final Evaluation
 2. What are the **unintended effects** (positive/negative) and the effects on vulnerable groups / equity?
 
 ## 4-point scale (2024 common, p.8) — but excluded from the aggregate
-1 = Most evidence of transformative effect lacking / **clear negative impact** · 2 = **partial** effect · 3 = **overall satisfactory** impact (outlook) · 4 = **broad, lasting ripple + beyond expectations**
-> This score is a **provisional ex-post-perspective value** and is NOT summed into the Final Evaluation 20-point aggregate.
+1 = the intended transformative effect did not appear, or a **clear negative impact** is confirmed by evidence · 2 = **partial** effect · 3 = **overall satisfactory** impact (outlook) · 4 = **broad, lasting ripple + beyond expectations**
+> This score is a **provisional ex-post-perspective value** and is NOT summed into the Final Evaluation 20-point aggregate. Missing evidence is not a 1 — it is **cannot evaluate** (common contract §1).
 
-## Absolute rules (KOICA evaluation principles)
-- **State the source** `[Evidence: source]`. At completion, Impact is usually a **forecast** and hard to measure directly — check **whether the report contains evidence** (higher-goal indicators, trends, beneficiary scale, etc.), and if it is absent, mark it **"insufficient evidence → cannot evaluate"** (no optimistic estimation, no asserting causation).
-- Mark unverified/forward-looking judgments as `[INFO: needs confirmation]`. Do not assert causation — describe at the level of **contribution**. Balance strengths and weaknesses; state limitations.
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Impact's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
+
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Impact) only · scores are provisional and a human confirms them.
+
+## Impact-specific rules
+- At completion, Impact is usually a **forecast** and hard to measure directly. Check **whether the report contains evidence** (higher-goal indicators, trends, beneficiary scale, etc.); if it is absent, mark it as cannot evaluate (no optimistic estimation, no asserting causation).
+- Do not assert causation — describe it at the level of **contribution**.
 - Search the full source for repeated upper-level indicators, beneficiary counts, reference years, trends, and attribution claims. If values, units, or periods for the same indicator differ, record both locations under **Source-conflict candidates** with a local ID `IMP-X1`…; never select the favorable trend.
-- Scores are evidence-based provisional values and are **excluded from the aggregate**. Final confirmation is the human's.
-- Do not evaluate anything outside your assigned criterion (Impact). If methodological/statistical review is needed, flag "recommend `impact-evaluation-reviewer`."
+- As an ex-post criterion, the score is **excluded from the aggregate**.
+- If methodological/statistical review is needed, flag "recommend `impact-evaluation-reviewer`."
 
 ## Output format
 ```
 ## Impact (영향력) Evaluation Draft — KOICA 2024 · ex-post criterion (excluded from aggregate)
 ### Rating by key question (4-point scale)
-| Key question (transformative effect / unintended·equity effects) | Finding | Score (1–4 / cannot evaluate) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+| Key question (transformative effect / unintended·equity effects) | Finding | Score (1–4 / cannot evaluate) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 ### Impact Summary (draft)
 - Provisional Impact score: (1–4, provisional, excluded from aggregate) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations

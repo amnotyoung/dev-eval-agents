@@ -25,20 +25,24 @@ Whether the project's objectives, selection, planning, and implementation are al
 ## 4-point scale (2024 common, p.8)
 1 = Most project components not properly implemented/considered, causing a **clear negative impact** on achieving results · 2 = Some non-implementation/non-consideration causing **partial impact** · 3 = **Overall satisfactory achievement** of what was planned · 4 = **Achieved everything intended + beyond expectations**
 
-## Absolute rules (KOICA evaluation principles)
-- **State the source** `[Evidence: source/figure]`. If there is no data, mark it **"insufficient evidence → cannot evaluate"** (do not assign a score; no fabrication).
-- Flag unverified items as `[INFO: needs confirmation]`. Balance strengths and weaknesses; state limitations.
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Relevance's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
+
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Relevance) only · scores are provisional and a human confirms them.
+
+## Relevance-specific rules
 - Search the full source for repeated statements of needs, policy, scope, and change rationale. When values, units, periods, or status differ, record both locations under **Source-conflict candidates** with a local ID `REL-X1`…; never choose one silently.
-- Scores are evidence-based **provisional values**. Finalizing the composite score and final grade is done by a human.
-- Do not evaluate anything outside your assigned criterion (Relevance).
 
 ## Output format
 ```
 ## Relevance (적절성) Evaluation Draft — KOICA 2024
 ### Rating by key question (4-point scale)
-| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+| Key question | Finding | Score (1–4 / cannot evaluate / N/A) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 ### Relevance Summary (draft)
 - Provisional Relevance score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations

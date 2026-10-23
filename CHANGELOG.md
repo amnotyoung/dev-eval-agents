@@ -36,7 +36,39 @@ each slice below is recorded as a 0.x milestone.
 - The numeric checker flattens HTML tables (kordoc MCP's default output), so
   `colspan="4"` is no longer read as a composite score.
 
+- **Common evaluator contract** — `reference/평가관-공통계약.md` (with its
+  English mirror) now holds the rules all six criterion evaluators share:
+  source citation with `p.N`, no score without evidence (missing evidence is
+  never a 1), `[사실: Fn]` on score-critical claims, source-conflict
+  candidates, partial reading of large sources (Grep, then ≤300-line Reads),
+  independence, and the shared output tables. The evaluate skill and the Codex
+  `AGENTS.md` pass it to every evaluator.
+- `tests/test_evaluator_contract.py` parses each evaluator's output tables and
+  fails when their columns drift from the contract.
+
 ### Changed
+- **One agent-instructions document** — the repository-development context
+  (`CLAUDE.md`) and the Codex direct-run evaluation fallback (`AGENTS.md`)
+  are merged into a single `AGENTS.md`: Part 1 for developing the plugin,
+  Part 2 (between `deveval:codex-fallback` markers) for running an evaluation
+  directly in Codex. `CLAUDE.md` and `docs/en/CLAUDE.md` are removed; the
+  mirror check, CI paths, licensing and DPG docs, and reference mapping tables
+  point at `AGENTS.md`. `scripts/open_runner.py` injects only Part 2 into the
+  open-weight model. *Claude Code sessions in this repository need a setup
+  that loads `AGENTS.md` (or should read it at session start).*
+- **Criterion evaluators emit the fact-ID contract** — the evaluate skill
+  required `[사실: Fn]` on every claim, but none of the six `dac-*` output
+  formats had a fact-ID column. Each rating table now has one, each draft
+  returns a **fact-ledger additions** table, and duplicated generic rules were
+  replaced by a reference to the common contract plus criterion-specific
+  rules. The effectiveness evaluator no longer starts by reading the whole
+  source.
+- **Impact evaluator's 1-point definition follows the official scale** — it
+  read "most evidence of transformative effect lacking", which turned missing
+  evidence into a score; missing evidence is now *cannot evaluate*.
+- The Codex single-agent path reads the contract and the matching evaluator
+  file per criterion, and states that it cannot structurally guarantee
+  independence between criteria.
 - **Checker exit codes no longer report an unread file as a pass** —
   `consistency_check.py` now returns 3 (cannot determine) instead of 0 for a
   missing or undecodable file, an internal error, or a usage error (argparse's
@@ -49,6 +81,28 @@ each slice below is recorded as a 0.x milestone.
   contradicted the /16 legend; /24 and other schemes are no longer judged.
 
 ### Fixed
+- **Evaluations stopped halfway in headless runs** — a real end-to-end run on a
+  137-page, three-project HWP report delegated the fact-ledger work in the
+  background and ended its turn; the headless runner killed the subagents
+  after 10 minutes, so no criterion evaluator or verifier ever ran. All four
+  skills now delegate in the foreground (parallel calls in one message) and
+  never end a turn while background work is pending; long source conversion
+  is awaited.
+- **The completion engine was off for most evaluations** — the plan board,
+  which arms the Stop hook, was only created for "long or multi-project"
+  evaluations and was skipped even for that three-project bundle. A plan board
+  is now created for every evaluation, with a shared block for conversion and
+  project-boundary detection.
+- **Permission friction from shelling into the plugin folder** — skills told
+  the orchestrator to verify `reference/` etc. and copy templates, which it did
+  with `ls`, `test`, and `cp` outside the working folder (blocked in the e2e
+  run). Plugin files are now checked with Glob and templates moved with
+  Read/Write.
+- **Bundled reports could mix projects** — briefs, matrices, and drafts now
+  live in `.omo/<project-slug>/`; a bundle gets one folder, brief, and F/X-ID
+  series per project. Re-delegation passes only the brief's scope and ledger
+  sections, never the sections holding other criteria's scores.
+- `tests/test_skill_run_rules.py` pins these run rules.
 - **Grade checks were silently off for the plugin's own briefs** — any "잠정"
   anywhere in a document disabled grade↔score checking, and the brief notation
   `13/20, D(안)` was not read as a grade, so `13/20, A(안)` passed. Exclusion is

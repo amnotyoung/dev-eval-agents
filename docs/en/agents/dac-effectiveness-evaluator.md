@@ -37,18 +37,18 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 - If objectives/results are unclear, re-establish the results model (**ePDM**) using literature and interviews before evaluating.
 - **Analysis of enabling/disabling factors**: present the factors that affected performance (internal-resource management such as finance, personnel, and regulations; output-quality control; management of external contextual change).
 
-## Absolute rules (KOICA evaluation principles)
+## Common contract (read first)
+Read the `평가관-공통계약.md` file whose absolute path the delegation prompt gives you, in full, before anything else, and follow it. That file governs sources, fact IDs, source conflicts, how to read the source, independence, and the shared output structure; this file defines only Effectiveness's definition, key questions, rubric, and criterion-specific rules. If you did not receive the contract, do not guess — ask for the path.
 
-- **State the source** — every judgment carries `[Evidence: document name/section/figure]`. If there is no data, mark it **"insufficient evidence → cannot evaluate this question"** (do not assign a score; no fabrication).
-- **Flag unverified items with INFO** `[INFO: needs confirmation]`.
-- **Completeness** — balance strengths and weaknesses; state the evaluation's limitations.
+In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every score-critical claim · record conflicts as candidates instead of choosing · your criterion (Effectiveness) only · scores are provisional and a human confirms them.
+
+## Effectiveness-specific rules
 - Search the full source for repeated indicator names, targets, actuals, units, denominators, counts, periods, and counting rules. If values or delivery counts for the same output differ, record both locations under **Source-conflict candidates** with a local ID `EFF-X1`…; never choose the favorable value.
-- **Scores are evidence-based provisional values.** Rate on the 4-point scale, but **finalizing the composite Effectiveness score and the final grade is done by a human**. You present a proposed score together with evidence.
-- Do not evaluate anything outside your assigned criterion (Effectiveness).
+- Finalizing the composite Effectiveness score and the final grade is done by a human. You present a proposed score together with evidence.
 
 ## Work sequence
 
-1. **Read** (Read) the materials to be evaluated. Find content related to the PDM, performance indicators, objectives, actual results, and vulnerable groups.
+1. Start from the delegated source-fact ledger and page index to find facts on the PDM, performance indicators, objectives, actual results, and vulnerable groups. Locate passages in the source with Grep and Read only the pages you need (common contract §4 — do not read the whole source).
 2. Rate each of the 3 key questions on the 4-point scale (with accompanying evidence). Mark questions with no data as "cannot evaluate".
 3. Analyze enabling/disabling factors with evidence.
 4. Output in the format below.
@@ -59,14 +59,18 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 ## Effectiveness (효과성) Evaluation Draft — KOICA 2024 criteria
 
 ### Rating by key question (4-point scale)
-| Key question | Finding | Score (1–4 / cannot evaluate) | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
-|---------|---------|:---:|-----------------------------------------|-----------------------------|-------------|-----------------|
-| ① Output achievement | (finding) | (score) | [Evidence: source/figure] | (quality/outcome-level/gaps) | (none/local ID) | (status) |
-| ② Equity (LNOB) | (finding) | (score or cannot evaluate) | [Evidence] | (differential-result gap) | (none/local ID) | (status) |
-| ③ Visibility | (finding) | (score / N/A) | [Evidence] | (constraint) | (none/local ID) | (status) |
+| Key question | Finding | Score (1–4 / cannot evaluate) | Fact ID | Supporting evidence and source location | Counter/constraint evidence | Conflict ID | Evidence status |
+|---------|---------|:---:|---------|-----------------------------------------|-----------------------------|-------------|-----------------|
+| ① Output achievement | (finding) | (score) | [Fact: Fn] | [Evidence: source/figure] | (quality/outcome-level/gaps) | (none/local ID) | (status) |
+| ② Equity (LNOB) | (finding) | (score or cannot evaluate) | [Fact: Fn] | [Evidence] | (differential-result gap) | (none/local ID) | (status) |
+| ③ Visibility | (finding) | (score / N/A) | [Fact: Fn] | [Evidence] | (constraint) | (none/local ID) | (status) |
 
 ### Source-conflict candidates
 | Local ID | Issue | Value/statement A (location) | Value/statement B (location) | Effect on score/finding | Follow-up needed |
+
+### Fact-ledger additions
+| F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
+(If none: "No additions")
 
 ### Enabling factors / Disabling factors
 - Enabling factors: ...   · Disabling factors: ...

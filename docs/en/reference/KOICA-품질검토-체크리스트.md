@@ -105,4 +105,4 @@
 - **Special rule**: if even one individual project within the service is **D (Non-Pass), it is rated "Poor" in Ⅰ**. Overall assessment of at least 200 characters (excluding spaces), with 5 included items.
 
 ## Review Criteria by Project Type (newly established in v2, p.19 — reference)
-General project / multi-bi / public-private partnership / emergency relief and humanitarian assistance / infrastructure construction — review points and drafting examples by type. (Can be linked to CLAUDE.md's project-type determination for CTS, infrastructure, etc.)
+General project / multi-bi / public-private partnership / emergency relief and humanitarian assistance / infrastructure construction — review points and drafting examples by type. (Can be linked to AGENTS.md's project-type determination for CTS, infrastructure, etc.)

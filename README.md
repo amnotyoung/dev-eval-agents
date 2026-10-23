@@ -177,7 +177,7 @@ Then invoke the same four workflows with the syntax for your host:
 | Impact review | `$deveval:impact-review` | `/deveval:impact-review` | 6 proposed principles / 10 operational questions |
 | Write report | `$deveval:write-report` | `/deveval:write-report` | draft → numeric check → narrative verification → human |
 
-Your working files (`.omo/eval-plan.md`, `.omo/draft-report*.md`) stay in **your**
+Your working files (the plan board `.omo/eval-plan.md` and per-project briefs and drafts under `.omo/<project-slug>/`) stay in **your**
 folder; the plugin directory is read-only knowledge. Claude Code exposes the
 bundled `deveval-consistency-check` command on `PATH`; the shared skills use the
 same checker by absolute path on hosts that do not expose plugin `bin/` entries.

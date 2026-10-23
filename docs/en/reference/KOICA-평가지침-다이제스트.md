@@ -122,7 +122,7 @@ Practical principles for the determination:
 
 | Extract | Reflected in |
 |--------|----------|
-| Evaluation criteria framework (DAC 5 + cross-cutting), Effectiveness two-axis | `CLAUDE.md`, `dac-effectiveness-evaluator` |
-| Evaluation conduct principles (§3) | `CLAUDE.md` Rules, the two agents |
+| Evaluation criteria framework (DAC 5 + cross-cutting), Effectiveness two-axis | `AGENTS.md`, `dac-effectiveness-evaluator` |
+| Evaluation conduct principles (§3) | `AGENTS.md` Rules, the two agents |
 | 100-point quality checklist (§4) | (preserved) → the next slice's "quality inspector" agent |
 | Effectiveness definition / grading scale | **Not secured** — source guidelines needed. Do not assert grades before they are secured |

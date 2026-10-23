@@ -16,7 +16,7 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 
 MIRROR_PREFIX="docs/en/"
 # 미러를 두는 정본 — 루트 파일과 디렉터리
-MIRRORED_FILES=("CLAUDE.md" "AGENTS.md")
+MIRRORED_FILES=("AGENTS.md")  # 옛 CLAUDE.md는 AGENTS.md 1부로 합쳤다
 MIRRORED_DIRS=("agents" "reference")
 # 한 쌍이지만 한쪽만 고치는 일이 정상인 문서 — 실패가 아니라 경고
 SOFT_PAIR_A="README.md"
