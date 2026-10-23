@@ -99,6 +99,22 @@ class KoEnMismatch(unittest.TestCase):
 
 
 class GradeScoreGap(unittest.TestCase):
+    def test_actual_composer_bare_grade_gap_is_caught(self):
+        code, out = run_text("- 검증 후 종합점수·등급(안): 11.67/20, A\n")
+        self.assertEqual(code, 2, out)
+        self.assertIn("등급-점수 괴리", out)
+
+    def test_actual_composer_bare_grade_passes_when_correct(self):
+        code, out = run_text("- 검증 후 종합점수·등급(안): 11.67/20, E\n")
+        self.assertEqual(code, 0, out)
+        self.assertEqual(cc.find_grades_af("- 검증 후 종합점수·등급(안): 11.67/20, E"), [("E", 1)])
+
+    def test_bold_bare_grade_is_checked_without_scanning_unrelated_letters(self):
+        text = "- 검증 후 종합점수·등급(안): **11.67/20, E**\n부록 A는 자료목록이다."
+        self.assertEqual(cc.find_grades_af(text), [("E", 1)])
+        code, out = run_text(text.replace(", E**", ", **A**"))
+        self.assertEqual(code, 2, out)
+
     def test_grade_gap_caught(self):
         code, out = run_fixture("project-grade-gap.md")
         self.assertEqual(code, 2, out)

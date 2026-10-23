@@ -26,6 +26,12 @@ class OpenRunnerValidation(unittest.TestCase):
                 bad = self.clean.replace("13/20, D(안)", replacement)
                 self.assertEqual(open_runner.validate_output(bad)[0], 2)
 
+    def test_composer_bare_grade_is_validated(self):
+        for suffix, expected in (("13/20, D", 0), ("13/20, A", 2), ("13/20, **A**", 2)):
+            with self.subTest(suffix=suffix):
+                text = self.clean.replace("13/20, D(안)", suffix)
+                self.assertEqual(open_runner.validate_output(text)[0], expected)
+
     def test_empty_or_nontext_response_is_uncheckable(self):
         for value in ("", "  ", None, []):
             self.assertEqual(open_runner.validate_output(value)[0], 3)

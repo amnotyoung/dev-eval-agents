@@ -10,6 +10,17 @@ each slice below is recorded as a 0.x milestone.
 
 ## [Unreleased]
 
+## [0.13.1] — 2026-10-23
+
+### Fixed
+- The real-report clean-install run exposed a remaining grade-parser gap:
+  the composer writes `11.67/20, E`, while the checker only recognized a
+  trailing draft suffix such as `E(안)`. A mutated `11.67/20, A` therefore
+  passed. The checker now reads the letter immediately following the `/20`
+  score on a grade line, including Markdown emphasis, and rejects that
+  mismatch. Regression tests use the actual output shape without copying
+  copyrighted report text. The v0.13.0 tag is unchanged.
+
 ## [0.13.0] — 2026-10-23
 
 ### Release review hardening
