@@ -102,4 +102,8 @@ bash scripts/check-mirror-sync.sh --audit    # 감사 모드 — 저장소 전�
 
 스킬 3종(evaluate·write-report·quality-review)과 Codex `AGENTS.md`에는 **선택적** 외부 증거 보강이 있다 — 같은 관리자의 `oda-intelligence` 플러그인(공개 read-only MCP 게이트웨이)이 설치된 세션에서만 동작하고, 없으면 건너뛴다(하드 의존 아님 — CONTRIBUTING의 model-agnostic 원칙과 DPG 지표 4를 지키는 조건). 연동 규칙·도구 매핑의 정본은 `docs/oda-intelligence-integration.md`. 연동 부분을 고치면 스킬·`AGENTS.md`·통합 문서를 함께 동기화한다. 에이전트 파일은 건드리지 않는 설계다 — 증거는 위임 프롬프트에 실리는 자기서술형 블록으로 전달된다.
 
+## 선택적 원문 변환 (kordoc)
+
+에이전트는 Read·Grep·Glob만 쓰므로 PDF·HWP를 직접 검색하지 못한다. 스킬 4종과 Codex `AGENTS.md`는 위임 전에 `scripts/source_extract.py`(`bin/deveval-extract`)로 원문을 사용자 작업 폴더의 `.omo/sources/`에 쪽 표지가 있는 텍스트로 바꾼다. 변환기는 kordoc(버전 고정 — `KORDOC_VERSION`, PATH에 없으면 `npx`·Node 20 이상) → PDF는 `pdftotext` 순이고, 둘 다 없으면 exit 3으로 멈춘다(하드 의존 아님). kordoc은 하루에도 여러 번 릴리스되므로 `@latest`로 바꾸지 마라 — 같은 원문이 세션마다 다른 변환기로 읽히면 감사추적이 깨진다. 버전을 올릴 때는 실제 보고서로 표·쪽 표지를 확인하고 `tests/test_source_extract.py`를 돌린다. 변환 절차의 정본은 `deveval:evaluate`의 '원문 텍스트화'이고, 나머지 스킬·`AGENTS.md`는 그 요약이다.
+
 > 학습·실험용 프로젝트다. Codex 설치형 플러그인, Codex `AGENTS.md` 직접 실행 폴백, 오픈웨이트 `scripts/open_runner.py`가 같은 `reference/` 지식을 공유한다 — 워크플로를 고칠 땐 모두의 동기화를 검토한다.

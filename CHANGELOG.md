@@ -22,6 +22,20 @@ each slice below is recorded as a 0.x milestone.
   collisions, and duplicate or path-mismatched agent/skill identities. An
   exact-path allowlist documents the rare intentional suffix-shaped name.
 
+- **PDF/HWP source conversion before delegation** — evaluator agents can only
+  Read/Grep/Glob, so PDF, HWP, HWPX, DOCX, and XLSX sources were never actually
+  searchable. `scripts/source_extract.py` (`bin/deveval-extract`) converts them into
+  `.omo/sources/` with real-page markers (`<!-- p.N -->`), a provenance header
+  (source path, SHA-256, converter and version, warnings for image regions,
+  low-confidence OCR, and pages without text), and an `index.md`. kordoc is
+  pinned (4.24.1; GFM tables, no images) and runs from `PATH` or through `npx`;
+  `pdftotext -layout` is the PDF fallback; an unconvertible source exits 3. The
+  same source is not converted twice. All four skills and the Codex `AGENTS.md`
+  delegate converted copies; quality review now runs the numeric checker on the
+  converted report instead of skipping PDFs.
+- The numeric checker flattens HTML tables (kordoc MCP's default output), so
+  `colspan="4"` is no longer read as a composite score.
+
 ### Changed
 - **Checker exit codes no longer report an unread file as a pass** —
   `consistency_check.py` now returns 3 (cannot determine) instead of 0 for a

@@ -182,6 +182,14 @@ folder; the plugin directory is read-only knowledge. Claude Code exposes the
 bundled `deveval-consistency-check` command on `PATH`; the shared skills use the
 same checker by absolute path on hosts that do not expose plugin `bin/` entries.
 
+**PDF and HWP sources** are converted before delegation by `deveval-extract` into
+page-marked text (`<!-- p.N -->`) under `.omo/sources/` in your folder, because the
+evaluation agents can search text only. The converter is
+[kordoc](https://github.com/chrisryugj/kordoc) (pinned; run through `npx` when Node 20+
+is available) with `pdftotext` as the PDF fallback; with neither, the skill asks for
+the source text. Conversion runs locally; `npx` downloads the kordoc package from
+npm once. A PDF over 100 pages may take a few minutes.
+
 To try the Claude plugin without installing it (or to develop it):
 
 ```bash

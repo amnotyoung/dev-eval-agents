@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# 평가 원문(PDF·HWP·HWPX·DOCX) 텍스트화 (scripts/source_extract.py 래퍼).
+# 플러그인 활성화 시 PATH에 올라가므로 평가자의 어느 폴더에서든 실행된다.
+#   deveval-extract <원문…> [--out-dir .omo/sources] [--ocr] [--force]
+# 심볼릭 링크로 PATH에 올려도 플러그인 루트를 잃지 않도록 실제 위치를 따라간다.
+src="${BASH_SOURCE[0]}"
+while [ -L "$src" ]; do
+  dir="$(cd -P "$(dirname "$src")" && pwd)"
+  src="$(readlink "$src")"
+  case "$src" in /*) ;; *) src="$dir/$src" ;; esac
+done
+here="$(cd -P "$(dirname "$src")" && pwd)"
+exec python3 "$here/../scripts/source_extract.py" "$@"
