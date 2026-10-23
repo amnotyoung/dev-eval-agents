@@ -6,6 +6,8 @@ import sys
 import tempfile
 import subprocess
 import unittest
+from unittest.mock import patch
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -146,6 +148,16 @@ class DelegationContract(unittest.TestCase):
             dc.verify(self.path, self.trace([{'unknown':'format'}]))
         with self.assertRaises(OSError):
             dc.verify(self.path, self.root/'missing.jsonl')
+
+    def test_claude_project_directory_escapes_dots_and_spaces(self):
+        project=self.root/'project.with space';project.mkdir()
+        config=self.root/'claude-config'
+        folder=config/'projects'/re.sub(r'[^A-Za-z0-9]','-',str(project))
+        folder.mkdir(parents=True)
+        transcript=folder/'session.jsonl'
+        transcript.write_text(json.dumps({'sessionId':'session','cwd':str(project),'type':'user'})+'\n')
+        with patch.dict('os.environ',{'CODEX_HOME':str(self.root/'empty-codex'),'CLAUDE_CONFIG_DIR':str(config)}):
+            self.assertEqual(dc.find_transcript(project),transcript)
 
     def test_final_audit_requires_and_rechecks_receipt(self):
         final = self.root/'final.md'

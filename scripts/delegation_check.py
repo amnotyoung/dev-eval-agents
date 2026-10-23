@@ -222,8 +222,10 @@ def find_transcript(project_root, thread_id=None):
                 if Path(cwd).resolve() == root and Path(path).is_file():
                     return Path(path)
     config = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude")))
-    folder = config / "projects" / str(root).replace("/", "-")
-    for path in sorted(folder.glob("*.jsonl"), key=lambda p: p.stat().st_mtime, reverse=True):
+    # Native Claude escapes dots/spaces as well as slashes in project folders.
+    folders = {str(root).replace("/", "-"), re.sub(r"[^A-Za-z0-9]", "-", str(root))}
+    candidates = {p for name in folders for p in (config / "projects" / name).glob("*.jsonl")}
+    for path in sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True):
         trace = claude_calls(read_trace(path))
         if trace and Path(trace["cwd"]).resolve() == root and (not thread_id or trace["thread_id"] == thread_id):
             return path
