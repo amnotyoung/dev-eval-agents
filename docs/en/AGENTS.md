@@ -24,7 +24,7 @@ This part is the instruction to follow **when working in this repository** (deve
 .agents/plugins/marketplace.json Codex repository marketplace
 AGENTS.md                        this document — Part 1 development · Part 2 Codex direct-run fallback
 skills/                          the 4 evaluation workflows ← the user's actual entry point
-agents/                          11 dedicated evaluators & verifiers
+agents/                          12 dedicated evaluators, verifiers & source analyst
 hooks/hooks.json + boulder.sh    completion engine (Stop hook)
 bin/                             executables Claude puts on PATH (Codex uses absolute fallback paths)
 reference/                       official KOICA norms + Impact Evaluation proposal + 3 methods modules (shared knowledge)
@@ -158,10 +158,10 @@ Aggregate score = **the 5 criteria of Relevance, Coherence, Effectiveness, Effic
 | Aggregate score | KOICA grade | OPC grade |
 |:---:|:---:|:---:|
 | 18↑ | A | Highly successful |
-| 16–18 | B | Successful |
-| 14–16 | C | Successful |
-| 12–14 | D | Partially successful |
-| 10–12 | E | Partially successful |
+| 16 to under 18 | B | Successful |
+| 14 to under 16 | C | Successful |
+| 12 to under 14 | D | Partially successful |
+| 10 to under 12 | E | Partially successful |
 | Below 10 | F | Unsatisfactory |
 
 **Common 4-point scale:** 1 = clearly negative / 2 = some impact / 3 = generally good / 4 = fully achieved + beyond expectations.
@@ -189,7 +189,7 @@ When the user provides an evaluation target and requests an evaluation:
 2. **Sequential, independent rating per criterion** — evaluate Relevance → Coherence → Effectiveness → Efficiency → Sustainability **one at a time**.
    - For each criterion, first read `reference/평가관-공통계약.md` and the matching `agents/dac-<criterion>-evaluator.md`, then write the criterion draft in that output format (including the fact-ID column, source-conflict candidates, and fact-ledger additions). Locate passages through the ledger and Grep and Read only the pages you need (no full read-through).
    - Because this single-agent path rates the criteria one after another in one context, it **cannot structurally guarantee independence between criteria.** State this limitation in section 9 of the brief.
-   - Each criterion: cross-check that criterion's key questions against the evidence in the report → **1–4 points (or "cannot evaluate")** + `[Fact: Fn]` + supporting-evidence location + counter/constraint evidence + evidence status + why the adjacent scores do not apply.
+   - Each criterion: cross-check each scored key question against the evidence in the report → **1–4 points (half points allowed, or "cannot evaluate")** + `[Fact: Fn]` + supporting-evidence location + counter/constraint evidence + evidence status + why the adjacent scores do not apply. Criterion rating = mean of the scored questions (weighted mean if the evaluation table gives weights; `reference/KOICA-평가지침-2024-다이제스트.md` §2-1).
    - If values, units, counts, periods, or completion status differ for the same fact, attach a local conflict ID and preserve both locations; never choose the favorable value.
    - For each material item, check question fit, measurement fit, comparison and time, representation, rival explanations, and traceability to the primary source. This is an **evidence gate**, not a separate score.
    - **Do not be pulled along by the scores of other criteria.** One criterion at a time, on its evidence alone. (E.g., even if Effectiveness is good, Sustainability is judged on Sustainability evidence only.)

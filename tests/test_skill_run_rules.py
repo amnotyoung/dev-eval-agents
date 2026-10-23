@@ -26,6 +26,8 @@ class DelegationRuns(unittest.TestCase):
             body = read("skills", name, "SKILL.md")
             self.assertIn("포그라운드", body, name)
             self.assertIn("차례를 끝내지 않는다", body, name)
+            # v5 e2e: 값을 비운 위임이 비동기로 돌아 평가총괄이 sleep 대기를 7번 되풀이했다
+            self.assertIn("`run_in_background: false`를 **명시한다**", body, name)
 
     def test_long_conversion_is_awaited_not_backgrounded(self):
         body = read("skills", "evaluate", "SKILL.md")

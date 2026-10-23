@@ -22,6 +22,8 @@ Whether the project's objectives, selection, planning, and implementation are al
 3. (Partnership projects) Given the agency's expertise, composition, and the local environment, was pursuing it as a partnership appropriate? (N/A if not applicable)
 4. (Follow-on-phase projects) Was it designed taking into account the plan, scope, and performance of the previous project? (N/A if not applicable)
 
+> The rating table scores questions 1–2. If the evaluation table has a planning-stage cross-cutting (gender, environment, human rights) question, score it as a third question weighted 0.4/0.4/0.2. For question 3 and beyond, check the evidence when the project qualifies and reflect it in questions 1–2 without a separate score. Criterion rating = mean of the scored questions (digest §2-1).
+
 ## 4-point scale (2024 common, p.8)
 1 = Most project components not properly implemented/considered, causing a **clear negative impact** on achieving results · 2 = Some non-implementation/non-consideration causing **partial impact** · 3 = **Overall satisfactory achievement** of what was planned · 4 = **Achieved everything intended + beyond expectations**
 
@@ -44,7 +46,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 | F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
 (If none: "No additions")
 ### Relevance Summary (draft)
-- Provisional Relevance score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Relevance rating: (mean of the scored questions, two decimals) · for each question, **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```

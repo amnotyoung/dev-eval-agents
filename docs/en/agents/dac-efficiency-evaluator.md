@@ -21,6 +21,8 @@ Whether the project used its resources (time, budget, personnel) **economically 
 2. Was the project pursued efficiently, taking into account the **balance and interaction among key inputs and activities**?
 3. (Partnership projects) Were the partnership and communication among KOICA, international organizations, NGOs, and other stakeholders managed efficiently? (N/A if not applicable)
 
+> The rating table scores questions 1–2. For question 3 and beyond, check the evidence when the project qualifies and reflect it in questions 1–2 without a separate score. Criterion rating = mean of questions 1–2 (digest §2-1).
+
 ## 4-point scale (2024 common, p.8)
 1 = Mostly inefficient, causing a **clear negative impact** · 2 = Some inefficiency causing **partial impact** · 3 = **Overall satisfactory** efficient execution · 4 = **All efficient + economy beyond expectations**
 
@@ -45,7 +47,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 | F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
 (If none: "No additions")
 ### Efficiency Summary (draft)
-- Provisional Efficiency score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Efficiency rating: (mean of the scored questions, two decimals) · for each question, **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```

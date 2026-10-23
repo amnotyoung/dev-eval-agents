@@ -43,7 +43,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 | F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
 (If none: "No additions")
 ### Sustainability Summary (draft)
-- Provisional Sustainability score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Sustainability rating: (mean of the scored questions, two decimals) · for each question, **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```

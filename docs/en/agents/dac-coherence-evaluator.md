@@ -22,6 +22,8 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 2. **(External)** Did it consider complementarity, harmonization, coordination, and added value with the interventions of other actors in the target area (other donors, the private sector, the recipient-country government, etc.)?
 3. (International-organization projects) If it is part of a flagship or co-funded project, was it planned and pursued taking into account linkage and synergy with other projects within the relevant program? (N/A if not applicable)
 
+> The rating table scores questions 1–2. For question 3 and beyond, check the evidence when the project qualifies and reflect it in questions 1–2 without a separate score. Criterion rating = mean of questions 1–2 (digest §2-1).
+
 ## 4-point scale (2024 common, p.8)
 1 = Most not considered, causing a **clear negative impact** · 2 = Some not considered, causing **partial impact** · 3 = **Overall satisfactory** consideration/achievement · 4 = **All considered + synergy beyond expectations**
 
@@ -45,7 +47,7 @@ In short: **no evidence, no score** (cannot evaluate) · `[Fact: Fn]` on every s
 | F-ID (existing/new) | Fact key and definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document·version | Source location | Reason |
 (If none: "No additions")
 ### Coherence Summary (draft)
-- Provisional Coherence score: (1–4, provisional) · **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
+- Provisional Coherence rating: (mean of the scored questions, two decimals) · for each question, **why this score and not the adjacent higher/lower scores** · Evidence-confirmed / cannot-evaluate parts · Strengths/weaknesses · Limitations
 ### Improvement recommendations
 > ⚠️ Evaluation draft. Scores are provisional; final confirmation is the evaluation officer's responsibility.
 ```

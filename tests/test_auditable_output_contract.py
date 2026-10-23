@@ -366,6 +366,13 @@ class CheckerBehavior(unittest.TestCase):
         self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
         self.assertIn("단정함", result.stderr)
 
+    def test_formula_note_in_score_cell_is_accepted(self):
+        """`2.75 (2.5+3.0)`처럼 점수 뒤에 산식을 붙인 칸은 점수로 읽는다(e2e에서 5칸이 오류였다)."""
+        text = read("tests", "fixtures", "auditable-brief-clean.md").replace(
+            "| 효율성 | 2 | 2 | 확인됨 |", "| 효율성 | 2 | 2.00 (2+2) | 확인됨 |", 1)
+        result = run_text(text)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_criterion_scores_must_sum_to_composite(self):
         text = read("tests", "fixtures", "auditable-brief-clean.md").replace("13/20, D(안)", "14/20, C(안)")
         result = run_text(text)
