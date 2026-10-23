@@ -719,6 +719,8 @@ def main() -> int:
         action="store_true",
         help="평정 전 작업본에서 원문 사실대장 계약만 조기 검사",
     )
+    parser.add_argument("--isolation", help="원시 로그와 재대조할 독립성 확인서 JSON")
+    parser.add_argument("--require-isolation", action="store_true", help="확인서 없이 병렬 평가를 통과시키지 않음")
     args = parser.parse_args()
     try:
         raw = Path(args.brief).read_bytes()
@@ -739,6 +741,15 @@ def main() -> int:
         violations, _fact_ids, _conflicts = inspect_ledger(text)
     else:
         violations = inspect(text)
+        receipt = Path(args.isolation) if args.isolation else Path(args.brief).parent / "isolation.json"
+        if args.require_isolation or args.isolation or receipt.exists():
+            try:
+                import delegation_check
+                result = delegation_check.verify_receipt(receipt)
+                violations.extend("독립성: " + item for item in result["violations"])
+            except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+                print(f"독립성 확인 불가(exit 3): {exc}", file=sys.stderr)
+                return 3
     if violations:
         label = "원문 사실대장" if args.ledger_only else "감사 가능한 평가 브리프"
         print(f"{label} 계약 위반:", file=sys.stderr)
