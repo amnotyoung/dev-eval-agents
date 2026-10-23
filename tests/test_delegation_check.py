@@ -36,9 +36,9 @@ class DelegationContract(unittest.TestCase):
         for name in dc.CRITERIA:
             rows.extend([
                 {"type": "response_item", "payload": {"type": "function_call", "name": "spawn_agent", "call_id": name,
-                    "arguments": json.dumps({"task_name": name, "fork_turns": fork, "message": self.prompt})}},
+                    "arguments": json.dumps({"task_name": self.manifest['task_names'][name], "fork_turns": fork, "message": self.prompt})}},
                 {"type": "response_item", "payload": {"type": "function_call_output", "call_id": name,
-                    "output": json.dumps({"task_name": "/root/" + name})}},
+                    "output": json.dumps({"task_name": "/root/" + self.manifest['task_names'][name]})}},
             ])
         return rows
 
@@ -98,11 +98,28 @@ class DelegationContract(unittest.TestCase):
         rows=self.codex(); extra=copy.deepcopy(rows[-2:])
         a=json.loads(extra[0]['payload']['arguments'])
         a['message']='Other /work/other/source-pack.md [DEVEVAL_INPUT_SHA256: '+'a'*64+']'
+        a['task_name']='sustainability_r'+'a'*16
         extra[0]['payload']['arguments']=json.dumps(a)
         extra[0]['payload']['call_id']='other';extra[1]['payload']['call_id']='other'
         result=dc.verify(self.path,self.trace(rows+extra))
         self.assertEqual(result['status'],'passed',result)
         self.assertEqual(len(result['criterion_calls']),5)
+
+    def test_native_redacted_messages_use_clear_scope_and_disclose_limit(self):
+        rows=self.codex()
+        for row in rows:
+            p=row.get('payload',{})
+            if p.get('type')=='function_call':
+                a=json.loads(p['arguments']);a['message']='gAAAAA'+'x'*100+'=='
+                p['arguments']=json.dumps(a)
+        r=dc.verify(self.path,self.trace(rows))
+        self.assertEqual(r['status'],'passed',r)
+        self.assertFalse(r['prompt_bodies_verified']);self.assertTrue(r['limitations'])
+        for row in rows:
+            p=row.get('payload',{})
+            if p.get('type')=='function_call':
+                a=json.loads(p['arguments']);a['fork_turns']='all';p['arguments']=json.dumps(a)
+        self.assertEqual(dc.verify(self.path,self.trace(rows))['status'],'failed')
 
     def test_receipt_is_rechecked_against_native_evidence(self):
         trace = self.trace(self.codex())

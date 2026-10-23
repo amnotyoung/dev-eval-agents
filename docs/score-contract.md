@@ -96,7 +96,8 @@ externally authored reports; it does not replace the strict authored-output gate
 `delegation_check.py prepare` freezes sections 1–2 as `source-pack.md` and binds
 the packet, converted source and index hashes in `delegation-manifest.json`.
 Pass both printed SHA markers and the packet's absolute path to every criterion.
-Codex must use `fork_turns: "none"`; Claude must use fresh registered evaluators,
+Codex uses the exact generated `task_names` values (criterion plus an input-hash
+scope) and `fork_turns: "none"`; Claude must use fresh registered evaluators,
 foreground calls, and no resume. The native JSONL trace is checked; a self-written
 "independent" assertion is not evidence. `isolation.json` is rechecked against
 the trace at final audit. Unsupported/missing trace evidence returns exit 3.
@@ -105,6 +106,12 @@ This verifies parent-history separation and the supplied packet, not filesystem
 sandboxing, blind removal of the original human report's grade, or scoring
 accuracy. Claude's separate context behavior is documented in its
 [official subagent documentation](https://code.claude.com/docs/en/sub-agents).
+
+Some Codex logs redact the delegation body. In that format, the checker uses
+the clear task-scope hash, `fork_turns`, successful calls and frozen-file hashes.
+It sets `prompt_bodies_verified: false` and preserves a limitation: the exact
+explicit prompt body was not inspected. It never decrypts protected log fields
+or treats an absent/redacted body as proof that no extra data was supplied.
 
 질문 점수와 근거 판단은 사람이 검토할 AI 초안이다. 평균·합계·등급·표의 수치는
 코드가 생성하며, 필수 값을 읽지 못하거나 정본과 다르면 통과하지 않는다.

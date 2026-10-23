@@ -64,13 +64,14 @@ description: ODA 사업을 OECD DAC/KOICA 기준으로 평가해 구조화된 �
 
 ## 기준 평가관의 이력 분리 (필수)
 
-- Codex 기준 평가관은 매번 **`fork_turns: "none"`**으로 새로 만든다. `all`·기본값·기존 세션 재개는 금지다. 과업 이름은 `relevance`, `coherence`, `effectiveness`, `efficiency`, `sustainability`를 쓰고 재위임은 `<이름>_retry1`처럼 새 에이전트로 한다. 모델은 상속하고 임의로 바꾸지 않는다.
+- Codex 기준 평가관은 매번 **`fork_turns: "none"`**으로 새로 만든다. `all`·기본값·기존 세션 재개는 금지다. 과업 이름은 prepare가 반환한 `task_names`의 값을 **그대로** 쓴다(예: `relevance_r<입력해시 앞16자>`). 재위임은 그 이름에 `_retry1`을 붙여 새 에이전트로 한다. 모델은 상속하고 임의로 바꾸지 않는다.
 - Claude Code는 등록된 `dac-*-evaluator`를 새 Agent/Task로 호출하고 `run_in_background: false`를 명시한다. `resume`·대화 포크를 쓰지 않는다.
 - 기준별 위임문은 역할 지침·공통 계약·규범·필요 방법론·원문·쪽 색인·고정 입력팩만 전달한다. 앞 묶음의 점수나 전체 브리프·다른 기준 결과 경로를 넣지 않는다. 부모 대화가 없어도 수행할 수 있게 모든 절대경로와 담당 질문을 적는다.
   고정 입력팩은 1·2절만 담으며, 다른 기준의 점수가 있는 3·4절은 넘기지 않는다.
 - 위임 직전에 `python3 <root>/scripts/delegation_check.py prepare --brief <작업본> --source <변환본> --index <쪽색인> --project-root <사용자 작업폴더>`를 실행한다. 생성된 `source-pack.md`는 1·2절만 포함한다. **반환된 절대경로와 두 표지 `[DEVEVAL_PACKET_SHA256: …]`, `[DEVEVAL_INPUT_SHA256: …]`를 모든 기준 위임문에 그대로 넣는다.** 이후 입력팩·변환본·쪽 색인을 바꾸지 않는다. 검증자의 수정은 최종 브리프에만 반영한다.
 - 5기준 결과를 받은 후 총괄이 `python3 <root>/scripts/delegation_check.py check --manifest <사업폴더>/delegation-manifest.json --out <사업폴더>/isolation.json`을 실행한다. 현재 Codex/Claude 원시 로그를 찾아 실제 위임·상속 여부·입력팩을 검사한다. 자동 발견이 불가능하면 호스트가 제공한 원시 JSONL 경로를 `--transcript`로 지정한다. 로그를 직접 만들어 통과시키지 않는다.
 - exit 2는 독립성 위반, exit 3은 확인 불가다. 해당 평정을 완료로 표시하지 않고 새 실행 폴더에서 재실행하거나 실패를 사람에게 명시한다. 원시 로그가 없는 하네스는 독립성 검증 통과를 주장하지 않는다. 테스트·헤드리스 실행에서는 원시 로그를 보존한다(예: Codex `--ephemeral`을 쓰지 않음).
+- Codex가 위임문 본문을 암호화해 기록하면, 검사기는 평문인 과업 이름의 입력 해시·`fork_turns`·성공한 호출과 파일 무결성을 확인한다. `prompt_bodies_verified: false`이면 9절에 `[INFO: 위임문 본문 미검증 — 암호화된 로그]`를 남긴다. 명시적 위임문 내용까지 검사했다고 주장하지 않는다.
 
 ## 원문 텍스트화 (PDF·HWP 입력)
 

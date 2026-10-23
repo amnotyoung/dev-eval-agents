@@ -30,6 +30,10 @@ def input_digest(manifest):
     return hashlib.sha256(json.dumps(bound, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
+def task_names(manifest):
+    return {name:f"{name}_r{input_digest(manifest)[:16]}" for name in CRITERIA}
+
+
 def prepare(brief, source, index, project_root):
     packet_display = str(Path(brief).absolute().parent / "source-pack.md")
     brief, source, index = (Path(p).resolve() for p in (brief, source, index))
@@ -57,6 +61,7 @@ def prepare(brief, source, index, project_root):
         "index": str(index), "index_sha256": digest(index),
     }
     manifest["input_sha256"] = input_digest(manifest)
+    manifest["task_names"] = task_names(manifest)
     path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return path, manifest
 
@@ -64,7 +69,7 @@ def prepare(brief, source, index, project_root):
 def criterion_name(name):
     leaf = str(name or "").split("/")[-1].split(":")[-1]
     for criterion in CRITERIA:
-        if re.fullmatch(rf"(?:dac-)?{criterion}(?:-evaluator)?(?:[_-]retry\d*)?", leaf):
+        if re.fullmatch(rf"(?:dac-)?{criterion}(?:-evaluator)?(?:_r[0-9a-f]{{16}})?(?:[_-]retry\d*)?", leaf):
             return criterion
     return None
 
@@ -99,11 +104,13 @@ def codex_calls(rows):
             result = json.loads(result) if isinstance(result, str) else result
         except ValueError:
             result = None
-        named_ok = isinstance(result, dict) and criterion_name(result.get("task_name")) == criterion
-        calls.append({"criterion": criterion, "call_id": p.get("call_id"),
+        named_ok = isinstance(result, dict) and str(result.get("task_name", "")).split("/")[-1] == a.get("task_name")
+        prompt = a.get("message") or a.get("prompt") or ""
+        calls.append({"criterion": criterion, "call_id": p.get("call_id"), "task_name": a.get("task_name"),
                       "isolated": a.get("fork_turns") == "none",
                       "successful_spawn": isinstance(result, dict) and bool(named_ok or result.get("agent_id")) and not result.get("error"),
-                      "prompt": a.get("message") or a.get("prompt") or ""})
+                      "prompt_visibility": "redacted" if re.fullmatch(r"gAAAAA[A-Za-z0-9_-]{60,}=*", prompt) else "plain",
+                      "prompt": prompt})
     return {"host": "codex", "thread_id": meta.get("id"), "cwd": meta.get("cwd"), "calls": calls}
 
 
@@ -128,6 +135,7 @@ def claude_calls(rows):
                 continue
             result = outputs.get(item.get("id"))
             calls.append({"criterion": criterion, "call_id": item.get("id"),
+                          "task_name": a.get("subagent_type"), "prompt_visibility": "plain",
                           "isolated": not a.get("resume") and a.get("run_in_background") is False,
                           "successful_spawn": result is not None and not result.get("is_error"),
                           "prompt": a.get("prompt") or ""})
@@ -153,6 +161,7 @@ def verify(manifest_path, transcript):
     seen = set()
     token = f"[DEVEVAL_PACKET_SHA256: {manifest['packet_sha256']}]"
     input_token = f"[DEVEVAL_INPUT_SHA256: {input_digest(manifest)}]"
+    names = task_names(manifest)
     packet_paths = {manifest["packet"]}
     alias = manifest.get("packet_display")
     if alias and Path(alias).resolve() == Path(manifest["packet"]).resolve():
@@ -160,8 +169,11 @@ def verify(manifest_path, transcript):
     relevant = []
     for call in trace["calls"]:
         prompt = call["prompt"]
-        if any(path in prompt for path in packet_paths) or token in prompt or input_token in prompt:
+        scoped = re.fullmatch(re.escape(names[call['criterion']])+r"(?:_retry\d+)?", call.get('task_name') or '')
+        if scoped or any(path in prompt for path in packet_paths) or token in prompt or input_token in prompt:
             relevant.append(call)
+        elif call.get('prompt_visibility') == 'redacted' and re.search(r"_r[0-9a-f]{16}(?:_retry\d+)?$",call.get('task_name') or ''):
+            continue  # clear task scope identifies another run despite redacted body
         elif re.search(r"\[DEVEVAL_INPUT_SHA256: [0-9a-f]{64}\]", prompt):
             continue  # another project's frozen packet in the same parent session
         else:
@@ -174,19 +186,24 @@ def verify(manifest_path, transcript):
         if not call["successful_spawn"]:
             violations.append(f"{name}: 성공한 위임 결과가 확인되지 않음")
         prompt = call["prompt"]
-        if token not in prompt or input_token not in prompt or not any(path in prompt for path in packet_paths):
-            violations.append(f"{name}: 고정 입력팩 경로·해시가 위임문에 없음")
-        if any(path in prompt for path in FORBIDDEN_FILES):
-            violations.append(f"{name}: 다른 평정·검증 결과 경로가 위임문에 포함됨")
+        if trace['host']=='codex' and not re.fullmatch(re.escape(names[name])+r"(?:_retry\d+)?",call.get('task_name') or ''):
+            violations.append(f"{name}: 입력팩 해시에 결속된 task_name이 아님")
+        if call['prompt_visibility']=='plain':
+            if token not in prompt or input_token not in prompt or not any(path in prompt for path in packet_paths):
+                violations.append(f"{name}: 고정 입력팩 경로·해시가 위임문에 없음")
+            if any(path in prompt for path in FORBIDDEN_FILES):
+                violations.append(f"{name}: 다른 평정·검증 결과 경로가 위임문에 포함됨")
     for name in sorted(set(CRITERIA) - seen):
         violations.append(f"{name}: 실제 위임 기록 없음")
-    call_evidence = [{k: v for k, v in c.items() if k != "prompt"} | {"prompt_sha256": hashlib.sha256(c["prompt"].encode()).hexdigest()} for c in relevant]
+    call_evidence = [{k: v for k, v in c.items() if k != "prompt"} | {"logged_prompt_sha256": hashlib.sha256(c["prompt"].encode()).hexdigest()} for c in relevant]
     return {"schema_version": 1, "status": "failed" if violations else "passed",
             "host": trace["host"], "thread_id": trace["thread_id"],
             "manifest_path": str(Path(manifest_path).resolve()),
             "manifest_sha256": digest(manifest_path),
             "transcript_path": str(Path(transcript).resolve()),
-            "criterion_calls": call_evidence, "violations": violations}
+            "criterion_calls": call_evidence, "violations": violations,
+            "prompt_bodies_verified": bool(relevant) and all(c['prompt_visibility']=='plain' for c in relevant),
+            "limitations": ["위임문 본문은 호스트 로그에서 가려짐. 이력 분리·실행 범위·입력 무결성은 확인했으나 명시적 위임문 내용은 검사하지 못함"] if any(c['prompt_visibility']=='redacted' for c in relevant) else []}
 
 
 def find_transcript(project_root, thread_id=None):
@@ -242,6 +259,7 @@ def main(argv=None):
             print(f"source-pack: {manifest['packet']}")
             print(f"[DEVEVAL_PACKET_SHA256: {manifest['packet_sha256']}]")
             print(f"[DEVEVAL_INPUT_SHA256: {manifest['input_sha256']}]")
+            print("Codex task_names: " + json.dumps(manifest['task_names'],ensure_ascii=False))
             return 0
         manifest = json.loads(Path(a.manifest).read_text(encoding="utf-8"))
         transcript = a.transcript or find_transcript(manifest["project_root"], a.thread_id)

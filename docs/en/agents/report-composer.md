@@ -57,6 +57,10 @@ When the lead evaluator gives you absolute paths to the working brief (sections 
 
 **Missing evidence and failed checks take precedence:** use the numeric format above only for scorable criteria. Preserve `평가 불가` for an unscorable criterion and `산정 보류` for a withheld composite. Numeric exit 3 is not a pass. If a legitimately withheld result has no checkable numbers, disclose that limitation and hand it to a human; never invent scores or evidence to pass a checker. Resolve other exit-3 causes such as unreadable files. Return audit exit 2 or violations remaining after two repair rounds to the lead without marking the work complete.
 
+When `isolation.json` has `prompt_bodies_verified: false`, section 9 must retain
+`[INFO: 위임문 본문 미검증 — 암호화된 로그]`. Parent-history separation and input
+integrity are different from inspecting the explicit delegation body.
+
 ## Work Sequence
 1. Read the evaluators' results + project materials.
 2. Write the requested chapter(s) in the standard structure. **Attach a source to each statement** and make each material judgment traceable through `question -> [Fact: Fn]/finding/conflict ID -> post-verification score/conclusion -> recommendation`.

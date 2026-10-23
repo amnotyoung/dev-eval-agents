@@ -769,6 +769,8 @@ def main() -> int:
                 import delegation_check
                 result = delegation_check.verify_receipt(receipt)
                 violations.extend("독립성: " + item for item in result["violations"])
+                if not result.get("prompt_bodies_verified") and "[INFO: 위임문 본문 미검증 — 암호화된 로그]" not in (section(text, "한계·사람 판단") or ""):
+                    violations.append("독립성 한계 누락 — 9절에 [INFO: 위임문 본문 미검증 — 암호화된 로그]를 남겨야 함")
             except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
                 print(f"독립성 확인 불가(exit 3): {exc}", file=sys.stderr)
                 return 3
