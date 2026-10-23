@@ -63,6 +63,14 @@ class Arithmetic(unittest.TestCase):
     def test_missing_evidence_and_false_unavailable_score_rejected(self):
         d=example();d['criteria'][0]['questions'][0]['fact_ids']=[]
         with self.assertRaises(sc.Invalid):sc.calculate(d)
+
+    def test_local_conflicts_are_valid_before_verification_only(self):
+        d=example();d['verification']='not_reviewed';d['criteria'][0]['conflict_ids']=['REL-X1']
+        self.assertEqual(sc.calculate(d)['total'],'13.00')
+        d['verification']='conditional'
+        with self.assertRaises(sc.Invalid):sc.calculate(d)
+        d['verification']='not_reviewed';d['criteria'][0]['conflict_ids']=['EFF-X1']
+        with self.assertRaises(sc.Invalid):sc.calculate(d)
         d=example();d['criteria'][0]['questions'][0]['status']='unavailable'
         with self.assertRaises(sc.Invalid):sc.calculate(d)
 
@@ -179,6 +187,12 @@ class Projection(unittest.TestCase):
         r=subprocess.run(cmd,capture_output=True,text=True)
         self.assertEqual(r.returncode,2,r.stdout+r.stderr)
         self.assertIn('F999',r.stderr)
+
+    def test_final_score_conflicts_must_exist_in_register(self):
+        self.data['criteria'][0]['conflict_ids']=['X999']
+        self.scores.write_text(sc.dumps(self.data));self.brief.write_text(sc.render_text(self.text,self.data)[0])
+        r=subprocess.run([sys.executable,str(ROOT/'scripts/auditable_output_check.py'),str(self.brief),'--require-scores'],capture_output=True,text=True)
+        self.assertEqual(r.returncode,2,r.stdout+r.stderr);self.assertIn('X999',r.stderr)
 
 
 if __name__=='__main__':unittest.main()

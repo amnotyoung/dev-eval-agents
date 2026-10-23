@@ -34,7 +34,10 @@ Other question sets need an explicit contract extension; never drop a question
 to make an input fit. Impact remains outside the 20-point composite.
 
 Each criterion has `criterion` (the five English IDs above), `questions`, and
-optional `aggregation`, `weight_basis`, `summary`, and `conflict_ids` (`X1`, …).
+optional `aggregation`, `weight_basis`, `summary`, and `conflict_ids`. Inputs
+with `verification: not_reviewed` may retain their own local candidate IDs
+(REL-Xn/COH-Xn/EFF-Xn/EFI-Xn/SUS-Xn). Verified inputs allow only global `X1`, …
+IDs, and the final audit requires every listed ID to exist in the register.
 `aggregation` is `mean` or `weighted_mean`. Weighted means require a cited
 `weight_basis` and a positive `weight` on every question, with sum exactly 1.
 
@@ -102,7 +105,7 @@ foreground calls, and no resume. The native JSONL trace is checked; a self-writt
 "independent" assertion is not evidence. `isolation.json` is rechecked against
 the trace at final audit. Unsupported/missing trace evidence returns exit 3.
 
-This verifies parent-history separation and the supplied packet, not filesystem
+This verifies parent-history separation and the declared frozen input scope, not filesystem
 sandboxing, blind removal of the original human report's grade, or scoring
 accuracy. Claude's separate context behavior is documented in its
 [official subagent documentation](https://code.claude.com/docs/en/sub-agents).

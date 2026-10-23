@@ -98,7 +98,7 @@ def display(value):
     return format(Decimal(value).normalize(), "f")
 
 
-def validate_criterion(c, profile):
+def validate_criterion(c, profile, verification="conditional"):
     keys(c, {"criterion", "questions", "aggregation", "weight_basis", "summary", "conflict_ids"}, {"criterion", "questions"}, "기준")
     name = c["criterion"]
     require(name in CRITERIA, f"알 수 없는 기준: {name}")
@@ -138,7 +138,10 @@ def validate_criterion(c, profile):
     if "summary" in c:
         nonempty(c["summary"], f"{name}.summary")
     conflicts = c.get("conflict_ids", [])
-    require(isinstance(conflicts, list) and all(isinstance(x, str) and re.fullmatch(r"X[1-9]\d*", x) for x in conflicts), f"{name}: 상충 ID 목록 오류")
+    local_prefix = {"relevance":"REL", "coherence":"COH", "effectiveness":"EFF", "efficiency":"EFI", "sustainability":"SUS"}[name]
+    pattern = rf"(?:X[1-9]\d*|{local_prefix}-X[1-9]\d*)" if verification == "not_reviewed" else r"X[1-9]\d*"
+    require(isinstance(conflicts, list) and all(isinstance(x, str) and re.fullmatch(pattern, x) for x in conflicts),
+            f"{name}: 상충 ID 오류 — 검증 전에는 담당 기준 임시 ID, 검증 후에는 전역 X-ID만 허용")
 
 
 def calculate(data):
@@ -155,7 +158,7 @@ def calculate(data):
     require({c.get('criterion') for c in criteria if isinstance(c, dict)} == set(CRITERIA), "기준 ID 누락·중복")
     by_name = {}
     for c in criteria:
-        validate_criterion(c, profile)
+        validate_criterion(c, profile, data["verification"])
         by_name[c["criterion"]] = c
     results = []
     for name, (label, _) in CRITERIA.items():
