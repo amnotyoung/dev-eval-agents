@@ -38,6 +38,7 @@ When the same information appears in multiple places, **do the figures/expressio
 - Was association, before-after change, or self-report exaggerated into causal effect?
 - Do findings support conclusions, and do conclusions support recommendations?
 - Did sampling, bias, missingness, rival explanations, or unevaluable items disappear from the summary?
+- Are **all source-fact ledger occurrence rows and F-IDs** from the evaluation brief preserved in an appendix, and do score-critical summary/body claims cite the same `[Fact: Fn]`? Were rows merged or F-IDs renumbered during composition?
 - Are **all material conflict IDs, values A/B, resolution status, score effects, and pre/post-verification corrections** from the evaluation brief preserved in the report summary, relevant criterion chapter, and appendix? Was an unresolved conflict merged into a falsely resolved fact?
 
 ## Absolute Rules
@@ -62,8 +63,8 @@ When the same information appears in multiple places, **do the figures/expressio
 |---------------------|------------------|---------------------------|-------------------------|
 
 ### (D) Audit-Trail Preservation
-| Conflict/Correction ID | Evaluation-Brief Content | Report Location/Expression | Preserved? / Effect of Omission |
-|------------------------|--------------------------|----------------------------|---------------------------------|
+| Fact/Conflict/Correction ID | Evaluation-Brief Content | Report Location/Expression | Preserved? / Effect of Omission |
+|-----------------------------|--------------------------|----------------------------|---------------------------------|
 
 ### Rejection/Correction Requests
 - (Specific corrections per unsourced statement and per inconsistency item)

@@ -32,6 +32,13 @@ evaluation. Contributions of all sizes are welcome.
    anonymization principles intact (see [`docs/do-no-harm.md`](docs/do-no-harm.md)).
 4. **Keep it model-agnostic.** Avoid hard dependencies on any single proprietary
    LLM or harness. If a change assumes one, note how it degrades/adapts on others.
+5. **Keep canonical plugin identities unique.** An agent's frontmatter `name`
+   must exactly match its `agents/<name>.md` filename; a skill's `name` must
+   exactly match its `skills/<name>/` directory. Do not commit operating-system
+   or sync-tool copies such as `file 2.md`, `file copy.md`, or `file (1).md`
+   alongside their canonical sibling. If a suffix-shaped path is genuinely
+   intentional, add its exact repository-relative path to
+   `.repository-hygiene-allow` and explain the exception in review.
 
 ## Process / 절차
 
@@ -43,7 +50,10 @@ evaluation. Contributions of all sizes are welcome.
    same PR — the `mirror-sync` check enforces this, and a deliberately
    one-sided PR needs the `mirror-sync-exempt` label. Run it yourself with
    `bash scripts/check-mirror-sync.sh` (or `--audit` for the whole repo).
-4. Open a pull request with a clear description and, for methodology changes, the
+4. Run the deterministic regression and repository-hygiene checks:
+   `python3 -m unittest discover -s tests -v` and
+   `python3 scripts/repository_hygiene_check.py`.
+5. Open a pull request with a clear description and, for methodology changes, the
    supporting citation.
 
 ## Licensing of contributions / 기여물 라이선스

@@ -23,7 +23,7 @@ The criteria/rubric documents (`reference/…`) and the templates (`templates/�
 
 > **When the evaluation officer claims something was "achieved," doubt whether that evidence is actually in the materials.**
 
-Your job is not to redo the evaluation — it is to check **(A) whether the evidence is real by cross-checking against the source text**, **(B) independently detect and organize each material conflict**, **(C) whether the scores are coherent with the evidence**, and **(D) compliance with KOICA principles**. Do not stop after identifying an evaluator error: specify the **post-verification score and audit trail** that must survive into the final deliverable.
+Your job is not to redo the evaluation — it is to check **(A) whether the evidence is real by cross-checking against the source text**, **(B0) the source-fact ledger**, **(B) independently detect and organize each material conflict**, **(C) whether the scores are coherent with the evidence**, and **(D) compliance with KOICA principles**. Do not stop after identifying an evaluator error: specify the **post-verification score and audit trail** that must survive into the final deliverable. If the delegation prompt omits the working source-fact ledger, report the missing input rather than reconstructing it by assumption.
 
 ## (A) Evidence Cross-Check — For Each Rating
 
@@ -32,6 +32,14 @@ Your job is not to redo the evaluation — it is to check **(A) whether the evid
 3. Check whether primary source, producer, collection/analysis method, population/sample, time, comparison, and quality limits fit the claim.
 4. Verdict: ✅ **Confirmed** / △ **Qualification needed** / ❌ **Mismatch** / ⚠️ **No evidence** (rated despite not being in the source text = hallucination, reject).
 
+## (B0) Source-Fact-Ledger Audit
+
+1. Independently search the entire source for repeated statements of score-critical indicators, counts, project dates, budgets, quantities, and completion/defect status.
+2. Confirm there is **one row per source occurrence** and that the same decision object, indicator, and target/actual role reuse the same global `F1`, `F2`, and so on. Never split an F-ID merely because its value differs.
+3. Check every row's **value/status, unit, denominator/population, reference period, aggregation rule, as-of date, document/version, and source location**. Use an explicit `not applicable` or `unknown` rather than a blank; unknown is not agreement.
+4. When comparison axes differ within one F-ID, require either `explained: …` supported by the source or `[Conflict: Xn]`. If the claimed unit, period, version, aggregation, or as-of explanation is only an assumption, return it to conflict-candidate status.
+5. Confirm each score-critical claim cites its related `[Fact: Fn]`. Add a missed occurrence to the existing F-ID and assign the next F-ID only to a genuinely new fact. Never renumber existing F-IDs.
+
 ## (B) Material Conflict and Inconsistency Audit
 
 A **material conflict** is an inconsistency for which choosing one value rather than another could change a factual finding, achievement status, quality/safety/defect status, schedule/cost, criterion score, composite grade, or recommendation.
@@ -39,7 +47,7 @@ A **material conflict** is an inconsistency for which choosing one value rather 
 1. Do not check only the conflict candidates reported by the evaluators. Independently search the source text for repeated statements of score-critical indicators, counts, project dates, budgets, and completion status.
 2. Align the **indicator name, unit, denominator, reference period, document version, counting rule, and status date**. A difference is `resolved` only when a supported explanation accounts for it; otherwise mark it `partly resolved` or `unresolved`.
 3. Never choose the more favorable value without support or dismiss a difference as a typo by assumption.
-4. Deduplicate evaluator-local IDs and assign global IDs `X1`, `X2`, and so on. Record values A/B and source locations, comparison result, resolution status, affected criterion/score/conclusion, and follow-up evidence.
+4. Deduplicate evaluator-local IDs and assign global IDs `X1`, `X2`, and so on. Record the linked Fact ID, values A/B and source locations, comparison result, resolution status, affected criterion/score/conclusion, and follow-up evidence. Triangulate the same F/X IDs across the source-fact ledger, conflict register, and detailed rating.
 5. If an unresolved material conflict could change a score or achievement finding, the verification result is `conditional pass` or `reject`, not an unqualified pass. Require a score range or deferral instead of forcing a single value.
 
 ## (C) Score–Evidence Coherence (2024 p.7 obligation)
@@ -56,12 +64,14 @@ KOICA 2024 mandates that you "carefully check whether there is any gap between t
 - **Handling of missing data**: Were items with no data honestly handled as "cannot evaluate"?
 - **Completeness (balance of strengths and weaknesses)** + **explicit statement of limitations**: Are these present?
 - **Audit-trail preservation**: Do counterevidence, material conflicts, unevaluable items, and verification corrections remain visible in the final brief?
+- **Fact traceability**: Does every score-critical claim link to `[Fact: Fn]` in the source-fact ledger, with comparison-axis differences classified by evidence or an X-ID?
 
 ## Absolute Rules
 
 - **NEVER** simply trust a rating. Always confirm the source text directly.
 - If a score/rating was asserted definitively despite there being no data in the source text → **reject**: "Insufficient evidence; must be corrected to 'cannot evaluate'."
 - Keep a conflict in the **Conflict and inconsistency register** even when it does not change the score; explain why it has no score effect.
+- Never replace the source-fact ledger with the conflict register. The ledger preserves every source occurrence as a row; the register records the judgment and effect of differences that remain unexplained.
 - After issuing a correction, never restate the pre-verification score as the final value.
 - You too must not deliver a verdict without a source.
 
@@ -69,14 +79,19 @@ KOICA 2024 mandates that you "carefully check whether there is any gap between t
 
 ```
 ## Evidence Verification Results (A)
-| Core Question | Officer's Score/Claim | Source-Text Confirmation | Method/Sample/Time/Limits | Verdict |
-|----------|-----------------|----------|---------------------------|------|
-| (question) | (score/performance) | (actual source content) | (permitted scope of claim) | ✅Confirmed / △Qualify / ❌Mismatch / ⚠️No evidence |
+| Core Question | Fact ID | Officer's Score/Claim | Source-Text Confirmation | Method/Sample/Time/Limits | Verdict |
+|----------|---------|-----------------|----------|---------------------------|------|
+| (question) | [Fact: F1] | (score/performance) | (actual source content) | (permitted scope of claim) | ✅Confirmed / △Qualify / ❌Mismatch / ⚠️No evidence |
+
+## Source-fact-ledger verification (B0)
+| Fact ID | Fact key/definition | Value/status | Unit | Denominator/population | Reference period | Aggregation rule | As-of date | Document/version | Source location | Comparison verdict/conflict ID |
+|---------|---------------------|--------------|------|------------------------|------------------|------------------|------------|------------------|-----------------|--------------------------------|
+| F1 | (same decision object, indicator, and role) | (source value/status) | (unit) | (denominator/population) | (period) | (rule) | (date) | (document/version) | (page/table/section) | single source/agrees/explained: evidence/[Conflict: X1] |
 
 ## Conflict and inconsistency register (B)
-| ID | Issue | Value/Statement A (location) | Value/Statement B (location) | Comparison Result | Resolution Status | Affected Criterion/Score/Conclusion | Follow-up |
-|----|-------|------------------------------|------------------------------|-------------------|-------------------|-------------------------------------|-----------|
-| X1 | (same-fact conflict) | (value/location) | (value/location) | (unit/time/version/counting rule) | resolved/partly resolved/unresolved | (effect or reason for no effect) | (evidence/owner) |
+| ID | Fact ID | Issue | Value/Statement A (location) | Value/Statement B (location) | Comparison Result | Resolution Status | Affected Criterion/Score/Conclusion | Follow-up |
+|----|---------|-------|------------------------------|------------------------------|-------------------|-------------------|-------------------------------------|-----------|
+| X1 | [Fact: F1] | (same-fact conflict) | (value/location) | (value/location) | (unit/time/version/counting rule) | resolved/partly resolved/unresolved | (effect or reason for no effect) | (evidence/owner) |
 
 - Only when none exist: **No material conflict — repeated statements of key indicators, counts, dates, budgets, and completion status were checked.**
 
@@ -86,7 +101,7 @@ KOICA 2024 mandates that you "carefully check whether there is any gap between t
 | (criterion) | (score/cannot evaluate) | (score/cannot evaluate/range) | (official scale, evidence, and conflict linkage) | (change) |
 
 ## KOICA Principles Check (D)
-- Source attribution: ✅/⚠️ · Missing-data handling: ✅/⚠️ · Strengths–weaknesses balance: ✅/⚠️ · Limitations stated: ✅/⚠️ · Audit trail preserved: ✅/⚠️
+- Source attribution: ✅/⚠️ · Source-fact-ledger traceability: ✅/⚠️ · Missing-data handling: ✅/⚠️ · Strengths–weaknesses balance: ✅/⚠️ · Limitations stated: ✅/⚠️ · Audit trail preserved: ✅/⚠️
 
 ## Rejection/Correction Requests
 - (Specific corrections per problematic item. If all pass: "Evidence, scores, and principles all confirmed. Verification passed.")
